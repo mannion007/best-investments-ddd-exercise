@@ -44,22 +44,22 @@ class Project
         if (!$this->status->is(ProjectStatus::ACTIVE)) {
             throw new \Exception('A specialist can only be added to a project after it has started');
         }
-        $this->specialists[$specialistId] = SpecialistRecommendation::UNVETTED;
+        $this->recommendedSpecialists[$specialistId] = SpecialistRecommendation::UNVETTED;
     }
 
     public function approveSpecialist(SpecialistId $specialistId)
     {
-        if(!$this->specialists[$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
+        if(!$this->recommendedSpecialists[$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
             throw new Exception('Potential specialist is not unvetted');
         }
-        $this->specialists[$specialistId] = SpecialistRecommendation::APPROVED;
+        $this->recommendedSpecialists[$specialistId] = SpecialistRecommendation::APPROVED;
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
     {
-        if(!$this->specialists[$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
+        if(!$this->recommendedSpecialists[$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
             throw new Exception('Potential specialist is not unvetted');
         }
-        $this->specialists[$specialistId] = SpecialistRecommendation::DISCARDED;
+        $this->recommendedSpecialists[$specialistId] = SpecialistRecommendation::DISCARDED;
     }
 }
