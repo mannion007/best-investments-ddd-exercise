@@ -10,16 +10,16 @@ class Specialist
     private $signedUp;
 
     /** Assumed there is a rule that all these things are required. */
-    private function __construct(Industry $industry, Background $background, Expertise $expertise, ContactDetail $contactDetail)
-    {
-        $this->id = new SpecialistId();
-        $this->industry = $industry;
-        $this->background = $background;
-        $this->expertise = $expertise;
-        $this->contactDetail = $contactDetail;
-        $this->signedUp = false;
-        /** Raise an event (to let Vlad know there is a new Potential Specialist to "chase up") */
-    }
+//    private function __construct(Industry $industry, Background $background, Expertise $expertise, ContactDetail $contactDetail)
+//    {
+//        $this->id = new SpecialistId();
+//        $this->industry = $industry;
+//        $this->background = $background;
+//        $this->expertise = $expertise;
+//        $this->contactDetail = $contactDetail;
+//        $this->signedUp = false;
+//        /** Raise an event (to let Vlad know there is a new Potential Specialist to "chase up") */
+//    }
 
     /** @todo Rename if Vlad provides anything more suitable */
     public static function putOnList(Industry $industry, Background $background, Expertise $expertise, ContactDetail $contactDetail)

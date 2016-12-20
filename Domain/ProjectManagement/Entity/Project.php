@@ -30,19 +30,19 @@ class Project
 
     public function start(ProjectManagerId $projectManagerId)
     {
+        if ($this->hasStarted()) {
+            throw new \Exception('The project has already started, it cannot be started again');
+        }
         $this->projectManagerId = $projectManagerId;
-        $this->status = ProjectStatus::ACTIVE;
+        $this->status = ProjectStatus::active();
         /** @todo Raise an event */
     }
 
     public function addPotentialSpecialist(SpecialistId $specialistId)
     {
-        if (ProjectStatus::ACTIVE !== $this->status) {
-            throw new \Exception('A specialist can only be added to an active project');
+        if (!$this->hasStarted()) {
+            throw new \Exception('A specialist can only be added to a project after it has started');
         }
-     
-        
-
         $this->specialistIds = $specialistId;
     }
 
@@ -54,5 +54,10 @@ class Project
     /** Does this belong to a project, or the specialist itself? */
     public function approveSpecialist(SpecialistId $specialistId)
     {
+    }
+
+    private function hasStarted()
+    {
+        return ProjectStatus::ACTIVE === $this->status;
     }
 }

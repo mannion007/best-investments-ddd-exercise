@@ -12,6 +12,11 @@ class ProjectStatus
     {
     }
 
+    public static function active()
+    {
+        return new self(self::ACTIVE);
+    }
+
     public static function draft()
     {
         return new self(self::DRAFT);
