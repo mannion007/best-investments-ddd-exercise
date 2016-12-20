@@ -2,14 +2,15 @@
 
 class ProjectStatus
 {
-    private $status;
-
     const DRAFT = 'draft';
     const ACTIVE = 'active';
     const ENDED = 'ended';
 
+    private $status;
+
     private function __construct($status)
     {
+        $this->status = $status;
     }
 
     public static function active()
@@ -20,5 +21,10 @@ class ProjectStatus
     public static function draft()
     {
         return new self(self::DRAFT);
+    }
+
+    public function is($value)
+    {
+        return $value === $this->status;
     }
 }

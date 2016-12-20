@@ -1,36 +1,19 @@
 <?php
+
 class Specialist
 {
     private $id;
-    private $industry;
-    private $background;
-    private $expertise;
-    private $contactDetail;
     private $availability;
-    private $signedUp;
 
-    /** Assumed there is a rule that all these things are required. */
-//    private function __construct(Industry $industry, Background $background, Expertise $expertise, ContactDetail $contactDetail)
-//    {
-//        $this->id = new SpecialistId();
-//        $this->industry = $industry;
-//        $this->background = $background;
-//        $this->expertise = $expertise;
-//        $this->contactDetail = $contactDetail;
-//        $this->signedUp = false;
-//        /** Raise an event (to let Vlad know there is a new Potential Specialist to "chase up") */
-//    }
-
-    /** @todo Rename if Vlad provides anything more suitable */
-    public static function putOnList(Industry $industry, Background $background, Expertise $expertise, ContactDetail $contactDetail)
+    private function __construct(SpecialistId $id, Availability $availability)
     {
-        return new self($industry, $background, $expertise, $email, $contactDetail);
+        $this->id = new SpecialistId();
+        $this->availability = $availability;
     }
 
-    public function signUp(Availability $Availability)
+    public function joinUp(SpecialistId $id, Availability $availability)
     {
         $this->availability = $availability;
-        $this->signedUp = true;
-        /** Raise an event */
+        /** Raise a 'specialist_joined_up' event */
     }
 }

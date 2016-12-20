@@ -1,4 +1,5 @@
 <?php
+
 class Project
 {
     private $reference;
@@ -10,7 +11,7 @@ class Project
     private $endDate;
 
     /** @var SpecialistId[] */
-    private $specialistIds = [];
+    private $recommendedSpecialists = [];
 
     private function __construct(ClientId $clientId, string $name, \DateTime $endDate)
     {
@@ -20,7 +21,7 @@ class Project
         $this->clientId = $clientId;
         $this->name = $name;
         $this->endDate = $endDate;
-        /** @todo Raise an event (to notify the Senior project manager) */
+        /** Raise a 'project_set_up' event */
     }
 
     public static function setUp(ClientId $clientId, string $name, \DateTime $endDate)
@@ -30,34 +31,35 @@ class Project
 
     public function start(ProjectManagerId $projectManagerId)
     {
-        if ($this->hasStarted()) {
+        if ($this->status->is(ProjectStatus::ACTIVE)) {
             throw new \Exception('The project has already started, it cannot be started again');
         }
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
-        /** @todo Raise an event */
+        /** @todo Raise a project started event */
     }
 
-    public function addPotentialSpecialist(SpecialistId $specialistId)
+    public function recommendSpecialist(SpecialistId $specialistId)
     {
-        if (!$this->hasStarted()) {
+        if (!$this->status->is(ProjectStatus::ACTIVE)) {
             throw new \Exception('A specialist can only be added to a project after it has started');
         }
-        $this->specialistIds = $specialistId;
+        $this->specialists[$specialistId] = SpecialistRecommendation::UNVETTED;
     }
 
-    /** Does this belong to a project, or the specialist itself? */
-    public function discardSpecialist(SpecialistId $specialistId)
-    {
-    }
-
-    /** Does this belong to a project, or the specialist itself? */
     public function approveSpecialist(SpecialistId $specialistId)
     {
+        if(!$this->specialists[$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
+            throw new Exception('Potential specialist is not unvetted');
+        }
+        $this->specialists[$specialistId] = SpecialistRecommendation::APPROVED;
     }
 
-    private function hasStarted()
+    public function discardSpecialist(SpecialistId $specialistId)
     {
-        return ProjectStatus::ACTIVE === $this->status;
+        if(!$this->specialists[$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
+            throw new Exception('Potential specialist is not unvetted');
+        }
+        $this->specialists[$specialistId] = SpecialistRecommendation::DISCARDED;
     }
 }

@@ -1,7 +1,8 @@
 <?php
+
 class Prospect
 {
-    private $prospectId;
+    private $id;
     private $phoneNumber;
 
     /** @var DateTime[]  */
@@ -10,32 +11,44 @@ class Prospect
     /** @var ProspectStatus */
     private $status;
 
-    private function __construct(ProspectId $prospectId, PhoneNumber $phoneNumber)
+    private function __construct(ProspectId $id, PhoneNumber $phoneNumber)
     {
-        $this->prospectId = $prospectId;
+        $this->id = $id;
         $this->phoneNumber = $phoneNumber;
-        $this->availability = ProspectStatus::IN_PROGRESS;
+        $this->status = ProspectStatus::IN_PROGRESS;
+        /** Raise a 'prospect_received' event */
     }
 
-    public function receive(ProspectId $prospectId, PhoneNumber $phoneNumber)
+    public function receive(ProspectId $id, PhoneNumber $phoneNumber)
     {
-        return new self($prospectId, $phoneNumber);
+        return new self($id, $phoneNumber);
     }
 
     public function chaseUp()
     {
-        // Check status here!
-        $this->phoneCalls = new DateTime();
+        if(!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+            throw new Exception('Prospect does not have "in progress" status');
+        }
+        $this->phoneCalls[] = new DateTime();
     }
 
-    public function notInterested()
+    //register?
+
+    public function declareNotInterested()
     {
-        $this->status = ProspectStatus::NOT_REACHABLE;
+        if(!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+            throw new Exception('Prospect does not have "in progress" status');
+        }
+        $this->status = ProspectStatus::NOT_INTERESTED;
+        /** Raise a 'prospect_not_interested' event */
     }
 
     public function giveUp()
     {
+        if(!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+            throw new Exception('Prospect does not have "in progress" status');
+        }
         $this->status = ProspectStatus::NOT_REACHABLE;
-        /** Raise an event - Do Andy's team need to know? */
+        /** Raise a 'prospect_not_reachable' event */
     }
 }
