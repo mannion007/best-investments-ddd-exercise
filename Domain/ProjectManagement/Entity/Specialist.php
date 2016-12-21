@@ -3,17 +3,17 @@
 class Specialist
 {
     private $id;
-    private $availability;
+    private $name;
 
-    private function __construct(SpecialistId $id, Availability $availability)
+    private function __construct(SpecialistId $id, string $name)
     {
         $this->id = new SpecialistId();
-        $this->availability = $availability;
+        $this->name = $name;
+        /** Raise a 'specialist_registered' event */
     }
 
-    public function joinUp(SpecialistId $id, Availability $availability)
+    public static function register(SpecialistId $id, string $name)
     {
-        $this->availability = $availability;
-        /** Raise a 'specialist_joined_up' event */
+        return new self($id, $name);
     }
 }

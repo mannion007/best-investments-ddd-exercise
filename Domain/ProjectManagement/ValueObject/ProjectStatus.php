@@ -4,7 +4,8 @@ class ProjectStatus
 {
     const DRAFT = 'draft';
     const ACTIVE = 'active';
-    const ENDED = 'ended';
+    const ON_HOLD = 'on_hold';
+    const CLOSED = 'closed';
 
     private $status;
 
@@ -21,6 +22,16 @@ class ProjectStatus
     public static function draft()
     {
         return new self(self::DRAFT);
+    }
+
+    public static function onHold()
+    {
+        return new self(self::ON_HOLD);
+    }
+
+    public static function closed()
+    {
+        return new self(self::CLOSED);
     }
 
     public function is($value)

@@ -3,19 +3,29 @@
 class PotentialSpecialist
 {
     private $id;
-    private $phoneNumber;
+    //Add research manager id
+    private $name;
+    private $notes;
 
     private function __construct(
-        PhoneNumber $phoneNumber
+        string $name,
+        string $notes
     ) {
         $this->id = new SpecialistId();
-        $this->phoneNumber = $phoneNumber;
+        $this->name = $name;
+        $this->notes = $notes;
         /** Raise a 'potential_specialist_put_on_list' event */
     }
 
     public static function putOnList(
-        PhoneNumber $phoneNumber
+        string $notes,
+        string $name
     ) {
-        return new self($phoneNumber);
+        return new self($name, $notes);
+    }
+
+    public function register()
+    {
+        return Specialist::register($this->id, $this->name);
     }
 }

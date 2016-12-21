@@ -3,52 +3,60 @@
 class Prospect
 {
     private $id;
-    private $phoneNumber;
+    private $name;
+    private $notes;
 
     /** @var DateTime[]  */
-    private $phoneCalls = [];
+    private $chaseUps = [];
 
     /** @var ProspectStatus */
     private $status;
 
-    private function __construct(ProspectId $id, PhoneNumber $phoneNumber)
+    private function __construct(ProspectId $id, string $name, string $notes)
     {
         $this->id = $id;
-        $this->phoneNumber = $phoneNumber;
-        $this->status = ProspectStatus::IN_PROGRESS;
+        $this->name = $name;
+        $this->notes = $notes;
+        $this->status = ProspectStatus::inProgress();
         /** Raise a 'prospect_received' event */
     }
 
-    public function receive(ProspectId $id, PhoneNumber $phoneNumber)
+    public function receive(ProspectId $id, string $name, string $notes)
     {
-        return new self($id, $phoneNumber);
+        return new self($id, $name, $notes);
     }
 
     public function chaseUp()
     {
-        if(!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
-        $this->phoneCalls[] = new DateTime();
+        $this->chaseUps[] = new DateTime();
     }
 
-    //register?
+    public function register()
+    {
+        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+            throw new Exception('Prospect does not have "in progress" status');
+        }
+        $this->status = ProspectStatus::registered();
+    }
 
     public function declareNotInterested()
     {
-        if(!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
-        $this->status = ProspectStatus::NOT_INTERESTED;
+        $this->status = ProspectStatus::notInterested();
         /** Raise a 'prospect_not_interested' event */
     }
 
     public function giveUp()
     {
-        if(!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
-        $this->status = ProspectStatus::NOT_REACHABLE;
+        $this->status = ProspectStatus::notReachable();
         /** Raise a 'prospect_not_reachable' event */
     }
 }
