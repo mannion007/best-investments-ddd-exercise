@@ -10,8 +10,8 @@ class Project
     private $status;
     private $endDate;
 
-    /** @var SpecialistRecommendation[] */
-    private $specialists = [];
+    /** @var SpecialistCollection  */
+    private $specialists;
 
     /** @var Consultation[]  */
     private $consultations = [];
@@ -19,11 +19,12 @@ class Project
     private function __construct(ClientId $clientId, string $name, \DateTime $endDate)
     {
         $this->reference = ProjectReference::create();
-        $this->status = ProjectStatus::Draft();
-
         $this->clientId = $clientId;
         $this->name = $name;
         $this->endDate = $endDate;
+        $this->specialists = new SpecialistCollection();
+
+        $this->status = ProjectStatus::Draft();
         /** Raise a 'project_set_up' event */
     }
 
@@ -58,7 +59,7 @@ class Project
 
     public function addSpecialist(SpecialistId $specialistId)
     {
-        if (array_key_exists((string)$specialistId, $this->specialists)) {
+        if ($this->specialists->includes((string)$specialistId)) {
             throw new Exception('Cannot add a specialist more than once');
         }
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
