@@ -32,4 +32,9 @@ class ConsultationStatus
     {
         return $value === $this->status;
     }
+
+    public function isNot($value)
+    {
+        return !$this->is($value);
+    }
 }

@@ -10,7 +10,7 @@ class Project
     private $status;
     private $endDate;
 
-    /** @var SpecialistId[] */
+    /** @var SpecialistRecommendation[] */
     private $specialists = [];
 
     /** @var Consultation[]  */
@@ -61,7 +61,7 @@ class Project
         if (array_key_exists((string)$specialistId, $this->specialists)) {
             throw new Exception('Cannot add a specialist more than once');
         }
-        if (!$this->status->is(ProjectStatus::ACTIVE)) {
+        if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new Exception('A specialist can only be added to a project after it has started');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::unvetted();
@@ -69,7 +69,7 @@ class Project
 
     public function approveSpecialist(SpecialistId $specialistId)
     {
-        if (!$this->specialists[(string)$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
+        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::UNVETTED)) {
             throw new Exception('Potential specialist is not unvetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::approved();
@@ -77,7 +77,7 @@ class Project
 
     public function discardSpecialist(SpecialistId $specialistId)
     {
-        if (!$this->specialists[(string)$specialistId]->is(SpecialistRecommendation::UNVETTED)) {
+        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::UNVETTED)) {
             throw new Exception('Potential specialist is not unvetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
@@ -88,10 +88,10 @@ class Project
      */
     public function scheduleConsultation(SpecialistId $specialistId, DateTime $time)
     {
-        if (!$this->status->is(ProjectStatus::ACTIVE)) {
+        if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('A specialist can only be added to a project after it has started');
         }
-        if (!$this->specialists[(string)$specialistId]->status->is(SpecialistRecommendation::APROVED)) {
+        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APROVED)) {
             throw new Exception('A consultation can only be scheduled with an approved Specialist');
         }
         $this->consultations = new Consultation($specialistId, $time);

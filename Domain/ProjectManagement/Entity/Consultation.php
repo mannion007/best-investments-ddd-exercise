@@ -18,7 +18,7 @@ class Consultation
 
     public function report(int $durationMinutes)
     {
-        if (!$this->status->is(ConsultationStatus::OPEN)) {
+        if ($this->status->isNot(ConsultationStatus::OPEN)) {
             throw new Exception('Cannot report on a consultation that is not open');
         }
         $this->durationMinutes = $durationMinutes;
@@ -28,7 +28,7 @@ class Consultation
     /** @todo implement discard */
     public function discard()
     {
-        if (!$this->status->is(ConsultationStatus::OPEN)) {
+        if ($this->status->isNot(ConsultationStatus::OPEN)) {
             throw new Exception('Cannot discard a report on a consultation that is not open');
         }
         $this->status = ConsultationStatus::discarded();

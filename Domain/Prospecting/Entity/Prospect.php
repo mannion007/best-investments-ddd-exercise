@@ -28,7 +28,7 @@ class Prospect
 
     public function chaseUp()
     {
-        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->chaseUps[] = new DateTime();
@@ -36,7 +36,7 @@ class Prospect
 
     public function register()
     {
-        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::registered();
@@ -44,7 +44,7 @@ class Prospect
 
     public function declareNotInterested()
     {
-        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::notInterested();
@@ -53,7 +53,7 @@ class Prospect
 
     public function giveUp()
     {
-        if (!$this->status->is(ProspectStatus::IN_PROGRESS)) {
+        if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::notReachable();
