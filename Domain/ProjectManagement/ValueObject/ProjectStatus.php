@@ -34,13 +34,13 @@ class ProjectStatus
         return new self(self::CLOSED);
     }
 
-    public function is($value)
+    public function is($status)
     {
-        return $value === $this->status;
+        return $status === $this->status;
     }
 
-    public function isNot($value)
+    public function isNot($status)
     {
-        return !$this->is($value);
+        return !$this->is($status);
     }
 }

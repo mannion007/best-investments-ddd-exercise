@@ -3,14 +3,19 @@
 class Consultation
 {
     private $consultationId;
+    private $projectReference;
     private $specialistId;
     private $time;
     private $status;
     private $durationMinutes;
 
-    public function __construct(SpecialistId $specialistId, DateTime $time)
+    public function __construct(Project $project, SpecialistId $specialistId, DateTime $time)
     {
+        if ($project->isNot(ProjectStatus::ACTIVE)) {
+            throw new Exception('Can only create a new Consultation for an active project.');
+        }
         $this->consultationId = new ConsultationId();
+        $this->projectReference = $project->getReference();
         $this->specialistId = $specialistId;
         $this->time = $time;
         $this->status = ConsultationStatus::open();
@@ -25,7 +30,6 @@ class Consultation
         $this->status = ConsultationStatus::confirmed();
     }
 
-    /** @todo implement discard */
     public function discard()
     {
         if ($this->status->isNot(ConsultationStatus::OPEN)) {
@@ -34,8 +38,8 @@ class Consultation
         $this->status = ConsultationStatus::discarded();
     }
 
-    public function is($value)
+    public function is($status)
     {
-        return $this->status->is($value);
+        return $this->status->is($status);
     }
 }

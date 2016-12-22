@@ -83,17 +83,26 @@ class Project
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
     }
 
-    /**
-     * Belongs here because there is a rule that a consultation can only be scheduled for an active project
-     */
     public function scheduleConsultation(SpecialistId $specialistId, DateTime $time)
     {
-        if ($this->status->isNot(ProjectStatus::ACTIVE)) {
-            throw new \Exception('A specialist can only be added to a project after it has started');
-        }
         if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APROVED)) {
             throw new Exception('A consultation can only be scheduled with an approved Specialist');
         }
-        $this->consultations = new Consultation($specialistId, $time);
+        $this->consultations = new Consultation($this, $specialistId, $time);
+    }
+
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    public function is($status)
+    {
+        return $this->status->is($status);
+    }
+
+    public function isNot($status)
+    {
+        return $this->status->isNot($status);
     }
 }
