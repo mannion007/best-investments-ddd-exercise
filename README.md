@@ -26,11 +26,14 @@
 |Specialists|People with long term experience in a given market|N|
 
 ###Prospecting
+|Term|Meaning|Confirmed|
+|---|---|---|
 |Chase Up|An attempt to contact a Potential Specialist with a view to getting them to Register|N|
 |Give Up|When a sufficient number of chase up attempts have been made to deem the Potential Specialist unreachable|N|
 |In Progress|A potential Specialist who should be chased up further|N|
 |Not Interested|A Potential Specialist that should not be chased up further|N|
 |Potential Specialist|Contact details for an individual who can potentially be Registered through chasing them up|N|
+|Prospecting|The role of Vlad's team|N|
 |Recieve [Potential Specialist]|A description of the event when a new Potential Specialist is to be Chased Up|N|
 |Register|When a chase up is successful |N|
 
