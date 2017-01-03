@@ -4,7 +4,7 @@
 
 |Term|Meaning|Confirmed|
 |---|---|---|
-|Add specialists [to a project]|???|N|
+|Add [specialist to a project]|???|N|
 |Approved [specialist]|A specialist who has passed the vetting process with the Compliance Officer|N|
 |Channel|An external source used by the Project Management team to identify suitable candidates for Specialists|N|
 |Client|A Financial Investor who has signed up for the services of Best Investments|N|
@@ -12,18 +12,22 @@
 |Confirmed|An arranged consultation which has taken place|N|
 |Consultation|An arranged phone call between an Investor and a Specialist|N|
 |Create a project (Set up)|???|N|
+|Database|A resource which contains Specialists|N|
 |Discarded [specialist]|A specialist who has not passed the vetting process|N|
-|Discared [consultation]|An arranged consultation which has been cancelled before it took place|N|
+|Discarded [consultation]|An arranged consultation which has been cancelled before it took place|N|
+|Drafted [project]|A project which has not been assigned a Project Manager and cannot have Specialists added|N|
 |Join up|A description of the event when a new Specialist becomes available to be added to Projects|N|
 |List|The current set of identified Potential specialists the Prospecting team are in the process of attempting to get to Join Up|N|
 |Open Consultation| An arranged consultation that is neither yet Confirmed or Discarded|N|
 |Potential Specialist|An approved specialist to be considered for arranging a consultation with an Investor|N|
 |Project Management|The role of Andy's team|N|
 |Project|One subject an Investor is looking for advice on|N|
+|Project Manager|A member of Andy's Team who is responsible for managing a given Project|N|
 |Researcher|A member of Andy's team who works within Project Management|N|
-|Schedule [a consultation]|Plan a Consultation between an Investor and a Specialist at an agreed time|N|
+|Schedule [consultation]|Plan a Consultation between an Investor and a Specialist at an agreed time|N|
 |Signed up|A description of the event of a new Investor being established|N|
 |Specialists|People with long term experience in a given market|N|
+|Started [project]|A project which has been assigned a Project Manager and can have specialists added from the Database|N|
 
 ###Prospecting
 |Term|Meaning|Confirmed|
@@ -38,7 +42,6 @@
 |Register|When a chase up is successful |N|
 
 ###Invoicing
-
 |Term|Meaning|Confirmed|
 |---|---|---|
 |Account|A Package|N|
