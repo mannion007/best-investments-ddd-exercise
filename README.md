@@ -10,7 +10,7 @@
 |Client|A Financial Investor who has signed up for the services of Best Investments|N|
 |Close [a project]|When a project requires no additional consultations|N|
 |Confirmed|An arranged consultation which has taken place|N|
-|Consultation|An arranged phonecall between an Investor and a Specialist|N|
+|Consultation|An arranged phone call between an Investor and a Specialist|N|
 |Create a project (Set up)|???|N|
 |Discarded [specialist]|A specialist who has not passed the vetting process|N|
 |Discared [consultation]|An arranged consultation which has been cancelled before it took place|N|
@@ -34,7 +34,7 @@
 |Not Interested|A Potential Specialist that should not be chased up further|N|
 |Potential Specialist|Contact details for an individual who can potentially be Registered through chasing them up|N|
 |Prospecting|The role of Vlad's team|N|
-|Recieve [Potential Specialist]|A description of the event when a new Potential Specialist is to be Chased Up|N|
+|Receive [Potential Specialist]|A description of the event when a new Potential Specialist is to be Chased Up|N|
 |Register|When a chase up is successful |N|
 
 ###Invoicing
