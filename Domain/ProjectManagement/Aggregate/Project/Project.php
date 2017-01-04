@@ -8,7 +8,7 @@ class Project
 
     private $name;
     private $status;
-    private $endDate;
+    private $deadline;
 
     /** @var SpecialistCollection  */
     private $specialists;
@@ -16,21 +16,21 @@ class Project
     /** @var Consultation[]  */
     private $consultations = [];
 
-    private function __construct(ClientId $clientId, string $name, \DateTime $endDate)
+    private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
     {
         $this->reference = ProjectReference::create();
         $this->clientId = $clientId;
         $this->name = $name;
-        $this->endDate = $endDate;
+        $this->deadline = $deadline;
         $this->specialists = new SpecialistCollection();
 
         $this->status = ProjectStatus::Draft();
         /** Raise a 'project_set_up' event */
     }
 
-    public static function setUp(ClientId $clientId, string $name, \DateTime $endDate)
+    public static function setUp(ClientId $clientId, string $name, \DateTime $deadline)
     {
-        return new self($clientId, $name, $endDate);
+        return new self($clientId, $name, $deadline);
     }
 
     public function start(ProjectManagerId $projectManagerId)
