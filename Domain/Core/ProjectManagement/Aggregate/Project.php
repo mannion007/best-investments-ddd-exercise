@@ -36,7 +36,7 @@ class Project
     public function start(ProjectManagerId $projectManagerId)
     {
         if ($this->status->is(ProjectStatus::ACTIVE)) {
-            throw new \Exception('The project has already started, it cannot be started again');
+            throw new Exception('The project has already started, it cannot be started again');
         }
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
@@ -90,6 +90,15 @@ class Project
             throw new Exception('A consultation can only be scheduled with an approved Specialist');
         }
         $this->consultations = new Consultation($this, $specialistId, $time);
+    }
+
+    public function putOnHold()
+    {
+        /** Need to enforce this, or if not on hold just do nothing? */
+        if ($this->status->isNot(ProjectStatus::ACTIVE)) {
+            throw new Exception('Can only put an active project on hold');
+        }
+        $this->status = ProjectStatus::ON_HOLD;
     }
 
     public function getReference()

@@ -38,9 +38,11 @@
 |Started||A project which has been assigned a Project Manager and can have specialists added from the Database|N|
 |Draft||A project which has not been assigned a Project Manager and cannot have Specialists added. It has not yet started|N|
 |Closed|End|When a project requires no additional consultations and the client can be billed for the consultations and the specialists can be paid for their time|N|
+|On Hold||A project for which the client has requested be temporarily locked, preventing any project management operations taking place on it|N|
 |Create|Set up|When a Client has a new area of Interest|N|
 |Deadline|End Date|The date a project should end|N|
 |Reference||A 2 letter - 4 digit combination|N|
+|Reactivate||When a project status changes from on hold to active|N|
 
 ####Consultation
 |Term|Alternatives|Definition|Confirmed|

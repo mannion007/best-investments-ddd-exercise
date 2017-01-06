@@ -2,12 +2,11 @@
 
 class Package
 {
-    const REFERENCE_FORMAT = '%s-%s-%s-%s';
-
-    private $name;
+    private $reference;
     private $startDate;
     private $durationMonths;
     private $availableHours;
+
     private $status;
 
     /** Custom type for this? */
@@ -43,11 +42,16 @@ class Package
         if ($this->status->isNot(PackageStatus::Active)) {
             throw new Exception('Can not expire Package because it is not active');
         }
-        if (!$this->isDueToExpire()) {
+        if ($this->isNotDueToExpire()) {
             throw new Exception('Package is not yet due to expire');
         }
         $this->status = PackageStatus::expired();
         /** Raise a package expired event that includes the available hours */
+    }
+
+    private function isNotDueToExpire()
+    {
+        return !$this->isDueToExpire();
     }
 
     private function isDueToExpire()
@@ -70,17 +74,8 @@ class Package
         }
     }
 
-    /**
-     * Invoicing team use package references
-     */
     public function getReference()
     {
-        return sprintf(
-            self::REFERENCE_FORMAT,
-            $this->name,
-            $this->startDate->format('Y'),
-            $this->startDate->format('m'),
-            (string)$this->durationMonths
-        );
+        return $this->reference;
     }
 }

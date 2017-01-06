@@ -19,7 +19,6 @@
 |Term|Alternatives|Definition|Confirmed|
 |---|---|---|---|
 |Assign [a closed Project to]||Determine that the consultation hours for that project should be deducted from this package|N|
-
 |Nominal Hours||The number of hours a client has purchased|N|
 |Available Hours|Remaining Amount|The number of hours available to a Client within a Packaged after additions or deductions|N|
 |Reference||consist of name, which is generally just a name or a grade, like gold, or silver, but it is really just a reference, it can be anything, plus year and month the when the package started, and finally the length|N|
@@ -27,6 +26,9 @@
 |Purchase|Buy|When a Client pays for a new Package|N|
 |Close Down||Changing the state of a package to prevent it being used further|
 
+####Package states
+|Term|Alternatives|Definition|Confirmed|
+|---|---|---|---|
 |Active|Started|A package which has a start date in the past and is not yet Closed or Expired|Y|
 |Inactive||A package which has a start date in the future|Y|
 |Expired||A package which can no longer be used because the time it could run for has been exceeded|N|

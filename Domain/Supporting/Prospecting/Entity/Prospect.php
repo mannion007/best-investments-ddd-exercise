@@ -5,10 +5,7 @@ class Prospect
     private $id;
     private $name;
     private $notes;
-
-    /** @var DateTime[]  */
     private $chaseUps = [];
-
     /** @var ProspectStatus */
     private $status;
 
