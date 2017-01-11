@@ -3,12 +3,14 @@
 class Client
 {
     private $clientId;
+    private $payAsYouGoRate;
     private $status;
 
     /** "new client" sounds OK, no point in guarding the constructor */
     public function __construct(ClientId $clientId, Money $payAsYouGoRate)
     {
         $this->clientId = $clientId;
+        $this->payAsYouGoRate = $payAsYouGoRate;
         $this->status = ClientStatus::active();
         /** Raise a new_client event */
     }
@@ -16,10 +18,10 @@ class Client
     public function purchasePackage(
         string $name,
         DateTime $startDate,
-        PackageDurationMonths $durationMonths,
+        PackageDuration $months,
         int $nominalHours
     ) {
-        return new Package($this->clientId, $name, $startDate, $durationMonths, $nominalHours);
+        return new Package($this->clientId, $name, $startDate, $months, $nominalHours);
     }
 
     public function suspendService()

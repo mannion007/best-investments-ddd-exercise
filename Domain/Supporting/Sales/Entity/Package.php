@@ -11,7 +11,7 @@ class Package
         ClientId $clientId,
         string $name,
         DateTime $startDate,
-        PackageDurationMonths $durationMonths,
+        PackageDuration $durationMonths,
         int $nominalHours
     ) {
         $this->clientId = $clientId;

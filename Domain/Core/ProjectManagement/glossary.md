@@ -47,7 +47,7 @@
 ####Consultation
 |Term|Alternatives|Definition|Confirmed|
 |---|---|---|---|
-|Consultation||A phone call between an Investor and a Specialist|N|
+|Consultation|Conversation|A phone call between an Investor and a Specialist|N|
 |Discarded||An arranged consultation which has been cancelled before it took place|N|
 |Confirmed||An arranged consultation which has taken place|N|
 |Open||An arranged consultation that is neither yet Confirmed or Discarded|N|

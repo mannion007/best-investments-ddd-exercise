@@ -1,0 +1,14 @@
+{
+  "name": "mannion007/best-investments-ddd-exercise",
+  "description": "An exercise in modelling a Business domain using DDD",
+  "authors": [
+    {
+      "name": "James Mannion",
+      "email": "mannion007@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.0"
+  }
+}

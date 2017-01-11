@@ -10,4 +10,9 @@ class ProjectReference
     {
         return new self();
     }
+
+    public function toString()
+    {
+        return '';
+    }
 }

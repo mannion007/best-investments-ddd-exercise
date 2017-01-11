@@ -1,6 +1,6 @@
 <?php
 
-class PackageDurationMonths
+class PackageDuration
 {
     const SIX = 6;
     const TWELVE = 12;
@@ -12,12 +12,12 @@ class PackageDurationMonths
         $this->months = $months;
     }
 
-    public static function six()
+    public static function sixMonths()
     {
         return new self(self::SIX);
     }
 
-    public static function twelve()
+    public static function twelveMonths()
     {
         return new self(self::TWELVE);
     }

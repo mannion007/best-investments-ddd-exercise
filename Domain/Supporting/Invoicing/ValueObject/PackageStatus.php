@@ -5,33 +5,31 @@ class PackageStatus
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
     const EXPIRED = 'expired';
-    const CLOSED = 'closed';
 
     private $status;
 
-    private function __construct(string $status)
+    public static function determineFrom(DateTime $startDate, PackageDuration $duration)
     {
-        $this->status = $status;
+        return new self($startDate, $duration);
     }
 
-    public static function active()
+    private function __construct(DateTime $startDate, PackageDuration $duration)
     {
-        return new self(self::ACTIVE);
-    }
+        $currentDate = new DateTime();
+        $expiryDate = $startDate->add(new DateInterval(sprintf('P%sM', (string)$duration)));
 
-    public static function inactive()
-    {
-        return new self(self::INACTIVE);
-    }
-
-    public static function expired()
-    {
-        return new self(self::EXPIRED);
-    }
-
-    public static function closed()
-    {
-        return new self(self::CLOSED);
+        if ($expiryDate <= $startDate) {
+            throw new DomainException('Package cannot expire before it starts');
+        }
+        if ($currentDate < $startDate) {
+            $this->status = self::INACTIVE;
+        }
+        if ($currentDate > $startDate) {
+            $this->status = self::ACTIVE;
+        }
+        if ($currentDate > $expiryDate) {
+            $this->status = self::EXPIRED;
+        }
     }
 
     public function is(string $status)
