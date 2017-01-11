@@ -12,10 +12,10 @@ class Package
     private $nominalHours;
 
     /** @var TimeIncrement */
-    private $transferredInTime;
+    private $transferredInHours;
 
     /** @var TimeIncrement */
-    private $transferredOutTime;
+    private $transferredOutHours;
 
     private $status;
 
@@ -31,6 +31,8 @@ class Package
         $this->clientId = $clientId;
         $this->nominalHours = $nominalHours;
         $this->status = PackageStatus::determineFrom($reference->getStartDate(), $reference->getMonths());
+        $this->transferredInHours = new TimeIncrement(0);
+        $this->transferredOutHours = new TimeIncrement(0);
     }
 
     public function attach(Consultation $consultation)
@@ -38,7 +40,7 @@ class Package
         if ($this->status->isNot(PackageStatus::ACTIVE)) {
             throw new Exception('Cannot attach a consultation to a Package that is not Active');
         }
-        if ($this->getUsedTime()->add($consultation->getTime())->isMoreThan($this->getAvailableTime())) {
+        if ($this->getUsedHours()->add($consultation->getTime())->isMoreThan($this->getRemainingHours())) {
             throw new Exception('Package does not have enough hours remaining');
         }
         if ($this->clientId->isNot($consultation->getClientId())) {
@@ -47,36 +49,41 @@ class Package
         $this->attachedConsultations[] = $consultation;
     }
 
-    private function getUsedTime() : TimeIncrement
+    private function getRemainingHours() : TimeIncrement
     {
-        $usedHours = new TimeIncrement(0);
+        return $this->getAvailableHours()->minus($this->getUsedHours())->minus($this->transferOutHours());
+    }
+
+    private function getAvailableHours() : TimeIncrement
+    {
+        return $this->nominalHours->add($this->transferredInHours);
+    }
+
+    private function getUsedHours() : TimeIncrement
+    {
+        $consultationHours = new TimeIncrement(0);
         foreach ($this->attachedConsultations as $attachedConsultation) {
-            $usedHours = $usedHours->add($attachedConsultation->getTime());
+            $consultationHours = $consultationHours->add($attachedConsultation->getTime());
         }
-        return $usedHours;
+        return $consultationHours->minus($this->transferredOutHours);
     }
 
-    private function getAvailableTime() : TimeIncrement
-    {
-        return $this->nominalHours->add($this->transferredInTime)->minus($this->transferredOutTime);
-    }
 
-    private function transferInTime(TimeIncrement $timeToTransferIn)
+    public function transferInTime(TimeIncrement $timeToTransferIn)
     {
         if ($this->status->is(PackageStatus::EXPIRED)) {
             throw new DomainException('Cannot transfer time into an Expired Package');
         }
-        $this->transferredInTime = $this->transferredInTime->add($timeToTransferIn);
+        $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn);
     }
 
-    private function transferOutTime(TimeIncrement $timeToTransferOut)
+    public function transferOutHours() : TimeIncrement
     {
         if ($this->status->isNot(PackageStatus::EXPIRED)) {
             throw new DomainException('Cannot transfer time out of a Package that has not yet Expired');
         }
-        if ($timeToTransferOut->isMoreThan($this->getAvailableTime())) {
-            throw new DomainException('Cannot transfer out more time than the Package has available');
-        }
-        $this->transferredOutTime = $this->transferredOutTime->add($timeToTransferOut);
+        /** No guard for 0 available time, that's probably not exceptional to transfer out no time... */
+        $this->transferredOutHours = $this->getRemainingHours();
+        return $this->transferredOutHours;
     }
 }

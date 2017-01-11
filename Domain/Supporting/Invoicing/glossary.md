@@ -26,15 +26,14 @@
 |---|---|---|---|
 |Assign [a closed Project to]||Determine that the consultation hours for that project should be deducted from this package|N|
 |Nominal Hours||The number of hours a client has purchased|N|
-|Available Hours||The number of hours available to a Client within a Packaged after additions or deductions|N|
-|Remaining Hours|Remaining Amount|The number of hours available to a Client at the current point in time|N|
+|Available Hours||Nominal + what is transferred in|N|
+|Remaining Hours|Available - whatever got used - whatever got transferred out|N|
 |Reference||consist of name, which is generally just a name or a grade, like gold, or silver, but it is really just a reference, it can be anything, plus year and month the when the package started, and finally the length|N|
 |Fixed Hourly Rate||The agreed cost of a 1 hour consultation for a given client|N|
 |Purchase|Buy|When a Client pays for a new Package|N|
 |Close Down||Changing the state of a package to prevent it being used further|
 |Close Down Manually||Changing the state of a package to prevent it being used further|
 |Ran Over||A package which has been allocated projects which exceed the pre-purchased amount of Consultation time|
-|Nominal Hours|Pre-purchased time|The amount of time a package had available at the point of purchase (Before any additions or deductions)|
 
 ####Package states
 |Term|Alternatives|Definition|Confirmed|
