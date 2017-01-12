@@ -42,7 +42,7 @@
 |Create|Set up|When a Client has a new area of Interest|N|
 |Deadline|End Date|The date a project should end|N|
 |Reference||A 2 letter - 4 digit combination|N|
-|Reactivate||When a project status changes from on hold to active|N|
+|Reactivate||When a project status changes from on hold to active|Y|
 
 ####Consultation
 |Term|Alternatives|Definition|Confirmed|

@@ -37,6 +37,7 @@ class Prospect
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::registered();
+        /** Raise a 'prospect_registered' event */
     }
 
     public function declareNotInterested()
@@ -45,7 +46,6 @@ class Prospect
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::notInterested();
-        /** Raise a 'prospect_not_interested' event */
     }
 
     public function giveUp()
@@ -54,6 +54,5 @@ class Prospect
             throw new Exception('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::notReachable();
-        /** Raise a 'prospect_not_reachable' event */
     }
 }

@@ -7,7 +7,7 @@ class Consultation
     private $specialistId;
     private $time;
     private $status;
-    private $durationMinutes;
+    private $duration;
 
     public function __construct(
         ConsultationId $consultationId,
@@ -20,6 +20,7 @@ class Consultation
         $this->specialistId = $specialistId;
         $this->time = $time;
         $this->status = ConsultationStatus::open();
+        $this->duration = new TimeIncrement(0);
     }
 
     public function report(int $durationMinutes)
@@ -27,7 +28,7 @@ class Consultation
         if ($this->status->isNot(ConsultationStatus::OPEN)) {
             throw new Exception('Cannot report on a consultation that is not open');
         }
-        $this->durationMinutes = $durationMinutes;
+        $this->duration = $this->duration->add(new TimeIncrement($durationMinutes));
         $this->status = ConsultationStatus::confirmed();
     }
 

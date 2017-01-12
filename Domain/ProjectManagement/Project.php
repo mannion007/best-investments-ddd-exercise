@@ -24,8 +24,8 @@ class Project
         $this->deadline = $deadline;
         $this->specialists = new SpecialistCollection();
 
-        $this->status = ProjectStatus::Draft();
-        /** Raise a 'project_set_up' event */
+        $this->status = ProjectStatus::draft();
+        /** Raise a 'project_drafted' event */
     }
 
     public static function setUp(ClientId $clientId, string $name, DateTime $deadline) : Project
@@ -35,8 +35,8 @@ class Project
 
     public function start(ProjectManagerId $projectManagerId)
     {
-        if ($this->status->is(ProjectStatus::ACTIVE)) {
-            throw new Exception('The project has already started, it cannot be started again');
+        if ($this->status->isNot(ProjectStatus::DRAFT)) {
+            throw new Exception('Cannot Start a Project that is not in Draft state');
         }
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
@@ -45,6 +45,7 @@ class Project
 
     public function close()
     {
+        /** This cannot be event driven. Client may want to arrange more consultations at any time */
         /** @var Consultation $consultation */
         foreach ($this->consultations as $consultation) {
             if ($consultation->is(ConsultationStatus::OPEN)) {
@@ -59,11 +60,11 @@ class Project
 
     public function addSpecialist(SpecialistId $specialistId)
     {
-        if ($this->specialists->includes((string)$specialistId)) {
-            throw new Exception('Cannot add a specialist more than once');
-        }
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new Exception('A specialist can only be added to a project after it has started');
+        }
+        if ($this->specialists->includes((string)$specialistId)) {
+            throw new Exception('Cannot add a specialist more than once');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::unvetted();
     }
@@ -74,6 +75,7 @@ class Project
             throw new Exception('Potential specialist is not unvetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::approved();
+        /** Raise a 'specialist_approved' event */
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
@@ -82,6 +84,7 @@ class Project
             throw new Exception('Potential specialist is not unvetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
+        /** Raise a 'specialist_discarded' event */
     }
 
     public function scheduleConsultation(SpecialistId $specialistId, DateTime $time)
@@ -94,16 +97,22 @@ class Project
         }
         $this->consultations = new Consultation($this->nextConsultationId(), $this->reference, $specialistId, $time);
     }
-
-    /** @todo What about taking off hold? */
-
+    
     public function putOnHold()
     {
         /** Need to enforce this, or if not on hold just do nothing? */
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new Exception('Can only put an active project on hold');
         }
-        $this->status = ProjectStatus::ON_HOLD;
+        $this->status = ProjectStatus::onHold();
+    }
+
+    public function reactivate()
+    {
+        if ($this->status->isNot(ProjectStatus::ON_HOLD)) {
+            throw new Exception('Cannot reactivate a Project that is not On Hold');
+        }
+        $this->status = ProjectStatus::active();
     }
 
     public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
