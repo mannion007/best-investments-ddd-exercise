@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Invoicing;
+
 class Package
 {
     /** @var PackageReference */
@@ -38,13 +40,13 @@ class Package
     public function attach(Consultation $consultation)
     {
         if ($this->status->isNot(PackageStatus::ACTIVE)) {
-            throw new Exception('Cannot attach a consultation to a Package that is not Active');
+            throw new \DomainException('Cannot attach a consultation to a Package that is not Active');
         }
         if ($this->getUsedHours()->add($consultation->getTime())->isMoreThan($this->getRemainingHours())) {
-            throw new Exception('Package does not have enough hours remaining');
+            throw new \DomainException('Package does not have enough hours remaining');
         }
         if ($this->clientId->isNot($consultation->getClientId())) {
-            throw new Exception('Cannot attach a Consultation for another Client');
+            throw new \DomainException('Cannot attach a Consultation for another Client');
         }
         $this->attachedConsultations[] = $consultation;
     }
@@ -72,7 +74,7 @@ class Package
     public function transferInTime(TimeIncrement $timeToTransferIn)
     {
         if ($this->status->is(PackageStatus::EXPIRED)) {
-            throw new DomainException('Cannot transfer time into an Expired Package');
+            throw new \DomainException('Cannot transfer time into an Expired Package');
         }
         $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn);
     }
@@ -80,7 +82,7 @@ class Package
     public function transferOutHours() : TimeIncrement
     {
         if ($this->status->isNot(PackageStatus::EXPIRED)) {
-            throw new DomainException('Cannot transfer time out of a Package that has not yet Expired');
+            throw new \DomainException('Cannot transfer time out of a Package that has not yet Expired');
         }
         /** No guard for 0 available time, that's probably not exceptional to transfer out no time... */
         $this->transferredOutHours = $this->getRemainingHours();

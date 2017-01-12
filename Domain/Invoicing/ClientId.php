@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Invoicing;
+
 class ClientId
 {
     private $id;

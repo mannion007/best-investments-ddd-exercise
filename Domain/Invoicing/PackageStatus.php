@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Invoicing;
+
 class PackageStatus
 {
     const ACTIVE = 'active';
@@ -8,18 +10,18 @@ class PackageStatus
 
     private $status;
 
-    public static function determineFrom(DateTime $startDate, PackageDuration $duration)
+    public static function determineFrom(\DateTime $startDate, PackageDuration $duration)
     {
         return new self($startDate, $duration);
     }
 
-    private function __construct(DateTime $startDate, PackageDuration $duration)
+    private function __construct(\DateTime $startDate, PackageDuration $duration)
     {
-        $currentDate = new DateTime();
-        $expiryDate = $startDate->add(new DateInterval(sprintf('P%sM', (string)$duration)));
+        $currentDate = new \DateTime();
+        $expiryDate = $startDate->add(new \DateInterval(sprintf('P%sM', (string)$duration)));
 
         if ($expiryDate <= $startDate) {
-            throw new DomainException('Package cannot expire before it starts');
+            throw new \DomainException('Package cannot expire before it starts');
         }
         if ($currentDate < $startDate) {
             $this->status = self::INACTIVE;

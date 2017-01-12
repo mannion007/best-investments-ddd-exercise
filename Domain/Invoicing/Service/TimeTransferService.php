@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Invoicing\Service;
+
 class TimeTransferService
 {
     public function transferAvailableTime(PackageReference $outReference, PackageReference $inReference)
