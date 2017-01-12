@@ -16,9 +16,9 @@ class Project
     /** @var Consultation[]  */
     private $consultations = [];
 
-    private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
+    private function __construct(ClientId $clientId, string $name, DateTime $deadline)
     {
-        $this->reference = ProjectReference::create();
+        $this->reference = new ProjectReference();
         $this->clientId = $clientId;
         $this->name = $name;
         $this->deadline = $deadline;
@@ -28,7 +28,7 @@ class Project
         /** Raise a 'project_set_up' event */
     }
 
-    public static function setUp(ClientId $clientId, string $name, \DateTime $deadline)
+    public static function setUp(ClientId $clientId, string $name, DateTime $deadline) : Project
     {
         return new self($clientId, $name, $deadline);
     }
@@ -49,7 +49,7 @@ class Project
         foreach ($this->consultations as $consultation) {
             if ($consultation->is(ConsultationStatus::OPEN)) {
                 throw new Exception(
-                    'Cannot close project until all open consultations have been either discarded or confirmed'
+                    'Cannot close project until all open Consultations have been either Confirmed or Discarded'
                 );
             }
         }
@@ -89,7 +89,7 @@ class Project
         if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APROVED)) {
             throw new Exception('A consultation can only be scheduled with an approved Specialist');
         }
-        $this->consultations = new Consultation($this, $specialistId, $time);
+        $this->consultations = new Consultation($this->nextConsultationId(), $this, $specialistId, $time);
     }
 
     public function putOnHold()
@@ -101,18 +101,23 @@ class Project
         $this->status = ProjectStatus::ON_HOLD;
     }
 
-    public function getReference()
+    public function getReference() : ProjectReference
     {
         return $this->reference;
     }
 
-    public function is($status)
+    public function is($status) : bool
     {
         return $this->status->is($status);
     }
 
-    public function isNot($status)
+    public function isNot($status) : bool
     {
         return $this->status->isNot($status);
+    }
+
+    private function nextConsultationId() : ConsultationId
+    {
+        return new ConsultationId(count($this->consultations));
     }
 }

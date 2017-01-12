@@ -4,17 +4,18 @@ class ClientId
 {
     private $id;
 
-    public function __construct($id)
+    /** "new client ID" sounds OK, no need to hide default constructor */
+    public function __construct()
     {
-        $this->id = $id;
+        $this->id = \Ramsey\Uuid\Uuid::uuid4()->toString();
     }
 
-    public function isNot(ClientId $id)
+    public function isNot(ClientId $id) : bool
     {
         return !$this->is($id);
     }
 
-    public function is(ClientId $id)
+    public function is(ClientId $id) : bool
     {
         return (string)$this === (string)$id;
     }

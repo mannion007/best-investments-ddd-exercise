@@ -4,17 +4,22 @@ class ClientId
 {
     private $id;
 
-    public function __construct($id)
+    private function __construct($id)
     {
         $this->id = $id;
     }
 
-    public function isNot(ClientId $id)
+    public static function fromExisting(string $id) : ClientId
+    {
+        return new self($id);
+    }
+
+    public function isNot(ClientId $id) : bool
     {
         return !$this->is($id);
     }
 
-    public function is(ClientId $id)
+    public function is(ClientId $id) : bool
     {
         return (string)$this === (string)$id;
     }

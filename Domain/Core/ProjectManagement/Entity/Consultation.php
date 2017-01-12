@@ -9,12 +9,16 @@ class Consultation
     private $status;
     private $durationMinutes;
 
-    public function __construct(Project $project, SpecialistId $specialistId, DateTime $time)
-    {
+    public function __construct(
+        ConsultationId $consultationId,
+        Project $project,
+        SpecialistId $specialistId,
+        DateTime $time
+    ) {
         if ($project->isNot(ProjectStatus::ACTIVE)) {
             throw new Exception('Can only create a new Consultation for an active project.');
         }
-        $this->consultationId = new ConsultationId();
+        $this->consultationId = $consultationId;
         $this->projectReference = $project->getReference();
         $this->specialistId = $specialistId;
         $this->time = $time;
@@ -38,7 +42,7 @@ class Consultation
         $this->status = ConsultationStatus::discarded();
     }
 
-    public function is($status)
+    public function is($status) : bool
     {
         return $this->status->is($status);
     }
