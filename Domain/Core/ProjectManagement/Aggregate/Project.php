@@ -104,9 +104,28 @@ class Project
         $this->status = ProjectStatus::ON_HOLD;
     }
 
+    public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
+    {
+        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
+         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
+        $this->consultations[(string)$consultationId]->report($durationMinutes);
+    }
+
+    public function discardConsultation(ConsultationId $consultationId)
+    {
+        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
+         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
+        $this->consultations[(string)$consultationId]->discard();
+    }
+
     public function getReference() : ProjectReference
     {
         return $this->reference;
+    }
+
+    private function nextConsultationId() : ConsultationId
+    {
+        return new ConsultationId(count($this->consultations));
     }
 
     public function is($status) : bool
@@ -117,10 +136,5 @@ class Project
     public function isNot($status) : bool
     {
         return $this->status->isNot($status);
-    }
-
-    private function nextConsultationId() : ConsultationId
-    {
-        return new ConsultationId(count($this->consultations));
     }
 }
