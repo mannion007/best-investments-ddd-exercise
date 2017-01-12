@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\ProjectManagement;
+
 class PotentialSpecialist
 {
     private $id;
@@ -19,12 +21,15 @@ class PotentialSpecialist
         /** Raise a 'potential_specialist_put_on_list' event */
     }
 
-    public static function putOnList(ProjectManagerId $projectManagerId, string $notes, string $name)
-    {
+    public static function putOnList(
+        ProjectManagerId $projectManagerId,
+        string $notes,
+        string $name
+    ) : PotentialSpecialist {
         return new self($projectManagerId, $name, $notes);
     }
 
-    public function register()
+    public function register() : Specialist
     {
         return Specialist::register($this->id, $this->name);
     }

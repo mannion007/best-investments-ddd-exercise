@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\ProjectManagement;
+
 class Consultation
 {
     private $consultationId;
@@ -13,7 +15,7 @@ class Consultation
         ConsultationId $consultationId,
         ProjectReference $projectReference,
         SpecialistId $specialistId,
-        DateTime $time
+        \DateTime $time
     ) {
         $this->consultationId = $consultationId;
         $this->projectReference = $projectReference;
@@ -26,7 +28,7 @@ class Consultation
     public function report(int $durationMinutes)
     {
         if ($this->status->isNot(ConsultationStatus::OPEN)) {
-            throw new Exception('Cannot report on a consultation that is not open');
+            throw new \DomainException('Cannot report on a consultation that is not open');
         }
         $this->duration = $this->duration->add(new TimeIncrement($durationMinutes));
         $this->status = ConsultationStatus::confirmed();
@@ -35,7 +37,7 @@ class Consultation
     public function discard()
     {
         if ($this->status->isNot(ConsultationStatus::OPEN)) {
-            throw new Exception('Cannot discard a report on a consultation that is not open');
+            throw new \DomainException('Cannot discard a report on a consultation that is not open');
         }
         $this->status = ConsultationStatus::discarded();
     }

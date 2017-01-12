@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\ProjectManagement;
+
 class ClientId
 {
     private $id;

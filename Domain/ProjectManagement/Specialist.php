@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\ProjectManagement;
+
 class Specialist
 {
     private $id;
@@ -12,7 +14,7 @@ class Specialist
         $this->name = $name;
     }
 
-    public static function register(SpecialistId $id, string $name)
+    public static function register(SpecialistId $id, string $name) : Specialist
     {
         return new self($id, $name);
     }

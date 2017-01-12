@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\ProjectManagement;
+
 class SpecialistRecommendation
 {
     const UNVETTED = 'unvetted';
@@ -13,27 +15,27 @@ class SpecialistRecommendation
         $this->status = $status;
     }
 
-    public static function unvetted()
+    public static function unvetted() : SpecialistRecommendation
     {
         return new self(self::UNVETTED);
     }
 
-    public static function approved()
+    public static function approved() : SpecialistRecommendation
     {
         return new self(self::APPROVED);
     }
 
-    public static function discarded()
+    public static function discarded() : SpecialistRecommendation
     {
         return new self(self::DISCARDED);
     }
 
-    public function is($status)
+    public function is($status) : bool
     {
         return $status === $this->status;
     }
 
-    public function isNot($status)
+    public function isNot($status) : bool
     {
         return !$this->is($status);
     }

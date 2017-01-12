@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\ProjectManagement;
+
 class SpecialistCollection implements ArrayAccess
 {
     private $specialists = [];
@@ -13,7 +15,7 @@ class SpecialistCollection implements ArrayAccess
         }
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         return isset($this->specialists[$offset]);
     }
@@ -28,7 +30,7 @@ class SpecialistCollection implements ArrayAccess
         return isset($this->specialists[$offset]) ? $this->specialists[$offset] : null;
     }
 
-    public function includes($key)
+    public function includes($key) : bool
     {
         return $this->offsetExists($key);
     }
