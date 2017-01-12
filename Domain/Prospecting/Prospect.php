@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Prospecting;
+
 class Prospect
 {
     private $id;
@@ -18,7 +20,7 @@ class Prospect
         /** Raise a 'prospect_received' event */
     }
 
-    public function receive(ProspectId $id, string $name, string $notes)
+    public function receive(ProspectId $id, string $name, string $notes) : Prospect
     {
         return new self($id, $name, $notes);
     }
@@ -26,15 +28,15 @@ class Prospect
     public function chaseUp()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new Exception('Prospect does not have "in progress" status');
+            throw new \DomainException('Prospect does not have "in progress" status');
         }
-        $this->chaseUps[] = new DateTime();
+        $this->chaseUps[] = new \DateTime();
     }
 
     public function register()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new Exception('Prospect does not have "in progress" status');
+            throw new \DomainException('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::registered();
         /** Raise a 'prospect_registered' event */
@@ -43,7 +45,7 @@ class Prospect
     public function declareNotInterested()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new Exception('Prospect does not have "in progress" status');
+            throw new \DomainException('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::notInterested();
     }
@@ -51,7 +53,7 @@ class Prospect
     public function giveUp()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new Exception('Prospect does not have "in progress" status');
+            throw new \DomainException('Prospect does not have "in progress" status');
         }
         $this->status = ProspectStatus::notReachable();
     }

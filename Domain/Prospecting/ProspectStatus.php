@@ -1,4 +1,7 @@
 <?php
+
+namespace Mannion007\BestInvestments\Domain\Prospecting;
+
 class ProspectStatus
 {
     const REGISTERED = 'registered';
@@ -13,34 +16,33 @@ class ProspectStatus
         $this->status = $status;
     }
 
-    public static function registered()
+    public static function registered() : ProspectStatus
     {
         return new self(self::REGISTERED);
     }
 
-    public static function inProgress()
+    public static function inProgress() : ProspectStatus
     {
         return new self(self::IN_PROGRESS);
     }
 
-    public static function notInterested()
+    public static function notInterested() : ProspectStatus
     {
         return new self(self::NOT_INTERESTED);
     }
 
-    public static function notReachable()
+    public static function notReachable() : ProspectStatus
     {
         return new self(self::NOT_INTERESTED);
     }
 
-    public function is($value)
+    public function is($value) : bool
     {
         return $value === $this->status;
     }
 
-    public function isNot($value)
+    public function isNot($value) : bool
     {
         return !$this->is($value);
     }
-
 }
