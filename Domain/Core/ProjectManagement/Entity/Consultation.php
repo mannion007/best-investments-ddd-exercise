@@ -11,15 +11,12 @@ class Consultation
 
     public function __construct(
         ConsultationId $consultationId,
-        Project $project,
+        ProjectReference $projectReference,
         SpecialistId $specialistId,
         DateTime $time
     ) {
-        if ($project->isNot(ProjectStatus::ACTIVE)) {
-            throw new Exception('Can only create a new Consultation for an active project.');
-        }
         $this->consultationId = $consultationId;
-        $this->projectReference = $project->getReference();
+        $this->projectReference = $projectReference;
         $this->specialistId = $specialistId;
         $this->time = $time;
         $this->status = ConsultationStatus::open();

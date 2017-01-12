@@ -86,10 +86,13 @@ class Project
 
     public function scheduleConsultation(SpecialistId $specialistId, DateTime $time)
     {
+        if ($this->isNot(ProjectStatus::ACTIVE)) {
+            throw new Exception('Can not schedule a Consultation for a Project that is not active');
+        }
         if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APROVED)) {
             throw new Exception('A consultation can only be scheduled with an approved Specialist');
         }
-        $this->consultations = new Consultation($this->nextConsultationId(), $this, $specialistId, $time);
+        $this->consultations = new Consultation($this->nextConsultationId(), $this->reference, $specialistId, $time);
     }
 
     public function putOnHold()
