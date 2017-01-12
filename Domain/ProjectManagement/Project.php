@@ -95,6 +95,8 @@ class Project
         $this->consultations = new Consultation($this->nextConsultationId(), $this->reference, $specialistId, $time);
     }
 
+    /** @todo What about taking off hold? */
+
     public function putOnHold()
     {
         /** Need to enforce this, or if not on hold just do nothing? */
