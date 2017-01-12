@@ -1,8 +1,8 @@
 <?php
 
-namespace Mannion007\BestInvestments\ProjectManagement;
+namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistCollection implements ArrayAccess
+class SpecialistCollection implements \ArrayAccess
 {
     private $specialists = [];
 
