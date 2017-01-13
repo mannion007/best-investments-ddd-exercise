@@ -20,6 +20,7 @@
 |Term|Alternatives|Meaning|Confirmed|
 |---|---|---|---|
 |Duration||The amount of time (rounded to 15 minutes) that a consultation lasted|N|
+|Billable||A consultation that belongs to a closed project and can be attached to a Package or invoiced using Pay as you go|Y|
 
 ####Packages
 |Term|Alternatives|Definition|Confirmed|

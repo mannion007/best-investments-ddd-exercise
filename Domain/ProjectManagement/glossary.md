@@ -52,4 +52,3 @@
 |Confirmed||An arranged consultation which has taken place|N|
 |Open||An arranged consultation that is neither yet Confirmed or Discarded|N|
 |Schedule|Set up|Plan a Consultation between an Investor and a Specialist|N|
-|Billable||A consultation that belongs to a closed project and can be attached to a Package or invoiced using Pay as you go|Y|
