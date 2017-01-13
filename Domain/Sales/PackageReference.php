@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Sales;
+
 class PackageReference
 {
     const REFERENCE_FORMAT = '%s-%s-%s-%s';
@@ -11,7 +13,7 @@ class PackageReference
 
     public function __construct(
         string $name,
-        DateTime $startDate,
+        \DateTime $startDate,
         PackageDuration $months
     ) {
         $this->name = $name;
@@ -27,7 +29,7 @@ class PackageReference
         );
     }
 
-    public function getStartDate() : DateTime
+    public function getStartDate() : \DateTime
     {
         return $this->startDate;
     }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Sales;
+
 class ClientStatus
 {
     const ACTIVE = 'active';
@@ -12,22 +14,22 @@ class ClientStatus
         $this->status = $status;
     }
 
-    public static function active()
+    public static function active() : ClientStatus
     {
         return new self(self::ACTIVE);
     }
 
-    public static function suspended()
+    public static function suspended() : ClientStatus
     {
         return new self(self::SUSPENDED);
     }
 
-    public function is(string $status)
+    public function is(string $status) : bool
     {
         return $status === $this->status;
     }
 
-    public function isNot(string $status)
+    public function isNot(string $status) : bool
     {
         return !$this->is($status);
     }

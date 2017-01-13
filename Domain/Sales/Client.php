@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Sales;
+
 class Client
 {
     private $clientId;
@@ -8,10 +10,9 @@ class Client
     private $payAsYouGoRate;
     private $status;
 
-    /** "new client" sounds OK, no point in guarding the constructor */
-    public function __construct(string $name, ContactDetails $contactDetails, Money $payAsYouGoRate)
+    public function __construct(ClientId $clientId, string $name, ContactDetails $contactDetails, Money $payAsYouGoRate)
     {
-        $this->clientId = new ClientId();
+        $this->clientId = $clientId;
         $this->name = $name;
         $this->contactDetails = $contactDetails;
         $this->payAsYouGoRate = $payAsYouGoRate;
@@ -21,7 +22,7 @@ class Client
 
     public function purchasePackage(
         string $name,
-        DateTime $startDate,
+        \DateTime $startDate,
         PackageDuration $months,
         int $nominalHours
     ) {
@@ -31,7 +32,7 @@ class Client
     public function suspendService()
     {
         if ($this->status->is(ClientStatus::SUSPENDED)) {
-            throw new Exception('Cannot suspend the Service of a Client when it is already suspended');
+            throw new \DomainException('Cannot suspend the Service of a Client when it is already suspended');
         }
         $this->status = ClientStatus::suspended();
         /** Raise a client_service_suspended event */
@@ -40,7 +41,7 @@ class Client
     public function resumeOperations()
     {
         if ($this->status->is(ClientStatus::ACTIVE)) {
-            throw new Exception('Cannot resume operations of a Client that is not suspended');
+            throw new \DomainException('Cannot resume operations of a Client that is not suspended');
         }
         $this->status = ClientStatus::active();
         /** Raise a client_operations_resumed event */

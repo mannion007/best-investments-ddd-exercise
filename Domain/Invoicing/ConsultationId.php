@@ -1,6 +1,6 @@
 <?php
 
-namespace Mannion007\BestInvestments\Domain\ProjectManagement;
+namespace Mannion007\BestInvestments\Domain\Invoicing;
 
 class ConsultationId
 {

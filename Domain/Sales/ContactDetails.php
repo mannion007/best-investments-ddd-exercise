@@ -1,5 +1,7 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Sales;
+
 class ContactDetails
 {
     private $telephone;

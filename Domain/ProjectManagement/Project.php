@@ -89,12 +89,12 @@ class Project
         /** Raise a 'specialist_discarded' event */
     }
 
-    public function scheduleConsultation(SpecialistId $specialistId, DateTime $time)
+    public function scheduleConsultation(SpecialistId $specialistId, \DateTime $time)
     {
         if ($this->isNot(ProjectStatus::ACTIVE)) {
             throw new \DomainException('Can not schedule a Consultation for a Project that is not active');
         }
-        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APROVED)) {
+        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APPROVED)) {
             throw new \DomainException('A consultation can only be scheduled with an approved Specialist');
         }
         $this->consultations = new Consultation($this->nextConsultationId(), $this->reference, $specialistId, $time);
@@ -112,7 +112,7 @@ class Project
     public function reactivate()
     {
         if ($this->status->isNot(ProjectStatus::ON_HOLD)) {
-            throw new Exception('Cannot reactivate a Project that is not On Hold');
+            throw new \DomainException('Cannot reactivate a Project that is not On Hold');
         }
         $this->status = ProjectStatus::active();
     }

@@ -6,7 +6,6 @@ class ProjectReference
 {
     private $reference;
 
-    /** "new project reference" sounds OK, no need to hide default constructor */
     public function __construct()
     {
         $letters = sprintf('%s%s', chr(rand(97, 122)), chr(rand(97, 122)));

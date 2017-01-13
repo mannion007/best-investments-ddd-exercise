@@ -1,5 +1,9 @@
 <?php
 
+namespace Mannion007\BestInvestments\Domain\Sales;
+
+use Ramsey\Uuid\Uuid;
+
 class ClientId
 {
     private $id;
@@ -7,7 +11,7 @@ class ClientId
     /** "new client ID" sounds OK, no need to hide default constructor */
     public function __construct()
     {
-        $this->id = \Ramsey\Uuid\Uuid::uuid4()->toString();
+        $this->id = Uuid::uuid4()->toString();
     }
 
     public function isNot(ClientId $id) : bool

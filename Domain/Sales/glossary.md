@@ -15,10 +15,11 @@
 |Suspend Service||Change the state of all active projects for the client to on hold so that no specialists can be added to it, no consultations set up. Does not affect packages|N|
 |Suspend Service||Change all Project statuses for the Client from Active to On Hold at the request of the Client|N|
 |Resume Operations||Change a Project statuses for the Client from On Hold to Active at the request of the Client|N|
+|Nominal Hours||The number of hours the client has purchased on the Package|N|
 
 ###Client
 |Client|||N|
-|Potential Client||Contact details for an individual within an organisation who may be interested in the servies of Best Investments |N|
+|Potential Client||Contact details for an individual within an organisation who may be interested in the services of Best Investments |N|
 |Primary Contact Information||The contact details for a Potential Client|N|
 |Potential Client|||N|
 |add potential client||When a new Potential client is put into the Client Database System|N|

@@ -5,7 +5,7 @@ namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 class SpecialistRecommendation
 {
     const UNVETTED = 'unvetted';
-    const APROVED = 'approved';
+    const APPROVED = 'approved';
     const DISCARDED = 'discarded';
 
     private $status;
