@@ -8,9 +8,14 @@ class SpecialistId
 {
     private $id;
 
-    public function __construct()
+    public function __construct(string $id = null)
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = is_null($id) ? Uuid::uuid4()->toString() : $id;
+    }
+
+    public static function fromExisting(string $id) : SpecialistId
+    {
+        return new self($id);
     }
 
     public function __toString()

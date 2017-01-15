@@ -27,7 +27,7 @@ class Project
         $this->specialists = new SpecialistCollection();
 
         $this->status = ProjectStatus::draft();
-        /** Raise a 'project_drafted' event */
+        /** Raise new ProjectDraftedEvent($this->reference, $this->clientId, $this->name, $this->deadline); */
     }
 
     public static function setUp(ClientId $clientId, string $name, \DateTime $deadline) : Project
@@ -42,7 +42,7 @@ class Project
         }
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
-        /** Raise a 'project_started' event */
+        /** Raise new ProjectStartedEvent($this->reference, $this->projectManagerId); */
     }
 
     public function close()
@@ -57,7 +57,7 @@ class Project
             }
         }
         $this->status = ProjectStatus::closed();
-        /** Raise a 'project_closed' event */
+        /** Raise new ProjectClosedEvent($this->reference, $this->clientId, $this->consultations); */
     }
 
     public function addSpecialist(SpecialistId $specialistId)
