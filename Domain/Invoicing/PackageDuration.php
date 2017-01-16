@@ -4,9 +4,6 @@ namespace Mannion007\BestInvestments\Domain\Invoicing;
 
 class PackageDuration
 {
-    const SIX = 6;
-    const TWELVE = 12;
-
     private $months;
 
     private function __construct(int $months)
@@ -16,12 +13,12 @@ class PackageDuration
 
     public static function sixMonths()
     {
-        return new self(self::SIX);
+        return new self(6);
     }
 
     public static function twelveMonths()
     {
-        return new self(self::TWELVE);
+        return new self(12);
     }
 
     public function __toString()
