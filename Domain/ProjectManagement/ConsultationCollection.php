@@ -2,32 +2,32 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistCollection implements \ArrayAccess
+class ConsultationCollection implements \ArrayAccess
 {
-    private $specialists = [];
+    private $consultations = [];
 
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
-            $this->specialists[] = $value;
+            $this->consultations[] = $value;
         } else {
-            $this->specialists[$offset] = $value;
+            $this->consultations[$offset] = $value;
         }
     }
 
     public function offsetExists($offset) : bool
     {
-        return isset($this->specialists[$offset]);
+        return isset($this->consultations[$offset]);
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->specialists[$offset]);
+        unset($this->consultations[$offset]);
     }
 
     public function offsetGet($offset)
     {
-        return isset($this->specialists[$offset]) ? $this->specialists[$offset] : null;
+        return isset($this->consultations[$offset]) ? $this->consultations[$offset] : null;
     }
 
     public function includes($key) : bool
