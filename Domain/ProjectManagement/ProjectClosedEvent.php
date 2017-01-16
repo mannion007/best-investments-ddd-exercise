@@ -20,9 +20,9 @@ class ProjectClosedEvent
     public static function fromPayload(array $payload)
     {
         return new self(
-            ProjectReference::fromExisting($payload->reference),
-            ClientId::fromExisting($payload->clientId),
-            $payload->consultations
+            ProjectReference::fromExisting($payload['reference']),
+            ClientId::fromExisting($payload['clientId']),
+            $payload['consultations']
         );
     }
 }

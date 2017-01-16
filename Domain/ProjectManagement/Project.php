@@ -15,7 +15,7 @@ class Project
     /** @var SpecialistCollection  */
     private $specialists;
 
-    /** @var Consultation[]  */
+    /** @var SpecialistCollection  */
     private $consultations = [];
 
     private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
@@ -25,6 +25,7 @@ class Project
         $this->name = $name;
         $this->deadline = $deadline;
         $this->specialists = new SpecialistCollection();
+        $this->consultations = new ConsultationCollection();
 
         $this->status = ProjectStatus::draft();
         /** Raise new ProjectDraftedEvent($this->reference, $this->clientId, $this->name, $this->deadline); */
@@ -97,9 +98,25 @@ class Project
         if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APPROVED)) {
             throw new \DomainException('A consultation can only be scheduled with an approved Specialist');
         }
-        $this->consultations = new Consultation($this->nextConsultationId(), $this->reference, $specialistId, $time);
+        $consultationId = $this->nextConsultationId();
+        $this->consultations[(string)$consultationId]
+            = new Consultation($consultationId, $this->reference, $specialistId, $time);
     }
-    
+
+    public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
+    {
+        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
+         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
+        $this->consultations[(string)$consultationId]->report($durationMinutes);
+    }
+
+    public function discardConsultation(ConsultationId $consultationId)
+    {
+        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
+         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
+        $this->consultations[(string)$consultationId]->discard();
+    }
+
     public function putOnHold()
     {
         /** Need to enforce this, or if not on hold just do nothing? */
@@ -115,20 +132,6 @@ class Project
             throw new \DomainException('Cannot reactivate a Project that is not On Hold');
         }
         $this->status = ProjectStatus::active();
-    }
-
-    public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
-    {
-        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
-         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
-        $this->consultations[(string)$consultationId]->report($durationMinutes);
-    }
-
-    public function discardConsultation(ConsultationId $consultationId)
-    {
-        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
-         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
-        $this->consultations[(string)$consultationId]->discard();
     }
 
     public function getReference() : ProjectReference

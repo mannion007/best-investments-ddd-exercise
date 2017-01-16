@@ -18,8 +18,8 @@ class SpecialistApprovedEvent
     public static function fromPayload(array $payload)
     {
         return new self(
-            $payload->reference,
-            new SpecialistId($payload->specialistId)
+            ProjectReference::fromExisting($payload['reference']),
+            SpecialistId::fromExisting($payload['specialistId'])
         );
     }
 }

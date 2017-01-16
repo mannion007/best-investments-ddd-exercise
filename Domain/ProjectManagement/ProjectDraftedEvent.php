@@ -5,6 +5,7 @@ namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 class ProjectDraftedEvent
 {
     const EVENT_NAME = 'project_drafted';
+    const DATE_FORMAT = 'c';
 
     private $reference;
 
@@ -19,10 +20,10 @@ class ProjectDraftedEvent
     public static function fromPayload(array $payload)
     {
         return new self(
-            ProjectReference::fromExisting($payload->reference),
-            ClientId::fromExisting($payload->client_id),
-            $payload->name,
-            new \DateTime($payload->deadline)
+            ProjectReference::fromExisting($payload['reference']),
+            ClientId::fromExisting($payload['client_id']),
+            $payload['name'],
+            \DateTime::createFromFormat(self::DATE_FORMAT, $payload['deadline'])
         );
     }
 
@@ -32,7 +33,7 @@ class ProjectDraftedEvent
             'reference' => $this->reference,
             'client_id' => $this->clientId,
             'name' => $this->name,
-            'deadline' => $this->deadline
+            'deadline' => date_format($this->deadline, self::DATE_FORMAT)
         );
     }
 }

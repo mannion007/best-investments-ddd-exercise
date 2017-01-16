@@ -20,8 +20,8 @@ class ProjectStartedEvent
     public static function fromPayload(array $payload)
     {
         return new self(
-            ProjectReference::fromExisting($payload->reference),
-            ProjectManagerId::fromExisting($payload->project_manager_id)
+            ProjectReference::fromExisting($payload['reference']),
+            ProjectManagerId::fromExisting($payload['project_manager_id'])
         );
     }
 }
