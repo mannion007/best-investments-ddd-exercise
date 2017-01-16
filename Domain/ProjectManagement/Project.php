@@ -7,16 +7,14 @@ class Project
     private $reference;
     private $clientId;
     private $projectManagerId;
-
     private $name;
     private $status;
     private $deadline;
-
     /** @var SpecialistCollection  */
     private $specialists;
-
     /** @var SpecialistCollection  */
     private $consultations = [];
+
 
     private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
     {
@@ -26,9 +24,10 @@ class Project
         $this->deadline = $deadline;
         $this->specialists = new SpecialistCollection();
         $this->consultations = new ConsultationCollection();
-
         $this->status = ProjectStatus::draft();
-        /** Raise new ProjectDraftedEvent($this->reference, $this->clientId, $this->name, $this->deadline); */
+        DomainEventPublisher::publish(
+            new ProjectDrafted($this->reference, $this->clientId, $this->name, $this->deadline)
+        );
     }
 
     public static function setUp(ClientId $clientId, string $name, \DateTime $deadline) : Project
@@ -58,7 +57,9 @@ class Project
             }
         }
         $this->status = ProjectStatus::closed();
-        /** Raise new ProjectClosedEvent($this->reference, $this->clientId, $this->consultations); */
+        DomainEventPublisher::publish(
+            new ProjectClosed($this->reference, $this->clientId, $this->consultations)
+        );
     }
 
     public function addSpecialist(SpecialistId $specialistId)
