@@ -38,4 +38,9 @@ class TimeIncrement
     {
         return $this->minutes;
     }
+
+    public function inHours() : float
+    {
+        return $this->minutes / 60;
+    }
 }

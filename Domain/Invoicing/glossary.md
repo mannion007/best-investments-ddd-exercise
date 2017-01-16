@@ -15,6 +15,7 @@
 |---|---|---|---|
 |Closed Project|Ended Project|When a project will not have any additional Consultations and can be processed for invoicing|N|
 |Unassigned Project||A project which has not yet been assigned to a Package|N|
+|Ended||A project reaches the point where invoicing for it can start|N|
 
 ####Consultation
 |Term|Alternatives|Meaning|Confirmed|
