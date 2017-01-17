@@ -20,7 +20,7 @@ class Prospect
         $this->notes = $notes;
         $this->status = ProspectStatus::inProgress();
 
-        EventPublisher::publish(new ProspectReceived($this->prospectId, $this->name, $this->notes));
+        EventPublisher::publish(new ProspectReceivedEvent((string)$this->prospectId, $this->name, $this->notes));
     }
 
     public function receive(ProspectId $prospectId, string $name, string $notes) : Prospect
@@ -44,7 +44,7 @@ class Prospect
         $this->hourlyRate = $hourlyRate;
         $this->status = ProspectStatus::registered();
 
-        EventPublisher::publish(new ProspectRegistered($this->prospectId, $this->hourlyRate));
+        EventPublisher::publish(new ProspectRegisteredEvent((string)$this->prospectId, (string)$this->hourlyRate));
     }
 
     public function declareNotInterested()
