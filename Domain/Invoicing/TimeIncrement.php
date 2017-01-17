@@ -13,7 +13,7 @@ class TimeIncrement
         if ($minutes < 0) {
             throw new \DomainException('A Time Increment must have at least positive number of minutes');
         }
-        $this->minutes = ceil($minutes/self::MINUTES_PER_INCREMENT);
+        $this->minutes = ceil($minutes / self::MINUTES_PER_INCREMENT);
     }
 
     public function add(TimeIncrement $timeToAdd)
