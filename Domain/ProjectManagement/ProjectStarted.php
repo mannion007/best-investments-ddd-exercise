@@ -2,7 +2,9 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ProjectStarted implements DomainEventInterface
+use Mannion007\BestInvestments\Event\EventInterface;
+
+class ProjectStarted implements EventInterface
 {
     const EVENT_NAME = 'project_started';
 

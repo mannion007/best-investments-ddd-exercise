@@ -2,7 +2,9 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ProjectClosed implements DomainEventInterface
+use Mannion007\BestInvestments\Event\EventInterface;
+
+class ProjectClosed implements EventInterface
 {
     const EVENT_NAME = 'project_closed';
 

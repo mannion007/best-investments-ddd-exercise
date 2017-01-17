@@ -2,7 +2,9 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ProjectDrafted implements DomainEventInterface
+use Mannion007\BestInvestments\Event\EventInterface;
+
+class ProjectDrafted implements EventInterface
 {
     const EVENT_NAME = 'project_drafted';
     const DATE_FORMAT = 'c';

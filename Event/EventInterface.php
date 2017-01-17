@@ -1,8 +1,8 @@
 <?php
 
-namespace Mannion007\BestInvestments\Domain\ProjectManagement;
+namespace Mannion007\BestInvestments\Event;
 
-interface DomainEventInterface
+interface EventInterface
 {
     public function getEventName() : string;
     public function getPayload() : array;

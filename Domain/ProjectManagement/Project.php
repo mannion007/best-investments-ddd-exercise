@@ -2,6 +2,8 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
+use Mannion007\BestInvestments\Event\EventPublisher;
+
 class Project
 {
     private $reference;
@@ -26,7 +28,7 @@ class Project
         $this->consultations = new ConsultationCollection();
         $this->status = ProjectStatus::draft();
 
-        DomainEventPublisher::publish(
+        EventPublisher::publish(
             new ProjectDrafted($this->reference, $this->clientId, $this->name, $this->deadline)
         );
     }
@@ -44,7 +46,7 @@ class Project
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
 
-        DomainEventPublisher::publish(new ProjectStarted($this->reference, $this->projectManagerId));
+        EventPublisher::publish(new ProjectStarted($this->reference, $this->projectManagerId));
     }
 
     public function close()
@@ -60,7 +62,7 @@ class Project
         }
         $this->status = ProjectStatus::closed();
 
-        DomainEventPublisher::publish(new ProjectClosed($this->reference));
+        EventPublisher::publish(new ProjectClosed($this->reference));
     }
 
     public function addSpecialist(SpecialistId $specialistId)
@@ -81,7 +83,7 @@ class Project
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::approved();
 
-        DomainEventPublisher::publish(new SpecialistApproved($this->reference, $specialistId));
+        EventPublisher::publish(new SpecialistApproved($this->reference, $specialistId));
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
@@ -91,7 +93,7 @@ class Project
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
 
-        DomainEventPublisher::publish(new SpecialistDiscarded($this->reference, $specialistId));
+        EventPublisher::publish(new SpecialistDiscarded($this->reference, $specialistId));
     }
 
     public function scheduleConsultation(SpecialistId $specialistId, \DateTime $time)
@@ -106,7 +108,7 @@ class Project
         $this->consultations[(string)$consultationId]
             = new Consultation($consultationId, $this->reference, $specialistId, $time);
 
-        DomainEventPublisher::publish(new ConsultationScheduled($this->reference, $specialistId, $time));
+        EventPublisher::publish(new ConsultationScheduled($this->reference, $specialistId, $time));
     }
 
     public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)

@@ -2,9 +2,11 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistApproved implements DomainEventInterface
+use Mannion007\BestInvestments\Event\EventInterface;
+
+class SpecialistDiscarded implements EventInterface
 {
-    const EVENT_NAME = 'specialist_approved';
+    const EVENT_NAME = 'specialist_discarded';
 
     private $reference;
     private $specialistId;
@@ -51,7 +53,7 @@ class SpecialistApproved implements DomainEventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : SpecialistApproved
+    public static function fromPayload(array $payload) : SpecialistDiscarded
     {
         return new self(
             ProjectReference::fromExisting($payload['reference']),
