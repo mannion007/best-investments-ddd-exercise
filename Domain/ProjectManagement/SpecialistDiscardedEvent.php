@@ -4,7 +4,7 @@ namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
 use Mannion007\BestInvestments\Event\EventInterface;
 
-class SpecialistDiscarded implements EventInterface
+class SpecialistDiscardedEvent implements EventInterface
 {
     const EVENT_NAME = 'specialist_discarded';
 
@@ -12,25 +12,19 @@ class SpecialistDiscarded implements EventInterface
     private $specialistId;
     private $occurredAt;
 
-    public function __construct(ProjectReference $reference, SpecialistId $specialistId, \DateTime $occurredAt = null)
+    public function __construct($reference, $specialistId, \DateTime $occurredAt = null)
     {
         $this->reference = $reference;
         $this->specialistId = $specialistId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
     }
 
-    /**
-     * @return ProjectReference
-     */
-    public function getReference(): ProjectReference
+    public function getReference(): string
     {
         return $this->reference;
     }
 
-    /**
-     * @return SpecialistId
-     */
-    public function getSpecialistId(): SpecialistId
+    public function getSpecialistId(): string
     {
         return $this->specialistId;
     }
@@ -47,17 +41,11 @@ class SpecialistDiscarded implements EventInterface
 
     public function getPayload(): array
     {
-        return [
-            'reference' => (string)$this->reference,
-            'specialist_id' => (string)$this->specialistId
-        ];
+        return ['reference' => $this->reference, 'specialist_id' => $this->specialistId];
     }
 
-    public static function fromPayload(array $payload) : SpecialistDiscarded
+    public static function fromPayload(array $payload) : SpecialistDiscardedEvent
     {
-        return new self(
-            ProjectReference::fromExisting($payload['reference']),
-            SpecialistId::fromExisting($payload['specialist_id'])
-        );
+        return new self($payload['reference'], $payload['specialist_id']);
     }
 }

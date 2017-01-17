@@ -27,7 +27,14 @@ class Project
         $this->consultations = new ConsultationCollection();
         $this->status = ProjectStatus::draft();
 
-        EventPublisher::publish(new ProjectDrafted($this->reference, $this->clientId, $this->name, $this->deadline));
+        EventPublisher::publish(
+            new ProjectDraftedEvent(
+                (string)$this->reference,
+                (string)$this->clientId,
+                $this->name,
+                date_format('c', $this->deadline)
+            )
+        );
     }
 
     public static function setUp(ClientId $clientId, string $name, \DateTime $deadline) : Project
@@ -43,7 +50,7 @@ class Project
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
 
-        EventPublisher::publish(new ProjectStarted($this->reference, $this->projectManagerId));
+        EventPublisher::publish(new ProjectStartedEvent((string)$this->reference, (string)$this->projectManagerId));
     }
 
     public function close()
@@ -59,7 +66,7 @@ class Project
         }
         $this->status = ProjectStatus::closed();
 
-        EventPublisher::publish(new ProjectClosed($this->reference));
+        EventPublisher::publish(new ProjectClosedEvent((string)$this->reference));
     }
 
     public function addSpecialist(SpecialistId $specialistId)
@@ -76,21 +83,21 @@ class Project
     public function approveSpecialist(SpecialistId $specialistId)
     {
         if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::UNVETTED)) {
-            throw new \DomainException('Potential specialist is not unvetted');
+            throw new \DomainException('Potential specialist is not un-vetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::approved();
 
-        EventPublisher::publish(new SpecialistApproved($this->reference, $specialistId));
+        EventPublisher::publish(new SpecialistApprovedEvent((string)$this->reference, (string)$specialistId));
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
     {
         if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::UNVETTED)) {
-            throw new \DomainException('Potential specialist is not unvetted');
+            throw new \DomainException('Potential specialist is not un-vetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
 
-        EventPublisher::publish(new SpecialistDiscarded($this->reference, $specialistId));
+        EventPublisher::publish(new SpecialistDiscardedEvent((string)$this->reference, (string)$specialistId));
     }
 
     public function scheduleConsultation(SpecialistId $specialistId, \DateTime $time)
@@ -105,7 +112,9 @@ class Project
         $this->consultations[(string)$consultationId]
             = new Consultation($consultationId, $this->reference, $specialistId, $time);
 
-        EventPublisher::publish(new ConsultationScheduled($this->reference, $specialistId, $time));
+        EventPublisher::publish(
+            new ConsultationScheduledEvent((string)$this->reference, (string)$specialistId, date_format('c', $time))
+        );
     }
 
     public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)

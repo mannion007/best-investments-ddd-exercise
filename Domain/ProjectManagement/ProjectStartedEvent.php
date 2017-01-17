@@ -4,7 +4,7 @@ namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
 use Mannion007\BestInvestments\Event\EventInterface;
 
-class ProjectStarted implements EventInterface
+class ProjectStartedEvent implements EventInterface
 {
     const EVENT_NAME = 'project_started';
 
@@ -12,22 +12,19 @@ class ProjectStarted implements EventInterface
     private $projectManagerId;
     private $occurredAt;
 
-    public function __construct(
-        ProjectReference $reference,
-        ProjectManagerId $projectManagerId,
-        \DateTime $occurredAt = null
-    ) {
+    public function __construct($reference, $projectManagerId, \DateTime $occurredAt = null)
+    {
         $this->reference = $reference;
         $this->projectManagerId = $projectManagerId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
     }
 
-    public function getReference(): ProjectReference
+    public function getReference(): string
     {
         return $this->reference;
     }
 
-    public function getProjectManagerId(): ProjectManagerId
+    public function getProjectManagerId(): string
     {
         return $this->projectManagerId;
     }
@@ -44,14 +41,14 @@ class ProjectStarted implements EventInterface
 
     public function getPayload(): array
     {
-        return ['reference' => (string)$this->reference];
+        return [
+            'reference' => $this->reference,
+            'project_manager_id' => $this->projectManagerId
+        ];
     }
 
-    public static function fromPayload(array $payload) : ProjectStarted
+    public static function fromPayload(array $payload) : ProjectStartedEvent
     {
-        return new self(
-            ProjectReference::fromExisting($payload['reference']),
-            ProjectManagerId::fromExisting($payload['project_manager_id'])
-        );
+        return new self($payload['reference'], $payload['project_manager_id']);
     }
 }
