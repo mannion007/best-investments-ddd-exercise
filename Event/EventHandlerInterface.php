@@ -4,5 +4,5 @@ namespace Mannion007\BestInvestments\Event;
 
 interface EventHandlerInterface
 {
-    public function handle(EventInterface $domainEvent);
+    public function handle(EventInterface $event);
 }
