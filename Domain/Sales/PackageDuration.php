@@ -4,7 +4,7 @@ namespace Mannion007\BestInvestments\Domain\Sales;
 
 class PackageDuration
 {
-    const VALID_DURATIONS = [6,12];
+    const VALID_DURATIONS = [6, 12];
 
     private $months;
 
