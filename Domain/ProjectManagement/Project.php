@@ -37,7 +37,7 @@ class Project
         );
     }
 
-    public static function setUp(ClientId $clientId, string $name, \DateTime $deadline) : Project
+    public static function setUp(ClientId $clientId, string $name, \DateTime $deadline): Project
     {
         return new self($clientId, $name, $deadline);
     }
@@ -148,22 +148,22 @@ class Project
         $this->status = ProjectStatus::active();
     }
 
-    public function getReference() : ProjectReference
+    public function getReference(): ProjectReference
     {
         return $this->reference;
     }
 
-    private function nextConsultationId() : ConsultationId
+    private function nextConsultationId(): ConsultationId
     {
         return new ConsultationId(count($this->consultations));
     }
 
-    public function isNot($status) : bool
+    public function isNot($status): bool
     {
         return !$this->is($status);
     }
 
-    public function is($status) : bool
+    public function is($status): bool
     {
         return $this->status->is($status);
     }

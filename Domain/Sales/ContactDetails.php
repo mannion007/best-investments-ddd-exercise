@@ -16,7 +16,7 @@ class ContactDetails
         return new self($telephone);
     }
 
-    public function getTelephone() : string
+    public function getTelephone(): string
     {
         return $this->telephone;
     }

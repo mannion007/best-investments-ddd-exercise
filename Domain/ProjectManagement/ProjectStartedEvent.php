@@ -29,12 +29,12 @@ class ProjectStartedEvent implements EventInterface
         return $this->projectManagerId;
     }
 
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt() : \DateTime
+    public function getOccurredAt(): \DateTime
     {
         return $this->occurredAt;
     }
@@ -47,7 +47,7 @@ class ProjectStartedEvent implements EventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : ProjectStartedEvent
+    public static function fromPayload(array $payload): ProjectStartedEvent
     {
         return new self($payload['reference'], $payload['project_manager_id']);
     }

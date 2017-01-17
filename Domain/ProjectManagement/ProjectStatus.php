@@ -16,32 +16,32 @@ class ProjectStatus
         $this->status = $status;
     }
 
-    public static function active() : ProjectStatus
+    public static function active(): ProjectStatus
     {
         return new self(self::ACTIVE);
     }
 
-    public static function draft() : ProjectStatus
+    public static function draft(): ProjectStatus
     {
         return new self(self::DRAFT);
     }
 
-    public static function onHold() : ProjectStatus
+    public static function onHold(): ProjectStatus
     {
         return new self(self::ON_HOLD);
     }
 
-    public static function closed() : ProjectStatus
+    public static function closed(): ProjectStatus
     {
         return new self(self::CLOSED);
     }
 
-    public function is($status) : bool
+    public function is($status): bool
     {
         return $status === $this->status;
     }
 
-    public function isNot($status) : bool
+    public function isNot($status): bool
     {
         return !$this->is($status);
     }

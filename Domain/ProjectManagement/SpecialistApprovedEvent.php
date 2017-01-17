@@ -29,12 +29,12 @@ class SpecialistApprovedEvent implements EventInterface
         return $this->specialistId;
     }
 
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt() : \DateTime
+    public function getOccurredAt(): \DateTime
     {
         return $this->occurredAt;
     }
@@ -47,7 +47,7 @@ class SpecialistApprovedEvent implements EventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : SpecialistApprovedEvent
+    public static function fromPayload(array $payload): SpecialistApprovedEvent
     {
         return new self($payload['reference'], $payload['specialist_id']);
     }

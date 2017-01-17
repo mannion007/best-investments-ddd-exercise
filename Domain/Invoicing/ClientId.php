@@ -11,17 +11,17 @@ class ClientId
         $this->id = $id;
     }
 
-    public static function fromExisting(string $id) : ClientId
+    public static function fromExisting(string $id): ClientId
     {
         return new self($id);
     }
 
-    public function isNot(ClientId $id) : bool
+    public function isNot(ClientId $id): bool
     {
         return !$this->is($id);
     }
 
-    public function is(ClientId $id) : bool
+    public function is(ClientId $id): bool
     {
         return (string)$this === (string)$id;
     }

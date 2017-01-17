@@ -28,11 +28,11 @@ class PotentialSpecialist
         ProjectManagerId $projectManagerId,
         string $notes,
         string $name
-    ) : PotentialSpecialist {
+    ): PotentialSpecialist {
         return new self($projectManagerId, $name, $notes);
     }
 
-    public function register(Money $hourlyRate) : Specialist
+    public function register(Money $hourlyRate): Specialist
     {
         return Specialist::register($this->specialistId, $this->name, $hourlyRate);
     }

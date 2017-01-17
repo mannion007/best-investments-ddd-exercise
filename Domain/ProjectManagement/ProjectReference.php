@@ -11,7 +11,7 @@ class ProjectReference
         $this->reference = is_null($reference) ? $this->generate() : $reference;
     }
 
-    public static function fromExisting(string $reference) : ProjectReference
+    public static function fromExisting(string $reference): ProjectReference
     {
         return new self($reference);
     }

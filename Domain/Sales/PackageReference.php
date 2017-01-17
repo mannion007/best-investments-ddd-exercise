@@ -29,17 +29,17 @@ class PackageReference
         );
     }
 
-    public function getStartDate() : \DateTime
+    public function getStartDate(): \DateTime
     {
         return $this->startDate;
     }
 
-    public function getDuration() : string
+    public function getDuration(): string
     {
         return $this->months;
     }
 
-    public function getMonths() : PackageDuration
+    public function getMonths(): PackageDuration
     {
         return $this->months;
     }

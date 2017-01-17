@@ -15,7 +15,7 @@ class ConsultationCollection implements \ArrayAccess, \Countable
         }
     }
 
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset): bool
     {
         return isset($this->consultations[$offset]);
     }
@@ -30,7 +30,7 @@ class ConsultationCollection implements \ArrayAccess, \Countable
         return isset($this->consultations[$offset]) ? $this->consultations[$offset] : null;
     }
 
-    public function includes($key) : bool
+    public function includes($key): bool
     {
         return $this->offsetExists($key);
     }

@@ -43,12 +43,12 @@ class ProjectDraftedEvent implements EventInterface
         return $this->deadline;
     }
 
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt() : \DateTime
+    public function getOccurredAt(): \DateTime
     {
         return $this->occurredAt;
     }
@@ -63,7 +63,7 @@ class ProjectDraftedEvent implements EventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : ProjectDraftedEvent
+    public static function fromPayload(array $payload): ProjectDraftedEvent
     {
         return new self($payload['reference'], $payload['client_id'], $payload['name'], $payload['deadline']);
     }

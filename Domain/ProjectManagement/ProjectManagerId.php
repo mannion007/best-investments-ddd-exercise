@@ -11,7 +11,7 @@ class ProjectManagerId
         $this->id = $id;
     }
 
-    public static function fromExisting(string $id) : ProjectManagerId
+    public static function fromExisting(string $id): ProjectManagerId
     {
         return new self($id);
     }

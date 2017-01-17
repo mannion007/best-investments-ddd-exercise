@@ -37,7 +37,7 @@ class ServiceSuspendedEvent implements EventInterface
         return $this->occurredAt;
     }
 
-    public static function fromPayload(array $payload) : ServiceSuspendedEvent
+    public static function fromPayload(array $payload): ServiceSuspendedEvent
     {
         return new self($payload['client_id']);
     }

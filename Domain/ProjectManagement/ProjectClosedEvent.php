@@ -37,7 +37,7 @@ class ProjectClosedEvent implements EventInterface
         return ['reference' => $this->reference];
     }
 
-    public static function fromPayload(array $payload) : ProjectClosedEvent
+    public static function fromPayload(array $payload): ProjectClosedEvent
     {
         return new self($payload['reference']);
     }

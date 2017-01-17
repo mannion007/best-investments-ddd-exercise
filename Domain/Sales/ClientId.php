@@ -18,12 +18,12 @@ class ClientId
         return new self($clientId);
     }
 
-    public function isNot(ClientId $clientId) : bool
+    public function isNot(ClientId $clientId): bool
     {
         return !$this->is($clientId);
     }
 
-    public function is(ClientId $clientId) : bool
+    public function is(ClientId $clientId): bool
     {
         return (string)$this === (string)$clientId;
     }

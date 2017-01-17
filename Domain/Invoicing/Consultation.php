@@ -49,12 +49,12 @@ class Consultation
         return $this->consultationId;
     }
 
-    public function getClientId() : ClientId
+    public function getClientId(): ClientId
     {
         return $this->clientId;
     }
 
-    public function getDuration() : TimeIncrement
+    public function getDuration(): TimeIncrement
     {
         return $this->duration;
     }

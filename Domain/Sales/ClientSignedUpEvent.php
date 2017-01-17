@@ -64,7 +64,7 @@ class ClientSignedUpEvent implements EventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : ClientSignedUpEvent
+    public static function fromPayload(array $payload): ClientSignedUpEvent
     {
         return new self(
             $payload['client_id'],

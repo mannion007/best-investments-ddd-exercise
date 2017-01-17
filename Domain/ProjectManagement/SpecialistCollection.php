@@ -15,7 +15,7 @@ class SpecialistCollection implements \ArrayAccess, \Countable
         }
     }
 
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset): bool
     {
         return isset($this->specialists[$offset]);
     }
@@ -30,7 +30,7 @@ class SpecialistCollection implements \ArrayAccess, \Countable
         return isset($this->specialists[$offset]) ? $this->specialists[$offset] : null;
     }
 
-    public function includes($key) : bool
+    public function includes($key): bool
     {
         return $this->offsetExists($key);
     }

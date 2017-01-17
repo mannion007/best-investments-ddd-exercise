@@ -46,12 +46,12 @@ class SpecialistPutOnList implements DomainEventInterface
         return $this->notes;
     }
 
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt() : \DateTime
+    public function getOccurredAt(): \DateTime
     {
         return $this->occurredAt;
     }
@@ -67,7 +67,7 @@ class SpecialistPutOnList implements DomainEventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : SpecialistPutOnList
+    public static function fromPayload(array $payload): SpecialistPutOnList
     {
         return new self(
             SpecialistId::fromExisting($payload['specialist_id']),

@@ -13,7 +13,7 @@ class SpecialistId
         $this->id = is_null($id) ? Uuid::uuid4()->toString() : $id;
     }
 
-    public static function fromExisting(string $id) : SpecialistId
+    public static function fromExisting(string $id): SpecialistId
     {
         return new self($id);
     }

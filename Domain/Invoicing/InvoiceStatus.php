@@ -14,22 +14,22 @@ class InvoiceStatus
         $this->status = $status;
     }
 
-    public static function paid() : InvoiceStatus
+    public static function paid(): InvoiceStatus
     {
         return new self(self::PAID);
     }
 
-    public static function outstanding() : InvoiceStatus
+    public static function outstanding(): InvoiceStatus
     {
         return new self(self::OUTSTANDING);
     }
 
-    public function is($status) : bool
+    public function is($status): bool
     {
         return $status === $this->status;
     }
 
-    public function isNot($status) : bool
+    public function isNot($status): bool
     {
         return !$this->is($status);
     }

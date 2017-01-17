@@ -29,12 +29,12 @@ class SpecialistDiscardedEvent implements EventInterface
         return $this->specialistId;
     }
 
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt() : \DateTime
+    public function getOccurredAt(): \DateTime
     {
         return $this->occurredAt;
     }
@@ -44,7 +44,7 @@ class SpecialistDiscardedEvent implements EventInterface
         return ['reference' => $this->reference, 'specialist_id' => $this->specialistId];
     }
 
-    public static function fromPayload(array $payload) : SpecialistDiscardedEvent
+    public static function fromPayload(array $payload): SpecialistDiscardedEvent
     {
         return new self($payload['reference'], $payload['specialist_id']);
     }

@@ -64,7 +64,7 @@ class PackagePurchasedEvent implements EventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : PackagePurchasedEvent
+    public static function fromPayload(array $payload): PackagePurchasedEvent
     {
         return new self(
             $payload['reference'],

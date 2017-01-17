@@ -37,7 +37,7 @@ class OperationsResumedEvent implements EventInterface
         return ['client_id' => $this->clientId];
     }
 
-    public static function fromPayload(array $payload) : OperationsResumedEvent
+    public static function fromPayload(array $payload): OperationsResumedEvent
     {
         return new self($payload['client_id']);
     }

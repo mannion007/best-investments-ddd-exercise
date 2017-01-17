@@ -16,7 +16,7 @@ class Specialist
         $this->hourlyRate = $hourlyRate;
     }
 
-    public static function register(SpecialistId $specialistId, string $name, Money $hourlyRate) : Specialist
+    public static function register(SpecialistId $specialistId, string $name, Money $hourlyRate): Specialist
     {
         return new self($specialistId, $name, $hourlyRate);
     }

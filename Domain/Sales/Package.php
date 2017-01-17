@@ -23,7 +23,7 @@ class Package
         $this->clientId = $clientId;
         $this->startDate = $startDate;
         $this->nominalHours = $nominalHours;
-        $this->status = $this->isDueToStart() ? PackageStatus::active() : PackageStatus::inactive();
+        $this->status = $this->isDueToStart() ? PackageStatus::active(): PackageStatus::inactive();
 
         EventPublisher::publish(
             new PackagePurchasedEvent(
@@ -35,7 +35,7 @@ class Package
         );
     }
 
-    private function isDueToStart() : bool
+    private function isDueToStart(): bool
     {
         return $this->startDate <= new \DateTime();
     }

@@ -34,12 +34,12 @@ class TimeIncrement
         return $this->inMinutes() > $increment->inMinutes();
     }
 
-    public function inMinutes() : int
+    public function inMinutes(): int
     {
         return $this->minutes;
     }
 
-    public function inHours() : float
+    public function inHours(): float
     {
         return $this->minutes / 60;
     }

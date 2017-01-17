@@ -23,7 +23,7 @@ class Prospect
         EventPublisher::publish(new ProspectReceivedEvent((string)$this->prospectId, $this->name, $this->notes));
     }
 
-    public function receive(ProspectId $prospectId, string $name, string $notes) : Prospect
+    public function receive(ProspectId $prospectId, string $name, string $notes): Prospect
     {
         return new self($prospectId, $name, $notes);
     }

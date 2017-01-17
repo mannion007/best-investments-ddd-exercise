@@ -51,17 +51,17 @@ class Package
         $this->attachedConsultations[] = $consultation;
     }
 
-    private function getRemainingHours() : TimeIncrement
+    private function getRemainingHours(): TimeIncrement
     {
         return $this->getAvailableHours()->minus($this->getUsedHours())->minus($this->transferOutHours());
     }
 
-    private function getAvailableHours() : TimeIncrement
+    private function getAvailableHours(): TimeIncrement
     {
         return $this->nominalHours->add($this->transferredInHours);
     }
 
-    private function getUsedHours() : TimeIncrement
+    private function getUsedHours(): TimeIncrement
     {
         $consultationHours = new TimeIncrement(0);
         foreach ($this->attachedConsultations as $attachedConsultation) {
@@ -79,7 +79,7 @@ class Package
         $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn);
     }
 
-    public function transferOutHours() : TimeIncrement
+    public function transferOutHours(): TimeIncrement
     {
         if ($this->status->isNot(PackageStatus::EXPIRED)) {
             throw new \DomainException('Cannot transfer hours out of a Package that has not yet Expired');

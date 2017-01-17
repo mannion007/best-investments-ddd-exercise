@@ -16,32 +16,32 @@ class ProspectStatus
         $this->status = $status;
     }
 
-    public static function registered() : ProspectStatus
+    public static function registered(): ProspectStatus
     {
         return new self(self::REGISTERED);
     }
 
-    public static function inProgress() : ProspectStatus
+    public static function inProgress(): ProspectStatus
     {
         return new self(self::IN_PROGRESS);
     }
 
-    public static function notInterested() : ProspectStatus
+    public static function notInterested(): ProspectStatus
     {
         return new self(self::NOT_INTERESTED);
     }
 
-    public static function notReachable() : ProspectStatus
+    public static function notReachable(): ProspectStatus
     {
         return new self(self::NOT_INTERESTED);
     }
 
-    public function is($value) : bool
+    public function is($value): bool
     {
         return $value === $this->status;
     }
 
-    public function isNot($value) : bool
+    public function isNot($value): bool
     {
         return !$this->is($value);
     }

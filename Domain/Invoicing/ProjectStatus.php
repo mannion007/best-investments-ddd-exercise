@@ -14,22 +14,22 @@ class ProjectStatus
         $this->status = $status;
     }
 
-    public static function active() : ProjectStatus
+    public static function active(): ProjectStatus
     {
         return new self(self::ACTIVE);
     }
 
-    public static function ended() : ProjectStatus
+    public static function ended(): ProjectStatus
     {
         return new self(self::ENDED);
     }
 
-    public function is($status) : bool
+    public function is($status): bool
     {
         return $status === $this->status;
     }
 
-    public function isNot($status) : bool
+    public function isNot($status): bool
     {
         return !$this->is($status);
     }

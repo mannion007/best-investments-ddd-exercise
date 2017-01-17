@@ -36,12 +36,12 @@ class ConsultationScheduledEvent implements EventInterface
         return $this->time;
     }
 
-    public function getEventName() : string
+    public function getEventName(): string
     {
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt() : \DateTime
+    public function getOccurredAt(): \DateTime
     {
         return $this->occurredAt;
     }
@@ -51,7 +51,7 @@ class ConsultationScheduledEvent implements EventInterface
         return ['reference' => $this->reference, 'specialist_id' => $this->specialistId, 'time' => $this->time];
     }
 
-    public static function fromPayload(array $payload) : ConsultationScheduledEvent
+    public static function fromPayload(array $payload): ConsultationScheduledEvent
     {
         return new self($payload['reference'], $payload['specialist_id'], $payload['time']);
     }
