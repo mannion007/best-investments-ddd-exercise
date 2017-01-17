@@ -4,10 +4,15 @@ namespace Mannion007\BestInvestments\Domain\Invoicing;
 
 class PackageDuration
 {
+    const VALID_DURATIONS = [6,12];
+
     private $months;
 
-    private function __construct(int $months)
+    public function __construct(int $months)
     {
+        if (!in_array($months, self::VALID_DURATIONS)) {
+            throw new \DomainException('Invalid number of months for Package Duration');
+        }
         $this->months = $months;
     }
 

@@ -4,24 +4,26 @@ namespace Mannion007\BestInvestments\Domain\Sales;
 
 class PackageDuration
 {
-    const SIX = 6;
-    const TWELVE = 12;
+    const VALID_DURATIONS = [6,12];
 
     private $months;
 
-    private function __construct(int $months)
+    public function __construct(int $months)
     {
+        if (!in_array($months, self::VALID_DURATIONS)) {
+            throw new \DomainException('Invalid number of months for Package Duration');
+        }
         $this->months = $months;
     }
 
     public static function sixMonths()
     {
-        return new self(self::SIX);
+        return new self(6);
     }
 
     public static function twelveMonths()
     {
-        return new self(self::TWELVE);
+        return new self(12);
     }
 
     public function __toString()
