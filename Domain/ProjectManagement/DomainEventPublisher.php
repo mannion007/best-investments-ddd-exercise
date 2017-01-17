@@ -14,7 +14,7 @@ class DomainEventPublisher
         self::$handler = $handler;
     }
 
-    public static function publish(DomainEvent $event)
+    public static function publish(DomainEventInterface $event)
     {
         self::$handler->handle($event);
     }

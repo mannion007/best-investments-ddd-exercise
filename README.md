@@ -6,6 +6,7 @@
 |project_drafted|Project Management|Project Management|To notify the senior project manager that he can assign a project manager to start the project|
 |project_started|Project Management|Project Management|To start adding specialists|
 |project_closed|Project Management|Invoicing|To start the invoicing process and pay the specialist(s)|
+|consultation_scheduled|Project Management|Invoicing|To Surface the Consultation|
 
 ###Specialist Events
 |Name|Origin|Observer|Interest|

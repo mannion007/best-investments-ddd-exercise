@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistCollection implements \ArrayAccess
+class SpecialistCollection implements \ArrayAccess, \Countable
 {
     private $specialists = [];
 
@@ -33,5 +33,10 @@ class SpecialistCollection implements \ArrayAccess
     public function includes($key) : bool
     {
         return $this->offsetExists($key);
+    }
+
+    public function count()
+    {
+        return count($this->specialists);
     }
 }

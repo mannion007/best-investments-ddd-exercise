@@ -7,5 +7,5 @@ interface DomainEventInterface
     public function getEventName() : string;
     public function getPayload() : array;
     public function getOccurredAt() : \DateTime;
-    public static function fromPayload(array $payload) : DomainEvent;
+    public static function fromPayload(array $payload);
 }

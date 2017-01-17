@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ProjectDrafted extends DomainEvent implements DomainEventInterface
+class ProjectDrafted implements DomainEventInterface
 {
     const EVENT_NAME = 'project_drafted';
     const DATE_FORMAT = 'c';
@@ -11,23 +11,56 @@ class ProjectDrafted extends DomainEvent implements DomainEventInterface
     private $clientId;
     private $name;
     private $deadline;
+    private $occurredAt;
 
     public function __construct(
         ProjectReference $reference,
         ClientId $clientId,
         string $name,
-        \DateTime $deadline
+        \DateTime $deadline,
+        \DateTime $occurredAt = null
     ) {
-        parent::__construct();
         $this->reference = $reference;
         $this->clientId = $clientId;
         $this->name = $name;
         $this->deadline = $deadline;
+        $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
+    }
+
+    public function getReference(): ProjectReference
+    {
+        return $this->reference;
+    }
+
+    public function getClientId(): ClientId
+    {
+        return $this->clientId;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDeadline(): \DateTime
+    {
+        return $this->deadline;
+    }
+
+    public function getEventName() : string
+    {
+        return self::EVENT_NAME;
+    }
+
+    public function getOccurredAt() : \DateTime
+    {
+        return $this->occurredAt;
     }
 
     public function getPayload(): array
     {
-        return [
+        return
+        [
             'reference' => (string)$this->reference,
             'client_id' => (string)$this->reference,
             'name' => (string)$this->name,
@@ -35,7 +68,7 @@ class ProjectDrafted extends DomainEvent implements DomainEventInterface
         ];
     }
 
-    public static function fromPayload(array $payload) : DomainEvent
+    public static function fromPayload(array $payload) : ProjectDrafted
     {
         return new self(
             ProjectReference::fromExisting($payload['reference']),

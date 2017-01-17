@@ -2,29 +2,41 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ProjectClosed extends DomainEvent
+class ProjectClosed implements DomainEventInterface
 {
     const EVENT_NAME = 'project_closed';
 
     private $reference;
+    private $occurredAt;
 
-    public function __construct(ProjectReference $reference)
+    public function __construct(ProjectReference $reference, \DateTime $occurredAt = null)
     {
-        parent::__construct(self::EVENT_NAME);
         $this->reference = $reference;
+        $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
+    }
+
+    public function getReference(): ProjectReference
+    {
+        return $this->reference;
+    }
+
+    public function getEventName() : string
+    {
+        return self::EVENT_NAME;
+    }
+
+    public function getOccurredAt() : \DateTime
+    {
+        return $this->occurredAt;
     }
 
     public function getPayload(): array
     {
-        return [
-          'reference' => $this->reference
-        ];
+        return ['reference' => (string)$this->reference];
     }
 
-    public static function fromPayload(array $payload) : DomainEvent
+    public static function fromPayload(array $payload) : ProjectClosed
     {
-        return new self(
-            ProjectReference::fromExisting($payload['reference'])
-        );
+        return new self(ProjectReference::fromExisting($payload['reference']));
     }
 }
