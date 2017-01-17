@@ -17,7 +17,6 @@ class Project
     /** @var SpecialistCollection  */
     private $consultations = [];
 
-
     private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
     {
         $this->reference = new ProjectReference();

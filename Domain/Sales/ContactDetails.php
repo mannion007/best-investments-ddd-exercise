@@ -11,8 +11,18 @@ class ContactDetails
         $this->telephone = $telephone;
     }
 
+    public static function fromExisting(string $telephone)
+    {
+        return new self($telephone);
+    }
+
     public function getTelephone() : string
     {
         return $this->telephone;
+    }
+
+    public function __toString()
+    {
+        return (string)$this->telephone;
     }
 }

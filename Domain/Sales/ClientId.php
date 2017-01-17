@@ -6,26 +6,30 @@ use Ramsey\Uuid\Uuid;
 
 class ClientId
 {
-    private $id;
+    private $clientId;
 
-    /** "new client ID" sounds OK, no need to hide default constructor */
-    public function __construct()
+    public function __construct(string $clientId = null)
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->clientId = is_null($clientId) ? Uuid::uuid4()->toString() : $clientId;
     }
 
-    public function isNot(ClientId $id) : bool
+    public static function fromExisting(string $clientId)
     {
-        return !$this->is($id);
+        return new self($clientId);
     }
 
-    public function is(ClientId $id) : bool
+    public function isNot(ClientId $clientId) : bool
     {
-        return (string)$this === (string)$id;
+        return !$this->is($clientId);
+    }
+
+    public function is(ClientId $clientId) : bool
+    {
+        return (string)$this === (string)$clientId;
     }
 
     public function __toString()
     {
-        return (string)$this->id;
+        return (string)$this->clientId;
     }
 }
