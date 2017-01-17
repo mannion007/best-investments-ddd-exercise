@@ -4,7 +4,7 @@ namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
 class PotentialSpecialist
 {
-    private $id;
+    private $specialistId;
     private $projectManagerId;
     private $name;
     private $notes;
@@ -14,11 +14,14 @@ class PotentialSpecialist
         string $name,
         string $notes
     ) {
-        $this->id = new SpecialistId();
+        $this->specialistId = new SpecialistId();
         $this->projectManagerId = $projectManagerId;
         $this->name = $name;
         $this->notes = $notes;
-        /** Raise a 'potential_specialist_put_on_list' event */
+
+        DomainEventPublisher::publish(
+            new SpecialistPutOnList($this->specialistId, $this->projectManagerId, $this->name, $this->notes)
+        );
     }
 
     public static function putOnList(
@@ -29,8 +32,8 @@ class PotentialSpecialist
         return new self($projectManagerId, $name, $notes);
     }
 
-    public function register() : Specialist
+    public function register(Money $hourlyRate) : Specialist
     {
-        return Specialist::register($this->id, $this->name);
+        return Specialist::register($this->specialistId, $this->name, $hourlyRate);
     }
 }

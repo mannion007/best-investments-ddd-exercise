@@ -80,6 +80,8 @@ class Project
             throw new \DomainException('Potential specialist is not unvetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::approved();
+
+        DomainEventPublisher::publish(new SpecialistApproved($this->reference, $specialistId));
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
@@ -88,6 +90,8 @@ class Project
             throw new \DomainException('Potential specialist is not unvetted');
         }
         $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
+
+        DomainEventPublisher::publish(new SpecialistDiscarded($this->reference, $specialistId));
     }
 
     public function scheduleConsultation(SpecialistId $specialistId, \DateTime $time)
@@ -146,13 +150,13 @@ class Project
         return new ConsultationId(count($this->consultations));
     }
 
+    public function isNot($status) : bool
+    {
+        return !$this->is($status);
+    }
+
     public function is($status) : bool
     {
         return $this->status->is($status);
-    }
-
-    public function isNot($status) : bool
-    {
-        return $this->status->isNot($status);
     }
 }

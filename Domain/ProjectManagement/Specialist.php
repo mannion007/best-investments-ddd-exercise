@@ -2,24 +2,22 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-use Mannion007\BestInvestments\Domain\Invoicing\Money;
-
 class Specialist
 {
-    private $id;
+    private $specialistId;
     private $name;
     private $hourlyRate;
 
     /** @todo consider the fields here, we need at least background and expertise, "notes" is a bit rubbish */
-    private function __construct(SpecialistId $id, string $name, Money $hourlyRate)
+    private function __construct(SpecialistId $specialistId, string $name, Money $hourlyRate)
     {
-        $this->id = new SpecialistId();
+        $this->specialistId = new SpecialistId();
         $this->name = $name;
         $this->hourlyRate = $hourlyRate;
     }
 
-    public static function register(SpecialistId $id, string $name, Money $hourlyRate) : Specialist
+    public static function register(SpecialistId $specialistId, string $name, Money $hourlyRate) : Specialist
     {
-        return new self($id, $name, $hourlyRate);
+        return new self($specialistId, $name, $hourlyRate);
     }
 }

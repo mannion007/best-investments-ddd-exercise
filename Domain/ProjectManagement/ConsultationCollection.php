@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ConsultationCollection implements \ArrayAccess
+class ConsultationCollection implements \ArrayAccess, \Countable
 {
     private $consultations = [];
 
@@ -33,5 +33,10 @@ class ConsultationCollection implements \ArrayAccess
     public function includes($key) : bool
     {
         return $this->offsetExists($key);
+    }
+
+    public function count()
+    {
+        return count($this->consultations);
     }
 }

@@ -2,12 +2,15 @@
 
 namespace Mannion007\BestInvestments\Domain\Prospecting;
 
+use Mannion007\BestInvestments\Domain\Invoicing\Money;
+
 class Prospect
 {
     private $id;
     private $name;
     private $notes;
     private $chaseUps = [];
+    private $hourlyRate;
     /** @var ProspectStatus */
     private $status;
 
@@ -33,11 +36,12 @@ class Prospect
         $this->chaseUps[] = new \DateTime();
     }
 
-    public function register()
+    public function register(Money $hourlyRate)
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
             throw new \DomainException('Prospect does not have "in progress" status');
         }
+        $this->hourlyRate = $hourlyRate;
         $this->status = ProspectStatus::registered();
         /** Raise a 'prospect_registered' event */
     }
