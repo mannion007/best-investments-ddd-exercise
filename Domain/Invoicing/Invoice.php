@@ -23,11 +23,6 @@ class Invoice
         $this->status = InvoiceStatus::outstanding();
     }
 
-    public function getTotal()
-    {
-        return $this->payAsYouGoRate * $this->consultationDuration->inHours();
-    }
-
     public function pay(PaymentReference $paymentReference)
     {
         if ($this->status->isNot(InvoiceStatus::OUTSTANDING)) {
@@ -35,5 +30,10 @@ class Invoice
         }
         $this->paymentReference = $paymentReference;
         $this->status = InvoiceStatus::paid();
+    }
+
+    public function getTotal()
+    {
+        return $this->payAsYouGoRate->getAmount() * $this->consultationDuration->inHours();
     }
 }

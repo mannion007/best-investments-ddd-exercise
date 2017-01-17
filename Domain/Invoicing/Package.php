@@ -4,25 +4,13 @@ namespace Mannion007\BestInvestments\Domain\Invoicing;
 
 class Package
 {
-    /** @var PackageReference */
     private $reference;
-
-    /** @var ClientId */
     private $clientId;
-
-    /** @var TimeIncrement */
     private $nominalHours;
-
-    /** @var TimeIncrement */
-    private $transferredInHours;
-
-    /** @var TimeIncrement */
-    private $transferredOutHours;
-
-    private $status;
-
-    /** @var Consultation[] */
     private $attachedConsultations;
+    private $transferredInHours;
+    private $transferredOutHours;
+    private $status;
 
     public function __construct(
         PackageReference $reference,
@@ -32,9 +20,9 @@ class Package
         $this->reference = $reference;
         $this->clientId = $clientId;
         $this->nominalHours = $nominalHours;
-        $this->status = PackageStatus::determineFrom($reference->getStartDate(), $reference->getMonths());
         $this->transferredInHours = new TimeIncrement(0);
         $this->transferredOutHours = new TimeIncrement(0);
+        $this->status = PackageStatus::determineFrom($reference->getStartDate(), $reference->getMonths());
     }
 
     public function attach(Consultation $consultation)
@@ -70,7 +58,6 @@ class Package
         return $consultationHours->minus($this->transferredOutHours);
     }
 
-
     public function transferInHours(TimeIncrement $timeToTransferIn)
     {
         if ($this->status->is(PackageStatus::EXPIRED)) {
@@ -84,7 +71,7 @@ class Package
         if ($this->status->isNot(PackageStatus::EXPIRED)) {
             throw new \DomainException('Cannot transfer hours out of a Package that has not yet Expired');
         }
-        /** No guard for 0 available time, that's probably not exceptional to transfer out no time... */
+        /** No guard for 0 available time, it's probably not exceptional to transfer out no time... */
         $this->transferredOutHours = $this->getRemainingHours();
         return $this->transferredOutHours;
     }

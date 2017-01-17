@@ -34,13 +34,13 @@ class PackageStatus
         }
     }
 
-    public function is(string $status)
-    {
-        return $status === $this->status;
-    }
-
     public function isNot(string $status)
     {
         return !$this->is($status);
+    }
+
+    public function is(string $status)
+    {
+        return $status === $this->status;
     }
 }

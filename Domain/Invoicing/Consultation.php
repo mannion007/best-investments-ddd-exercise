@@ -26,16 +26,6 @@ class Consultation
         return new self($consultationId, $clientId, $duration, ProjectStatus::active());
     }
 
-    public function isNotBillable()
-    {
-        return !$this->isBillable();
-    }
-
-    public function isBillable()
-    {
-        return $this->projectStatus->is(ProjectStatus::ENDED);
-    }
-
     public function projectEnded()
     {
         if ($this->projectStatus->isNot(ProjectStatus::ACTIVE)) {
@@ -57,5 +47,15 @@ class Consultation
     public function getDuration(): TimeIncrement
     {
         return $this->duration;
+    }
+
+    public function isNotBillable()
+    {
+        return !$this->isBillable();
+    }
+
+    public function isBillable()
+    {
+        return $this->projectStatus->is(ProjectStatus::ENDED);
     }
 }

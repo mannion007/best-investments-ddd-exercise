@@ -4,20 +4,20 @@ namespace Mannion007\BestInvestments\Domain\Invoicing;
 
 class ConsultationId
 {
-    private $id;
+    private $consultationId;
 
-    private function __construct(int $id)
+    private function __construct(int $consultationId)
     {
-        $this->id = $id;
+        $this->consultationId = $consultationId;
     }
 
-    public static function fromExisting(int $id)
+    public static function fromExisting(int $consultationId)
     {
-        return new self($id);
+        return new self($consultationId);
     }
 
     public function __toString()
     {
-        return (string)$this->id;
+        return (string)$this->consultationId;
     }
 }

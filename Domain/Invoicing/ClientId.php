@@ -4,30 +4,30 @@ namespace Mannion007\BestInvestments\Domain\Invoicing;
 
 class ClientId
 {
-    private $id;
+    private $clientId;
 
-    private function __construct($id)
+    private function __construct($clientId)
     {
-        $this->id = $id;
+        $this->clientId = $clientId;
     }
 
-    public static function fromExisting(string $id): ClientId
+    public static function fromExisting(string $clientId): ClientId
     {
-        return new self($id);
+        return new self($clientId);
     }
 
-    public function isNot(ClientId $id): bool
+    public function isNot(ClientId $clientId): bool
     {
-        return !$this->is($id);
+        return !$this->is($clientId);
     }
 
-    public function is(ClientId $id): bool
+    public function is(ClientId $clientId): bool
     {
-        return (string)$this === (string)$id;
+        return (string)$this === (string)$clientId;
     }
 
     public function __toString()
     {
-        return (string)$this->id;
+        return (string)$this->clientId;
     }
 }

@@ -24,13 +24,13 @@ class ProjectStatus
         return new self(self::ENDED);
     }
 
-    public function is($status): bool
-    {
-        return $status === $this->status;
-    }
-
     public function isNot($status): bool
     {
         return !$this->is($status);
+    }
+
+    public function is($status): bool
+    {
+        return $status === $this->status;
     }
 }

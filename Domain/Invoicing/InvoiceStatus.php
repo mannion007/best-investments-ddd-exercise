@@ -24,13 +24,13 @@ class InvoiceStatus
         return new self(self::OUTSTANDING);
     }
 
-    public function is($status): bool
-    {
-        return $status === $this->status;
-    }
-
     public function isNot($status): bool
     {
         return !$this->is($status);
+    }
+
+    public function is($status): bool
+    {
+        return $status === $this->status;
     }
 }

@@ -11,15 +11,11 @@ class PackageReference
     private $months;
     private $reference;
 
-    public function __construct(
-        string $name,
-        \DateTime $startDate,
-        PackageDuration $months
-    ) {
+    public function __construct(string $name, \DateTime $startDate, PackageDuration $months)
+    {
         $this->name = $name;
         $this->startDate = $startDate;
         $this->months = $months;
-
         $this->reference = sprintf(
             self::REFERENCE_FORMAT,
             $name,
