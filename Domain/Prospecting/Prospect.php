@@ -2,30 +2,30 @@
 
 namespace Mannion007\BestInvestments\Domain\Prospecting;
 
-use Mannion007\BestInvestments\Domain\Invoicing\Money;
+use Mannion007\BestInvestments\Event\EventPublisher;
 
 class Prospect
 {
-    private $id;
+    private $prospectId;
     private $name;
     private $notes;
     private $chaseUps = [];
     private $hourlyRate;
-    /** @var ProspectStatus */
     private $status;
 
-    private function __construct(ProspectId $id, string $name, string $notes)
+    private function __construct(ProspectId $prospectId, string $name, string $notes)
     {
-        $this->id = $id;
+        $this->prospectId = $prospectId;
         $this->name = $name;
         $this->notes = $notes;
         $this->status = ProspectStatus::inProgress();
-        /** Raise a 'prospect_received' event */
+
+        EventPublisher::publish(new ProspectReceived($this->prospectId, $this->name, $this->notes));
     }
 
-    public function receive(ProspectId $id, string $name, string $notes) : Prospect
+    public function receive(ProspectId $prospectId, string $name, string $notes) : Prospect
     {
-        return new self($id, $name, $notes);
+        return new self($prospectId, $name, $notes);
     }
 
     public function chaseUp()
@@ -43,7 +43,8 @@ class Prospect
         }
         $this->hourlyRate = $hourlyRate;
         $this->status = ProspectStatus::registered();
-        /** Raise a 'prospect_registered' event */
+
+        EventPublisher::publish(new ProspectRegistered($this->prospectId, $this->hourlyRate));
     }
 
     public function declareNotInterested()
