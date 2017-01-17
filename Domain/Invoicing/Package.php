@@ -65,7 +65,7 @@ class Package
     {
         $consultationHours = new TimeIncrement(0);
         foreach ($this->attachedConsultations as $attachedConsultation) {
-            $consultationHours = $consultationHours->add($attachedConsultation->getTime());
+            $consultationHours = $consultationHours->add($attachedConsultation->getDuration());
         }
         return $consultationHours->minus($this->transferredOutHours);
     }
