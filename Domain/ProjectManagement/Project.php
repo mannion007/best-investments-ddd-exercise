@@ -28,9 +28,7 @@ class Project
         $this->consultations = new ConsultationCollection();
         $this->status = ProjectStatus::draft();
 
-        EventPublisher::publish(
-            new ProjectDrafted($this->reference, $this->clientId, $this->name, $this->deadline)
-        );
+        EventPublisher::publish(new ProjectDrafted($this->reference, $this->clientId, $this->name, $this->deadline));
     }
 
     public static function setUp(ClientId $clientId, string $name, \DateTime $deadline) : Project
