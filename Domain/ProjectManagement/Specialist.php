@@ -8,10 +8,10 @@ class Specialist
     private $name;
     private $hourlyRate;
 
-    /** @todo consider the fields here, we need at least background and expertise, "notes" is a bit rubbish */
     private function __construct(SpecialistId $specialistId, string $name, Money $hourlyRate)
     {
-        $this->specialistId = new SpecialistId();
+        /** @todo consider the fields here, we need at least background and expertise, "notes" is a bit rubbish */
+        $this->specialistId = $specialistId;
         $this->name = $name;
         $this->hourlyRate = $hourlyRate;
     }
