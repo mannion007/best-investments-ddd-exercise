@@ -1,5 +1,6 @@
 #Best Investments
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mannion007/best-investments-ddd-exercise/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mannion007/best-investments-ddd-exercise/?branch=master)
+
 This codebase is being developed as a training exercise and introduction into Domain Driven Design and related topics. The task at hand is to develop an enterprise system for a fictional business, Best Investments.
 
 An initial mock conversation between the developers and the domain experts of the domain the company is in went down as follows:
