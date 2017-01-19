@@ -2,6 +2,8 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
+use Mannion007\BestInvestments\Event\EventPublisher;
+
 class PotentialSpecialist
 {
     private $specialistId;
@@ -19,7 +21,7 @@ class PotentialSpecialist
         $this->name = $name;
         $this->notes = $notes;
 
-        DomainEventPublisher::publish(
+        EventPublisher::publish(
             new SpecialistPutOnList($this->specialistId, $this->projectManagerId, $this->name, $this->notes)
         );
     }

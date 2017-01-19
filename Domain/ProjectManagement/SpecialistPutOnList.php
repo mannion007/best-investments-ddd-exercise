@@ -2,7 +2,9 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistPutOnList implements DomainEventInterface
+use Mannion007\BestInvestments\Event\EventInterface;
+
+class SpecialistPutOnList implements EventInterface
 {
     const EVENT_NAME = 'specialist_put_on_list';
 
