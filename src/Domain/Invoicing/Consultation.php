@@ -21,12 +21,12 @@ class Consultation
         $this->projectStatus = $projectStatus;
     }
 
-    public static function scheduled(ConsultationId $consultationId, ClientId $clientId, TimeIncrement $duration)
+    public static function schedule(ConsultationId $consultationId, ClientId $clientId, TimeIncrement $duration)
     {
         return new self($consultationId, $clientId, $duration, ProjectStatus::active());
     }
 
-    public function projectEnded()
+    public function endProject()
     {
         if ($this->projectStatus->isNot(ProjectStatus::ACTIVE)) {
             throw new \DomainException('Cannot end a Project that is not active');

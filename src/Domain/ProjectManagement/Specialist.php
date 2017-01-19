@@ -14,6 +14,7 @@ class Specialist
         $this->specialistId = $specialistId;
         $this->name = $name;
         $this->hourlyRate = $hourlyRate;
+        // Event?
     }
 
     public static function register(SpecialistId $specialistId, string $name, Money $hourlyRate): Specialist

@@ -11,5 +11,13 @@
   "require": {
     "php": ">=7.0",
     "ramsey/uuid": "^3.5"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "^3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mannion007\\BestInvestments\\": "src"
+    }
   }
 }

@@ -14,7 +14,7 @@ class Invoice
     public function __construct(Consultation $consultation, Money $payAsYouGoRate)
     {
         if ($consultation->isNotBillable()) {
-            throw new \DomainException('Cannot create a Pay as you go payment for a consultation that is not billable');
+            throw new \DomainException('Consultation is not billable');
         }
         $this->clientId = $consultation->getClientId();
         $this->consultationId = $consultation->getConsultationId();
