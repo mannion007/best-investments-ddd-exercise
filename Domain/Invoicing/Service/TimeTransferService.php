@@ -7,16 +7,16 @@ use Mannion007\BestInvestments\Domain\Invoicing\PackageRepositoryInterface;
 
 class TimeTransferService
 {
-    private $repository;
+    private $packageRepository;
 
-    public function __construct(PackageRepositoryInterface $repository)
+    public function __construct(PackageRepositoryInterface $packageRepository)
     {
-        $this->repository = $repository;
+        $this->packageRepository = $packageRepository;
     }
     public function transferAvailableTime(PackageReference $fromReference, PackageReference $toReference)
     {
-        $fromPackage = $this->repository->getByReference($fromReference);
-        $toPackage = $this->repository->getByReference($toReference);
+        $fromPackage = $this->packageRepository->getByReference($fromReference);
+        $toPackage = $this->packageRepository->getByReference($toReference);
         $hours = $fromPackage->transferOutHours();
         $toPackage->transferInHours($hours);
     }
