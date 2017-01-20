@@ -7,7 +7,7 @@ class Package
     private $reference;
     private $clientId;
     private $nominalHours;
-    private $attachedConsultations;
+    private $attachedConsultations = [];
     private $transferredInHours;
     private $transferredOutHours;
     private $status;
@@ -41,7 +41,7 @@ class Package
 
     private function getRemainingHours(): TimeIncrement
     {
-        return $this->getAvailableHours()->minus($this->getUsedHours())->minus($this->transferOutHours());
+        return $this->getAvailableHours()->minus($this->getUsedHours())->minus($this->transferredOutHours);
     }
 
     private function getAvailableHours(): TimeIncrement
