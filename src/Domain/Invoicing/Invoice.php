@@ -31,9 +31,4 @@ class Invoice
         $this->paymentReference = $paymentReference;
         $this->status = InvoiceStatus::paid();
     }
-
-    public function getTotal()
-    {
-        return $this->payAsYouGoRate->getAmount() * $this->consultationDuration->inHours();
-    }
 }
