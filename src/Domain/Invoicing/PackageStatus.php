@@ -13,7 +13,7 @@ class PackageStatus
     private function __construct(\DateTimeInterface $startDate, PackageDuration $duration)
     {
         $currentDate = new \DateTime();
-        $expiryDate = new \DateTime('@' . strtotime("+".(string)$duration." month", $startDate->getTimestamp()));
+        $expiryDate = new \DateTime('@'.strtotime('+'.(string)$duration.' month', $startDate->getTimestamp()));
 
         if ($currentDate < $startDate) {
             $this->status = self::INACTIVE;

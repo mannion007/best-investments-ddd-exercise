@@ -7,7 +7,6 @@ use Mannion007\BestInvestments\Domain\Invoicing\ConsultationId;
 use Mannion007\BestInvestments\Domain\Invoicing\ClientId;
 use Mannion007\BestInvestments\Domain\Invoicing\TimeIncrement;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class ConsultationSpec

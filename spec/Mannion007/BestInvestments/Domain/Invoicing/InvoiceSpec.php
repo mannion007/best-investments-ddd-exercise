@@ -10,7 +10,6 @@ use Mannion007\BestInvestments\Domain\Invoicing\Money;
 use Mannion007\BestInvestments\Domain\Invoicing\PaymentReference;
 use Mannion007\BestInvestments\Domain\Invoicing\TimeIncrement;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class InvoiceSpec

@@ -3,9 +3,7 @@
 namespace spec\Mannion007\BestInvestments\Domain\Invoicing;
 
 use Mannion007\BestInvestments\Domain\Invoicing\Package;
-use Mannion007\BestInvestments\Domain\Invoicing\PackageDuration;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class PackageDurationSpec

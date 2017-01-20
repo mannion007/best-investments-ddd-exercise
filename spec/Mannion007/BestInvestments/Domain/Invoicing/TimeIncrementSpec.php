@@ -4,7 +4,6 @@ namespace spec\Mannion007\BestInvestments\Domain\Invoicing;
 
 use Mannion007\BestInvestments\Domain\Invoicing\TimeIncrement;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class TimeIncrementSpec
