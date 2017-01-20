@@ -10,19 +10,11 @@ class PackageStatus
 
     private $status;
 
-    public static function determineFrom(\DateTime $startDate, PackageDuration $duration)
-    {
-        return new self($startDate, $duration);
-    }
-
-    private function __construct(\DateTime $startDate, PackageDuration $duration)
+    private function __construct(\DateTimeInterface $startDate, PackageDuration $duration)
     {
         $currentDate = new \DateTime();
-        $expiryDate = $startDate->add(new \DateInterval(sprintf('P%sM', (string)$duration)));
+        $expiryDate = new \DateTime('@' . strtotime("+".(string)$duration." month", $startDate->getTimestamp()));
 
-        if ($expiryDate <= $startDate) {
-            throw new \DomainException('Package cannot expire before it starts');
-        }
         if ($currentDate < $startDate) {
             $this->status = self::INACTIVE;
         }
@@ -34,12 +26,17 @@ class PackageStatus
         }
     }
 
-    public function isNot(string $status)
+    public static function determineFrom(\DateTimeInterface $startDate, PackageDuration $duration): PackageStatus
+    {
+        return new self($startDate, $duration);
+    }
+
+    public function isNot(string $status): bool
     {
         return !$this->is($status);
     }
 
-    public function is(string $status)
+    public function is(string $status): bool
     {
         return $status === $this->status;
     }

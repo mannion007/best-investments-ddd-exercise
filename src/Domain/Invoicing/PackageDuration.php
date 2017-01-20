@@ -16,12 +16,12 @@ class PackageDuration
         $this->months = $months;
     }
 
-    public static function sixMonths()
+    public static function sixMonths(): PackageDuration
     {
         return new self(6);
     }
 
-    public static function twelveMonths()
+    public static function twelveMonths(): PackageDuration
     {
         return new self(12);
     }

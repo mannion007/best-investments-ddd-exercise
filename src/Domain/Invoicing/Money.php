@@ -16,22 +16,22 @@ class Money
         return $this->amount;
     }
 
-    public function add(Money $other)
+    public function add(Money $other) : Money
     {
         return new static($this->amount + $other->getAmount());
     }
 
-    public function subtract(Money $other)
+    public function subtract(Money $other) : Money
     {
         return new static($this->amount - $other->getAmount());
     }
 
-    public function isMoreThan(Money $other)
+    public function isMoreThan(Money $other) : bool
     {
         return $this->amount > $other;
     }
 
-    public function isLessThan(Money $other)
+    public function isLessThan(Money $other) : bool
     {
         return $this->amount < $other;
     }

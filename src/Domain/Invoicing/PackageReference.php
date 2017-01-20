@@ -11,7 +11,7 @@ class PackageReference
     private $months;
     private $reference;
 
-    public function __construct(string $name, \DateTime $startDate, PackageDuration $months)
+    public function __construct(string $name, \DateTimeInterface $startDate, PackageDuration $months)
     {
         $this->name = $name;
         $this->startDate = $startDate;
@@ -25,7 +25,7 @@ class PackageReference
         );
     }
 
-    public function getStartDate(): \DateTime
+    public function getStartDate(): \DateTimeInterface
     {
         return $this->startDate;
     }
