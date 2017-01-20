@@ -11,7 +11,7 @@ class ConsultationId
         $this->consultationId = $consultationId;
     }
 
-    public static function fromExisting(int $consultationId)
+    public static function fromExisting(int $consultationId) : ConsultationId
     {
         return new self($consultationId);
     }
