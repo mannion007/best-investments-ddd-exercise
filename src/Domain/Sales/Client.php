@@ -42,7 +42,7 @@ class Client
     public function suspendService()
     {
         if ($this->status->is(ClientStatus::SUSPENDED)) {
-            throw new \DomainException('Cannot suspend the Service of a Client when it is already suspended');
+            throw new \Exception('Cannot suspend the Service of a Client when it is already suspended');
         }
         $this->status = ClientStatus::suspended();
 
@@ -52,7 +52,7 @@ class Client
     public function resumeOperations()
     {
         if ($this->status->is(ClientStatus::ACTIVE)) {
-            throw new \DomainException('Cannot resume operations of a Client that is not suspended');
+            throw new \Exception('Cannot resume operations of a Client that is not suspended');
         }
         $this->status = ClientStatus::active();
 

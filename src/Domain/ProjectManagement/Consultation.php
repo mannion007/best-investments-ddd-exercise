@@ -28,7 +28,7 @@ class Consultation
     public function report(int $durationMinutes)
     {
         if ($this->status->isNot(ConsultationStatus::OPEN)) {
-            throw new \DomainException('Cannot report on a consultation that is not open');
+            throw new \Exception('Cannot report on a consultation that is not open');
         }
         $this->duration = $this->duration->add(new TimeIncrement($durationMinutes));
         $this->status = ConsultationStatus::confirmed();
@@ -37,7 +37,7 @@ class Consultation
     public function discard()
     {
         if ($this->status->isNot(ConsultationStatus::OPEN)) {
-            throw new \DomainException('Cannot discard a report on a consultation that is not open');
+            throw new \Exception('Cannot discard a report on a consultation that is not open');
         }
         $this->status = ConsultationStatus::discarded();
     }

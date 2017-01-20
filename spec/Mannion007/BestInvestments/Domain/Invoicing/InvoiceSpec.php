@@ -38,22 +38,22 @@ class InvoiceSpec extends ObjectBehavior
     ) {
         $consultation->isNotBillable()->willReturn(true);
         $this->beConstructedWith($consultation, $payAsYouGoRate);
-        $this->shouldThrow(new \DomainException('Consultation is not billable'))->duringInstantiation();
+        $this->shouldThrow(new \Exception('Consultation is not billable'))->duringInstantiation();
     }
 
     function it_initialises_with_a_consultation_that_is_billable()
     {
-        $this->shouldNotThrow(new \DomainException('Consultation is not billable'))->duringInstantiation();
+        $this->shouldNotThrow(new \Exception('Consultation is not billable'))->duringInstantiation();
     }
 
     function it_cannot_be_paid_when_it_is_not_outstanding(PaymentReference $paymentReference)
     {
         $this->pay($paymentReference);
-        $this->shouldThrow(new \DomainException('Invoice is not outstanding'))->during('pay', [$paymentReference]);
+        $this->shouldThrow(new \Exception('Invoice is not outstanding'))->during('pay', [$paymentReference]);
     }
 
     function it_can_be_paid_when_it_is_outstanding(PaymentReference $paymentReference)
     {
-        $this->shouldNotThrow(new \DomainException('Invoice is not outstanding'))->during('pay', [$paymentReference]);
+        $this->shouldNotThrow(new \Exception('Invoice is not outstanding'))->during('pay', [$paymentReference]);
     }
 }

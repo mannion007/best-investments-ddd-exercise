@@ -11,7 +11,7 @@ class TimeIncrement
     public function __construct(int $minutes)
     {
         if ($minutes < 0) {
-            throw new \DomainException('A Time Increment must have a positive number of minutes');
+            throw new \Exception('A Time Increment must have a positive number of minutes');
         }
         $this->increments = (int)ceil($minutes / self::MINUTES_PER_INCREMENT);
     }
@@ -24,7 +24,7 @@ class TimeIncrement
     public function minus(TimeIncrement $timeToMinus)
     {
         if ($timeToMinus->inMinutes() > $this->inMinutes()) {
-            throw new \DomainException('Cannot minus more time than the time increment has');
+            throw new \Exception('Cannot minus more time than the time increment has');
         }
         return new self($this->inMinutes() - $timeToMinus->inMinutes());
     }

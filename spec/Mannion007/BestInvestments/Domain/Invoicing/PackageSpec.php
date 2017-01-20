@@ -37,7 +37,7 @@ class PackageSpec extends ObjectBehavior
         $tomorrow = $today->add(new \DateInterval('P1D'));
         $reference = new PackageReference('test-ref', $tomorrow, PackageDuration::sixMonths());
         $this->beConstructedWith($reference, $clientId, $nominalHours);
-        $this->shouldThrow(new \DomainException('Cannot attach a consultation to a Package that is not Active'))
+        $this->shouldThrow(new \Exception('Cannot attach a consultation to a Package that is not Active'))
             ->during('attach', [$consultation]);
     }
 
@@ -47,7 +47,7 @@ class PackageSpec extends ObjectBehavior
         $clientId = ClientId::fromExisting('client1');
         $duration = new TimeIncrement(120);
         $consultation = Consultation::schedule($consultationId, $clientId, $duration);
-        $this->shouldThrow(new \DomainException('Package does not have enough hours remaining'))
+        $this->shouldThrow(new \Exception('Package does not have enough hours remaining'))
             ->during('attach', [$consultation]);
     }
 
@@ -57,7 +57,7 @@ class PackageSpec extends ObjectBehavior
         $clientId = ClientId::fromExisting('client2');
         $duration = new TimeIncrement(30);
         $consultation = Consultation::schedule($consultationId, $clientId, $duration);
-        $this->shouldThrow(new \DomainException('Cannot attach a Consultation for another Client'))
+        $this->shouldThrow(new \Exception('Cannot attach a Consultation for another Client'))
             ->during('attach', [$consultation]);
     }
 

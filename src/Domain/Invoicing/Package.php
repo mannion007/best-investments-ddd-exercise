@@ -28,13 +28,13 @@ class Package
     public function attach(Consultation $consultation)
     {
         if ($this->status->isNot(PackageStatus::ACTIVE)) {
-            throw new \DomainException('Cannot attach a consultation to a Package that is not Active');
+            throw new \Exception('Cannot attach a consultation to a Package that is not Active');
         }
         if ($this->getUsedHours()->add($consultation->getDuration())->isMoreThan($this->getRemainingHours())) {
-            throw new \DomainException('Package does not have enough hours remaining');
+            throw new \Exception('Package does not have enough hours remaining');
         }
         if ($this->clientId->isNot($consultation->getClientId())) {
-            throw new \DomainException('Cannot attach a Consultation for another Client');
+            throw new \Exception('Cannot attach a Consultation for another Client');
         }
         $this->attachedConsultations[] = $consultation;
     }
@@ -61,7 +61,7 @@ class Package
     public function transferInHours(TimeIncrement $timeToTransferIn)
     {
         if ($this->status->is(PackageStatus::EXPIRED)) {
-            throw new \DomainException('Cannot transfer hours into an Expired Package');
+            throw new \Exception('Cannot transfer hours into an Expired Package');
         }
         $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn);
     }
@@ -69,7 +69,7 @@ class Package
     public function transferOutHours(): TimeIncrement
     {
         if ($this->status->isNot(PackageStatus::EXPIRED)) {
-            throw new \DomainException('Cannot transfer hours out of a Package that has not yet Expired');
+            throw new \Exception('Cannot transfer hours out of a Package that has not yet Expired');
         }
         /** No guard for 0 available time, it's probably not exceptional to transfer out no time... */
         $this->transferredOutHours = $this->getRemainingHours();

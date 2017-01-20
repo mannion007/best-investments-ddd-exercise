@@ -23,12 +23,12 @@ class ConsultationSpec extends ObjectBehavior
     function it_does_not_end_project_when_project_has_already_ended()
     {
         $this->endProject();
-        $this->shouldThrow(new \DomainException('Cannot end a Project that is not active'))->during('endProject');
+        $this->shouldThrow(new \Exception('Cannot end a Project that is not active'))->during('endProject');
     }
 
     function it_ends_project_when_project_has_not_yet_ended()
     {
-        $this->shouldNotThrow(new \DomainException('Cannot end a Project that is not active'))->during('endProject');
+        $this->shouldNotThrow(new \Exception('Cannot end a Project that is not active'))->during('endProject');
     }
 
     function it_is_not_billable_when_the_project_has_not_ended()

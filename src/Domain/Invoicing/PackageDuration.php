@@ -11,7 +11,7 @@ class PackageDuration
     public function __construct(int $months)
     {
         if (!in_array($months, self::VALID_DURATIONS)) {
-            throw new \DomainException('Invalid number of months for Package Duration');
+            throw new \Exception('Invalid number of months for Package Duration');
         }
         $this->months = $months;
     }

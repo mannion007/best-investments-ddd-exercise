@@ -31,7 +31,7 @@ class Prospect
     public function chaseUp()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new \DomainException('Cannot chase up prospect that is not In Progress');
+            throw new \Exception('Cannot chase up prospect that is not In Progress');
         }
         $this->chaseUps[] = new \DateTime();
     }
@@ -39,7 +39,7 @@ class Prospect
     public function register(Money $hourlyRate)
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new \DomainException('Cannot register Prospect that is not In Progress');
+            throw new \Exception('Cannot register Prospect that is not In Progress');
         }
         $this->hourlyRate = $hourlyRate;
         $this->status = ProspectStatus::registered();
@@ -50,7 +50,7 @@ class Prospect
     public function declareNotInterested()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new \DomainException('Cannot declare not interested for Prospect that is not In Progress');
+            throw new \Exception('Cannot declare not interested for Prospect that is not In Progress');
         }
         $this->status = ProspectStatus::notInterested();
 
@@ -60,7 +60,7 @@ class Prospect
     public function giveUp()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new \DomainException('Cannot give up on Prospect that is not in progress');
+            throw new \Exception('Cannot give up on Prospect that is not in progress');
         }
         $this->status = ProspectStatus::notReachable();
 

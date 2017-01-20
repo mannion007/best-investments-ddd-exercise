@@ -29,7 +29,7 @@ class Consultation
     public function endProject()
     {
         if ($this->projectStatus->isNot(ProjectStatus::ACTIVE)) {
-            throw new \DomainException('Cannot end a Project that is not active');
+            throw new \Exception('Cannot end a Project that is not active');
         }
         $this->projectStatus = ProjectStatus::ended();
     }
