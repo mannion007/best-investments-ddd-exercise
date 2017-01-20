@@ -6,7 +6,7 @@ class ClientId
 {
     private $clientId;
 
-    private function __construct($clientId)
+    private function __construct(string $clientId)
     {
         $this->clientId = $clientId;
     }
