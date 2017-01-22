@@ -20,13 +20,13 @@ class ConsultationSpec extends ObjectBehavior
         $this::beConstructedThrough('schedule', [$consultationId, $clientId, $duration]);
     }
 
-    function it_does_not_end_project_when_project_has_already_ended()
+    function it_does_not_end_project_when_project_has_previously_ended()
     {
         $this->endProject();
         $this->shouldThrow(new \Exception('Cannot end a Project that is not active'))->during('endProject');
     }
 
-    function it_ends_project_when_project_has_not_yet_ended()
+    function it_ends_project_when_project_has_not_ended()
     {
         $this->shouldNotThrow(new \Exception('Cannot end a Project that is not active'))->during('endProject');
     }

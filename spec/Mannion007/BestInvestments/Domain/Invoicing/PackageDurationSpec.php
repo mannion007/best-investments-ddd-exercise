@@ -12,7 +12,7 @@ use PhpSpec\ObjectBehavior;
  */
 class PackageDurationSpec extends ObjectBehavior
 {
-    function it_does_not_initialise_with_an_invalid_number_of_months()
+    function it_does_not_initialise_with_five_months()
     {
         $this->beConstructedWith(5);
         $this->shouldThrow(new \Exception('Invalid number of months for Package Duration'))

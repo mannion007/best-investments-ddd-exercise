@@ -20,8 +20,7 @@ class PackageSpec extends ObjectBehavior
 {
     function let()
     {
-        $today = new \DateTimeImmutable();
-        $yesterday = $today->sub(new \DateInterval('P1D'));
+        $yesterday = (new \DateTime())->modify('-1 day');
         $reference = new PackageReference('test-ref', $yesterday, PackageDuration::sixMonths());
         $clientId = ClientId::fromExisting('client1');
         $nominalHours = new TimeIncrement(60);
@@ -33,8 +32,7 @@ class PackageSpec extends ObjectBehavior
         TimeIncrement $nominalHours,
         Consultation $consultation
     ) {
-        $today = new \DateTimeImmutable();
-        $tomorrow = $today->add(new \DateInterval('P1D'));
+        $tomorrow = (new \DateTime())->modify('+1 day');
         $reference = new PackageReference('test-ref', $tomorrow, PackageDuration::sixMonths());
         $this->beConstructedWith($reference, $clientId, $nominalHours);
         $this->shouldThrow(new \Exception('Cannot attach a consultation to a Package that is not Active'))

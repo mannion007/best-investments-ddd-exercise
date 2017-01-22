@@ -22,7 +22,7 @@ class PackageStatusSpec extends ObjectBehavior
         $this->is(PackageStatus::INACTIVE)->shouldReturn(true);
     }
 
-    function it_is_inactive_when_the_start_date_is_in_the_past()
+    function it_is_active_when_the_start_date_is_in_the_past()
     {
         $this->beConstructedThrough(
             'determineFrom',

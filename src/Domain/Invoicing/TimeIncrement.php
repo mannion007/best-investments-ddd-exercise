@@ -16,7 +16,7 @@ class TimeIncrement
         $this->increments = (int)ceil($minutes / self::MINUTES_PER_INCREMENT);
     }
 
-    public function add(TimeIncrement $timeToAdd) : TimeIncrement
+    public function add(TimeIncrement $timeToAdd): TimeIncrement
     {
         return new self($this->inMinutes() + $timeToAdd->inMinutes());
     }

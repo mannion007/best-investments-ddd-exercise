@@ -34,7 +34,7 @@ class Consultation
         $this->projectStatus = ProjectStatus::ended();
     }
 
-    public function getConsultationId() : ConsultationId
+    public function getConsultationId(): ConsultationId
     {
         return $this->consultationId;
     }
@@ -49,12 +49,12 @@ class Consultation
         return $this->duration;
     }
 
-    public function isNotBillable() : bool
+    public function isNotBillable(): bool
     {
         return !$this->isBillable();
     }
 
-    public function isBillable() : bool
+    public function isBillable(): bool
     {
         return $this->projectStatus->is(ProjectStatus::ENDED);
     }

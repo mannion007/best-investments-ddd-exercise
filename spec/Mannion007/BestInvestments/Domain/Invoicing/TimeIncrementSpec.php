@@ -36,24 +36,24 @@ class TimeIncrementSpec extends ObjectBehavior
             ->duringInstantiation();
     }
 
-    function it_rounds_to_quarter_hours()
+    function it_rounds_minutes_to_quarter_hours()
     {
         $this->inMinutes()->shouldBeEqualTo(15);
         $this->add(new TimeIncrement(1))->inMinutes()->shouldBeEqualTo(30);
     }
 
-    function it_adds()
+    function it_adds_time_increments()
     {
         $this->add(new TimeIncrement(1))->inMinutes()->shouldBeEqualTo(30);
     }
 
-    function it_does_not_minus_more_minutes_than_it_has()
+    function it_does_not_minus_time_increments_with_more_minutes_than_it_has()
     {
         $this->shouldThrow(new \Exception('Cannot minus more time than the time increment has'))
         ->during('minus', [new TimeIncrement(45)]);
     }
 
-    function it_minuses()
+    function it_minuses_time_increments()
     {
         $this->beConstructedWith(30);
         $this->minus(new TimeIncrement(10))->inMinutes()->shouldBeEqualTo(15);
