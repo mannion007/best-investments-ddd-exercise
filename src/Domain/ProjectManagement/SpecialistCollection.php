@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistCollection implements \ArrayAccess, \Countable
+class SpecialistCollection implements \ArrayAccess, \Countable, \Traversable
 {
     private $specialists = [];
 

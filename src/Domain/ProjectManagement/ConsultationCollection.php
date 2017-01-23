@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ConsultationCollection implements \ArrayAccess, \Countable
+class ConsultationCollection implements \ArrayAccess, \Countable, \Traversable
 {
     private $consultations = [];
 
