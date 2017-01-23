@@ -29,7 +29,7 @@ class PackageReference
         );
     }
 
-    public function getStartDate(): \DateTime
+    public function getStartDate(): \DateTimeInterface
     {
         return $this->startDate;
     }

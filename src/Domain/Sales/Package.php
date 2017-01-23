@@ -29,7 +29,7 @@ class Package
             new PackagePurchasedEvent(
                 (string)$this->reference,
                 (string)$this->clientId,
-                date_format('c', $this->startDate),
+                date_format($this->startDate, 'c'),
                 (string)$this->nominalHours
             )
         );
