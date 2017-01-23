@@ -8,7 +8,6 @@ use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationStatus;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectReference;
 use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistId;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class TimeIncrementSpec
