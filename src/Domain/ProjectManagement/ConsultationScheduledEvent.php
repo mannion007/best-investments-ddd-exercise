@@ -41,7 +41,7 @@ class ConsultationScheduledEvent implements EventInterface
         return self::EVENT_NAME;
     }
 
-    public function getOccurredAt(): \DateTime
+    public function getOccurredAt(): \DateTimeInterface
     {
         return $this->occurredAt;
     }

@@ -11,7 +11,7 @@ class OperationsResumedEvent implements EventInterface
     private $clientId;
     private $occurredAt;
 
-    public function __construct($clientId, \DateTime $occurredAt = null)
+    public function __construct($clientId, \DateTimeInterface $occurredAt = null)
     {
         $this->clientId = $clientId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
@@ -27,7 +27,7 @@ class OperationsResumedEvent implements EventInterface
         return $this->clientId;
     }
 
-    public function getOccurredAt(): \DateTime
+    public function getOccurredAt(): \DateTimeInterface
     {
         return $this->occurredAt;
     }

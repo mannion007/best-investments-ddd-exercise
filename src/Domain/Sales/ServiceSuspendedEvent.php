@@ -32,7 +32,7 @@ class ServiceSuspendedEvent implements EventInterface
         return ['client_id' => $this->clientId];
     }
 
-    public function getOccurredAt(): \DateTime
+    public function getOccurredAt(): \DateTimeInterface
     {
         return $this->occurredAt;
     }

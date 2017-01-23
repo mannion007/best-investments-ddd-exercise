@@ -32,7 +32,7 @@ class Client
 
     public function purchasePackage(
         string $name,
-        \DateTime $startDate,
+        \DateTimeInterface $startDate,
         PackageDuration $months,
         int $nominalHours
     ) {

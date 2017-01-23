@@ -15,7 +15,7 @@ class Consultation
         ConsultationId $consultationId,
         ProjectReference $projectReference,
         SpecialistId $specialistId,
-        \DateTime $time
+        \DateTimeInterface $time
     ) {
         $this->consultationId = $consultationId;
         $this->projectReference = $projectReference;
