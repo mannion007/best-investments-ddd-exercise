@@ -6,6 +6,7 @@ use Mannion007\BestInvestments\Domain\Invoicing\Invoice;
 use Mannion007\BestInvestments\Domain\Invoicing\ClientId;
 use Mannion007\BestInvestments\Domain\Invoicing\ConsultationId;
 use Mannion007\BestInvestments\Domain\Invoicing\Consultation;
+use Mannion007\BestInvestments\Domain\Invoicing\InvoiceStatus;
 use Mannion007\BestInvestments\Domain\Invoicing\Money;
 use Mannion007\BestInvestments\Domain\Invoicing\PaymentReference;
 use Mannion007\BestInvestments\Domain\Invoicing\TimeIncrement;
@@ -48,12 +49,17 @@ class InvoiceSpec extends ObjectBehavior
 
     function it_cannot_be_paid_when_it_is_not_outstanding(PaymentReference $paymentReference)
     {
-        $this->pay($paymentReference);
+        $status = new \ReflectionProperty($this->getWrappedObject(), 'status');
+        $status->setAccessible(true);
+        $status->setValue($this->getWrappedObject(), InvoiceStatus::paid());
         $this->shouldThrow(new \Exception('Invoice is not outstanding'))->during('pay', [$paymentReference]);
     }
 
     function it_can_be_paid_when_it_is_outstanding(PaymentReference $paymentReference)
     {
+        $status = new \ReflectionProperty($this->getWrappedObject(), 'status');
+        $status->setAccessible(true);
+        $status->setValue($this->getWrappedObject(), InvoiceStatus::outstanding());
         $this->shouldNotThrow(new \Exception('Invoice is not outstanding'))->during('pay', [$paymentReference]);
     }
 }
