@@ -12,10 +12,8 @@ class Project
     private $name;
     private $status;
     private $deadline;
-    /** @var SpecialistCollection  */
     private $specialists;
-    /** @var SpecialistCollection  */
-    private $consultations = [];
+    private $consultations;
 
     private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
     {
