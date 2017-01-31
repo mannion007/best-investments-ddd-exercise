@@ -14,7 +14,7 @@ class PackagePurchasedEvent implements EventInterface
     private $nominalHours;
     private $occurredAt;
 
-    public function __construct($reference, $clientId, $startDate, $nominalHours, \DateTime $occurredAt = null)
+    public function __construct($reference, $clientId, $startDate, $nominalHours, \DateTimeInterface $occurredAt = null)
     {
         $this->reference = $reference;
         $this->clientId = $clientId;

@@ -14,7 +14,7 @@ class ProjectDraftedEvent implements EventInterface
     private $deadline;
     private $occurredAt;
 
-    public function __construct($reference, $clientId, $name, $deadline, \DateTime $occurredAt = null)
+    public function __construct($reference, $clientId, $name, $deadline, \DateTimeInterface $occurredAt = null)
     {
         $this->reference = $reference;
         $this->clientId = $clientId;

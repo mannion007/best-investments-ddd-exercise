@@ -15,7 +15,7 @@ class Package
     public function __construct(
         ClientId $clientId,
         string $name,
-        \DateTime $startDate,
+        \DateTimeInterface $startDate,
         PackageDuration $durationMonths,
         int $nominalHours
     ) {

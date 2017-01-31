@@ -12,7 +12,7 @@ class ProspectRegisteredEvent implements EventInterface
     private $hourlyRate;
     private $occurredAt;
 
-    public function __construct($prospectId, $hourlyRate, \DateTime $occurredAt = null)
+    public function __construct($prospectId, $hourlyRate, \DateTimeInterface $occurredAt = null)
     {
         $this->prospectId = $prospectId;
         $this->hourlyRate = $hourlyRate;

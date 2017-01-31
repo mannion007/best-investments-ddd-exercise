@@ -19,7 +19,7 @@ class SpecialistPutOnListEvent implements EventInterface
         ProjectManagerId $projectManagerId,
         string $name,
         string $notes,
-        \DateTime $occurredAt = null
+        \DateTimeInterface $occurredAt = null
     ) {
         $this->specialistId = $specialistId;
         $this->projectManagerId = $projectManagerId;

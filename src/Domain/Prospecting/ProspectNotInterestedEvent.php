@@ -11,7 +11,7 @@ class ProspectNotInterestedEvent implements EventInterface
     private $prospectId;
     private $occurredAt;
 
-    public function __construct($prospectId, \DateTime $occurredAt = null)
+    public function __construct($prospectId, \DateTimeInterface $occurredAt = null)
     {
         $this->prospectId = $prospectId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;

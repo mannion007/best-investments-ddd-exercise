@@ -11,7 +11,7 @@ class ServiceSuspendedEvent implements EventInterface
     private $clientId;
     private $occurredAt;
 
-    public function __construct($clientId, \DateTime $occurredAt = null)
+    public function __construct($clientId, \DateTimeInterface $occurredAt = null)
     {
         $this->clientId = $clientId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;

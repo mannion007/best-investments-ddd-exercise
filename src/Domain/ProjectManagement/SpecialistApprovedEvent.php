@@ -12,7 +12,7 @@ class SpecialistApprovedEvent implements EventInterface
     private $specialistId;
     private $occurredAt;
 
-    public function __construct($reference, $specialistId, \DateTime $occurredAt = null)
+    public function __construct($reference, $specialistId, \DateTimeInterface $occurredAt = null)
     {
         $this->reference = $reference;
         $this->specialistId = $specialistId;

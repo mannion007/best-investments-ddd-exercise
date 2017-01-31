@@ -11,7 +11,7 @@ class ProjectClosedEvent implements EventInterface
     private $reference;
     private $occurredAt;
 
-    public function __construct($reference, \DateTime $occurredAt = null)
+    public function __construct($reference, \DateTimeInterface $occurredAt = null)
     {
         $this->reference = $reference;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;

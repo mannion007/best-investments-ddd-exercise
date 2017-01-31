@@ -13,7 +13,7 @@ class PackageReference
 
     public function __construct(
         string $name,
-        \DateTime $startDate,
+        \DateTimeInterface $startDate,
         PackageDuration $months
     ) {
         $this->name = $name;

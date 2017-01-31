@@ -14,8 +14,13 @@ class ClientSignedUpEvent implements EventInterface
     private $payAsYouGoRate;
     private $occurredAt;
 
-    public function __construct($clientId, $name, $contactDetails, $payAsYouGoRate, \DateTime $occurredAt = null)
-    {
+    public function __construct(
+        $clientId,
+        $name,
+        $contactDetails,
+        $payAsYouGoRate,
+        \DateTimeInterface $occurredAt = null
+    ) {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->contactDetails = $contactDetails;
