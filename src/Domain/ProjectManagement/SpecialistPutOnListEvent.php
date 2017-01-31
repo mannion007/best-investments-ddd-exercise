@@ -4,7 +4,7 @@ namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
 use Mannion007\BestInvestments\Event\EventInterface;
 
-class SpecialistPutOnList implements EventInterface
+class SpecialistPutOnListEvent implements EventInterface
 {
     const EVENT_NAME = 'specialist_put_on_list';
 
@@ -69,7 +69,7 @@ class SpecialistPutOnList implements EventInterface
         ];
     }
 
-    public static function fromPayload(array $payload): SpecialistPutOnList
+    public static function fromPayload(array $payload): SpecialistPutOnListEvent
     {
         return new self(
             SpecialistId::fromExisting($payload['specialist_id']),

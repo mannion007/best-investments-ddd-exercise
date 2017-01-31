@@ -6,20 +6,20 @@ use Ramsey\Uuid\Uuid;
 
 class SpecialistId
 {
-    private $id;
+    private $specialistId;
 
-    public function __construct(string $id = null)
+    public function __construct(string $specialistId = null)
     {
-        $this->id = is_null($id) ? Uuid::uuid4()->toString() : $id;
+        $this->specialistId = is_null($specialistId) ? Uuid::uuid4()->toString() : $specialistId;
     }
 
-    public static function fromExisting(string $id): SpecialistId
+    public static function fromExisting(string $specialistId): SpecialistId
     {
-        return new self($id);
+        return new self($specialistId);
     }
 
     public function __toString()
     {
-        return (string)$this->id;
+        return (string)$this->specialistId;
     }
 }
