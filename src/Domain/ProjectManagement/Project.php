@@ -12,16 +12,21 @@ class Project
     private $name;
     private $status;
     private $deadline;
-    private $specialists;
+    private $unvettedSpecialits;
+    private $approvedSpecialists;
+    private $discardedSpecialists;
+
     private $consultations;
 
-    private function __construct(ClientId $clientId, string $name, \DateTime $deadline)
+    private function __construct(ClientId $clientId, string $name, \DateTimeInterface $deadline)
     {
         $this->reference = new ProjectReference();
         $this->clientId = $clientId;
         $this->name = $name;
         $this->deadline = $deadline;
-        $this->specialists = new SpecialistCollection();
+        $this->unvettedSpecialits = new SpecialistCollection();
+        $this->approvedSpecialists = new SpecialistCollection();
+        $this->discardedSpecialists = new SpecialistCollection();
         $this->consultations = new ConsultationCollection();
         $this->status = ProjectStatus::draft();
 
@@ -30,12 +35,12 @@ class Project
                 (string)$this->reference,
                 (string)$this->clientId,
                 $this->name,
-                date_format('c', $this->deadline)
+                date_format($this->deadline, 'c')
             )
         );
     }
 
-    public static function setUp(ClientId $clientId, string $name, \DateTime $deadline): Project
+    public static function setUp(ClientId $clientId, string $name, \DateTimeInterface $deadline): Project
     {
         return new self($clientId, $name, $deadline);
     }
@@ -55,10 +60,10 @@ class Project
     {
         /** This cannot be event driven. Client may want to arrange more consultations at any time */
         /** @var Consultation $consultation */
-        foreach ($this->consultations as $consultation) {
+        foreach ($this->consultations->getIterator() as $consultation) {
             if ($consultation->is(ConsultationStatus::OPEN)) {
                 throw new \Exception(
-                    'Cannot close project until all open Consultations have been either Confirmed or Discarded'
+                    'Cannot close Project until all open Consultations have been either Confirmed or Discarded'
                 );
             }
         }
@@ -72,61 +77,66 @@ class Project
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('A specialist can only be added to an Active Project');
         }
-        if ($this->specialists->includes((string)$specialistId)) {
+        if ($this->hasAdded($specialistId)) {
             throw new \Exception('Cannot add a specialist more than once');
         }
-        $this->specialists[(string)$specialistId] = SpecialistRecommendation::unvetted();
+        $this->unvettedSpecialits->add($specialistId);
     }
 
     public function approveSpecialist(SpecialistId $specialistId)
     {
-        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::UNVETTED)) {
-            throw new \Exception('Potential specialist is not un-vetted');
+        if (!$this->unvettedSpecialits->contains($specialistId)) {
+            throw new \Exception('Cannot approve a Specialist that is not un-vetted');
         }
-        $this->specialists[(string)$specialistId] = SpecialistRecommendation::approved();
-
+        $this->unvettedSpecialits->remove($specialistId);
+        $this->approvedSpecialists->add($specialistId);
         EventPublisher::publish(new SpecialistApprovedEvent((string)$this->reference, (string)$specialistId));
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
     {
-        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::UNVETTED)) {
-            throw new \Exception('Potential specialist is not un-vetted');
+        if (!$this->unvettedSpecialits->contains($specialistId)) {
+            throw new \Exception('Cannot discard a Specialist that is not un-vetted');
         }
-        $this->specialists[(string)$specialistId] = SpecialistRecommendation::discarded();
-
+        $this->unvettedSpecialits->remove($specialistId);
+        $this->discardedSpecialists->add($specialistId);
         EventPublisher::publish(new SpecialistDiscardedEvent((string)$this->reference, (string)$specialistId));
     }
 
-    public function scheduleConsultation(SpecialistId $specialistId, \DateTime $time)
+    public function scheduleConsultation(SpecialistId $specialistId, \DateTimeInterface $time)
     {
         if ($this->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('Cannot schedule a Consultation for a Project that is not active');
         }
-        if ($this->specialists[(string)$specialistId]->isNot(SpecialistRecommendation::APPROVED)) {
-            throw new \Exception('A consultation can only be scheduled with an approved Specialist');
+        if (!$this->approvedSpecialists->contains($specialistId)) {
+            throw new \Exception('Cannot schedule a Consultation with a Specialist that is not approved');
         }
         $consultationId = $this->nextConsultationId();
-        $this->consultations[(string)$consultationId]
-            = new Consultation($consultationId, $this->reference, $specialistId, $time);
-
-        EventPublisher::publish(
-            new ConsultationScheduledEvent((string)$this->reference, (string)$specialistId, date_format('c', $time))
+        $this->consultations->add(
+            new Consultation($consultationId, $this->reference, $specialistId, $time)
         );
+        EventPublisher::publish(
+            new ConsultationScheduledEvent((string)$this->reference, (string)$specialistId, date_format($time, 'c'))
+        );
+        return $consultationId;
     }
 
     public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
     {
         /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
          *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
-        $this->consultations[(string)$consultationId]->report($durationMinutes);
+        //$this->consultations[(string)$consultationId]->report($durationMinutes);
+        $this->consultations->get($consultationId)->report($durationMinutes);
+        //Put back in collection?
     }
 
     public function discardConsultation(ConsultationId $consultationId)
     {
         /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
          *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
-        $this->consultations[(string)$consultationId]->discard();
+        //$this->consultations[(string)$consultationId]->discard();
+        $this->consultations->get($consultationId)->discard();
+        //Put back in collection?
     }
 
     public function putOnHold()
@@ -146,9 +156,11 @@ class Project
         $this->status = ProjectStatus::active();
     }
 
-    public function getReference(): ProjectReference
+    private function hasAdded(SpecialistId $specialistId)
     {
-        return $this->reference;
+        return $this->unvettedSpecialits->contains($specialistId) ||
+        $this->approvedSpecialists->contains($specialistId) ||
+        $this->discardedSpecialists->contains($specialistId);
     }
 
     private function nextConsultationId(): ConsultationId

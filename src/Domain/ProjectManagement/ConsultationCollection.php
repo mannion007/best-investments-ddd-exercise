@@ -2,37 +2,45 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class ConsultationCollection implements \ArrayAccess, \Countable, \Traversable
+class ConsultationCollection implements \IteratorAggregate, \Countable
 {
     private $consultations = [];
 
-    public function offsetSet($offset, $value)
+    public function add(Consultation $consultation)
     {
-        if (is_null($offset)) {
-            $this->consultations[] = $value;
-        } else {
-            $this->consultations[$offset] = $value;
+        $this->consultations[(string)$consultation->getConsultationId()] = $consultation;
+    }
+
+    public function get(ConsultationId $consultationId): Consultation
+    {
+        if (!isset($this->consultations[(string)$consultationId])) {
+            throw new \Exception('Consultation not in collection');
         }
+        return $this->consultations[(string)$consultationId];
     }
 
-    public function offsetExists($offset): bool
+    public function remove(Consultation $consultation)
     {
-        return isset($this->consultations[$offset]);
+        $index = array_search($consultation, $this->consultations);
+        if (!is_numeric($index)) {
+            throw new \Exception('Cannot remove Consultation that is not in the collection');
+        }
+        unset($this->consultations[$index]);
     }
 
-    public function offsetUnset($offset)
+//    public function get(ConsultationId $consultationId)
+//    {
+//
+//    }
+
+    public function getIterator()
     {
-        unset($this->consultations[$offset]);
+        return new \ArrayIterator($this->consultations);
     }
 
-    public function offsetGet($offset)
+    public function contains(ConsultationId $consultationId): bool
     {
-        return isset($this->consultations[$offset]) ? $this->consultations[$offset] : null;
-    }
-
-    public function includes($key): bool
-    {
-        return $this->offsetExists($key);
+        return is_numeric(array_search($consultationId, $this->consultations));
     }
 
     public function count()

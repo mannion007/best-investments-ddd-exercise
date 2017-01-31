@@ -23,7 +23,7 @@ class ProjectReference
         return sprintf('%s%s', $letters, $digits);
     }
 
-    public function toString()
+    public function __toString()
     {
         return (string)$this->reference;
     }

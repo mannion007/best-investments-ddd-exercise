@@ -2,37 +2,37 @@
 
 namespace Mannion007\BestInvestments\Domain\ProjectManagement;
 
-class SpecialistCollection implements \ArrayAccess, \Countable, \Traversable
+class SpecialistCollection implements \IteratorAggregate, \Countable
 {
     private $specialists = [];
 
-    public function offsetSet($offset, $value)
+    public function add(SpecialistId $specialistId)
     {
-        if (is_null($offset)) {
-            $this->specialists[] = $value;
-        } else {
-            $this->specialists[$offset] = $value;
+        $this->specialists[] = $specialistId;
+    }
+
+    public function remove(SpecialistId $specialistId)
+    {
+        $index = array_search($specialistId, $this->specialists);
+        if (!is_numeric($index)) {
+            throw new \Exception('Cannot remove Specialist that is not in the collection');
         }
+        unset($this->specialists[$index]);
     }
 
-    public function offsetExists($offset): bool
+//    public function get(SpecialistId $specialistId) : SpecialistRecommendation
+//    {
+//        return $this->specialists[(string)$specialistId];
+//    }
+
+    public function getIterator()
     {
-        return isset($this->specialists[$offset]);
+        return new \ArrayIterator($this->specialists);
     }
 
-    public function offsetUnset($offset)
+    public function contains(SpecialistId $specialistId): bool
     {
-        unset($this->specialists[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return isset($this->specialists[$offset]) ? $this->specialists[$offset] : null;
-    }
-
-    public function includes($key): bool
-    {
-        return $this->offsetExists($key);
+        return is_numeric(array_search($specialistId, $this->specialists));
     }
 
     public function count()

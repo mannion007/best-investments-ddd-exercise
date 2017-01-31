@@ -46,4 +46,9 @@ class Consultation
     {
         return $this->status->is($status);
     }
+
+    public function getConsultationId(): ConsultationId
+    {
+        return $this->consultationId;
+    }
 }
