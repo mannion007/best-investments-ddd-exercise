@@ -52,13 +52,12 @@ class Project
         }
         $this->projectManagerId = $projectManagerId;
         $this->status = ProjectStatus::active();
-
         EventPublisher::publish(new ProjectStartedEvent((string)$this->reference, (string)$this->projectManagerId));
     }
 
     public function close()
     {
-        /** This cannot be event driven. Client may want to arrange more consultations at any time */
+        /** Cannot be event driven, may want to arrange more consultations at any time */
         /** @var Consultation $consultation */
         foreach ($this->consultations->getIterator() as $consultation) {
             if ($consultation->is(ConsultationStatus::OPEN)) {
@@ -68,7 +67,6 @@ class Project
             }
         }
         $this->status = ProjectStatus::closed();
-
         EventPublisher::publish(new ProjectClosedEvent((string)$this->reference));
     }
 
@@ -123,25 +121,16 @@ class Project
 
     public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
     {
-        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
-         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
-        //$this->consultations[(string)$consultationId]->report($durationMinutes);
         $this->consultations->get($consultationId)->report($durationMinutes);
-        //Put back in collection?
     }
 
     public function discardConsultation(ConsultationId $consultationId)
     {
-        /** While there is a rule that you can't do this if the project is closed, that is already guarded in that
-         *  a Project can only be put into the Closed state when all Consultations are Closed or Discarded */
-        //$this->consultations[(string)$consultationId]->discard();
         $this->consultations->get($consultationId)->discard();
-        //Put back in collection?
     }
 
     public function putOnHold()
     {
-        /** Need to enforce this, or if not on hold just do nothing? */
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('Cannot put a Project On Hold when it is not Active');
         }

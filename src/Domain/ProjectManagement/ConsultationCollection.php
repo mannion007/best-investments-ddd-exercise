@@ -28,11 +28,6 @@ class ConsultationCollection implements \IteratorAggregate, \Countable
         unset($this->consultations[$index]);
     }
 
-//    public function get(ConsultationId $consultationId)
-//    {
-//
-//    }
-
     public function getIterator()
     {
         return new \ArrayIterator($this->consultations);

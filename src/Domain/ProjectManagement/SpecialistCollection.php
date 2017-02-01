@@ -20,11 +20,6 @@ class SpecialistCollection implements \IteratorAggregate, \Countable
         unset($this->specialists[$index]);
     }
 
-//    public function get(SpecialistId $specialistId) : SpecialistRecommendation
-//    {
-//        return $this->specialists[(string)$specialistId];
-//    }
-
     public function getIterator()
     {
         return new \ArrayIterator($this->specialists);
