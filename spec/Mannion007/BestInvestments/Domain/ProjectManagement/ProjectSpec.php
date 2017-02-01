@@ -2,8 +2,6 @@
 
 namespace spec\Mannion007\BestInvestments\Domain\ProjectManagement;
 
-use Mannion007\BestInvestments\Domain\Invoicing\TimeIncrement;
-use Mannion007\BestInvestments\Domain\ProjectManagement\Consultation;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationId;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationScheduledEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\Project;

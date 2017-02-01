@@ -19,11 +19,10 @@ class Prospect
         $this->name = $name;
         $this->notes = $notes;
         $this->status = ProspectStatus::inProgress();
-
         EventPublisher::publish(new ProspectReceivedEvent((string)$this->prospectId, $this->name, $this->notes));
     }
 
-    public function receive(ProspectId $prospectId, string $name, string $notes): Prospect
+    public static function receive(ProspectId $prospectId, string $name, string $notes): Prospect
     {
         return new self($prospectId, $name, $notes);
     }
@@ -43,7 +42,6 @@ class Prospect
         }
         $this->hourlyRate = $hourlyRate;
         $this->status = ProspectStatus::registered();
-
         EventPublisher::publish(new ProspectRegisteredEvent((string)$this->prospectId, (string)$this->hourlyRate));
     }
 
@@ -53,17 +51,15 @@ class Prospect
             throw new \Exception('Cannot declare not interested for Prospect that is not In Progress');
         }
         $this->status = ProspectStatus::notInterested();
-
         EventPublisher::publish(new ProspectNotInterestedEvent($this->prospectId));
     }
 
     public function giveUp()
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
-            throw new \Exception('Cannot give up on Prospect that is not in progress');
+            throw new \Exception('Cannot give up on Prospect that is not In Progress');
         }
         $this->status = ProspectStatus::notReachable();
-
         EventPublisher::publish(new ProspectGivenUpOnEvent($this->prospectId));
     }
 }

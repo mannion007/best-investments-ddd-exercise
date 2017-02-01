@@ -6,13 +6,18 @@ class ProspectId
 {
     private $id;
 
-    private function __construct(string $id)
+    private function __construct(string $prospectId)
     {
-        $this->id = $id;
+        $this->prospectId = $prospectId;
     }
 
-    public static function fromExisting(string $id): ProspectId
+    public static function fromExisting(string $prospectId): ProspectId
     {
-        return new self($id);
+        return new self($prospectId);
+    }
+
+    public function __toString()
+    {
+        return (string)$this->prospectId;
     }
 }
