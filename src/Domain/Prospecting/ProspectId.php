@@ -4,7 +4,7 @@ namespace Mannion007\BestInvestments\Domain\Prospecting;
 
 class ProspectId
 {
-    private $id;
+    private $prospectId;
 
     private function __construct(string $prospectId)
     {

@@ -56,7 +56,7 @@ class ProjectSpec extends ObjectBehavior
             ->during('start', [ProjectManagerId::fromExisting('test-project-manager-id')]);
     }
 
-    function it_starts_when_the_project_is_drafted()
+    function it_can_start_when_the_project_is_drafted()
     {
         $status = new \ReflectionProperty($this->getWrappedObject(), 'status');
         $status->setAccessible(true);
@@ -74,7 +74,7 @@ class ProjectSpec extends ObjectBehavior
         )->during('close');
     }
 
-    function it_closes()
+    function it_can_close()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
@@ -94,14 +94,14 @@ class ProjectSpec extends ObjectBehavior
         $this->shouldThrow()->during('addSpecialist', [SpecialistId::fromExisting('test')]);
     }
 
-    function it_cannot_add_specialist_more_than_once()
+    function it_cannot_add_a_specialist_more_than_once()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->shouldThrow(new \Exception('Cannot add a specialist more than once'))
             ->during('addSpecialist', [SpecialistId::fromExisting('test')]);
     }
 
-    function it_adds_a_specialist()
+    function it_can_add_a_specialist()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
     }
@@ -120,7 +120,7 @@ class ProjectSpec extends ObjectBehavior
             ->during('approveSpecialist', [SpecialistId::fromExisting('test')]);
     }
 
-    function it_approves_specialists()
+    function it_can_approve_a_specialist()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
@@ -143,7 +143,7 @@ class ProjectSpec extends ObjectBehavior
             ->during('discardSpecialist', [SpecialistId::fromExisting('test')]);
     }
 
-    function it_discards_specialists()
+    function it_can_discard_a_specialists()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->discardSpecialist(SpecialistId::fromExisting('test'));
@@ -166,7 +166,7 @@ class ProjectSpec extends ObjectBehavior
             ->during('scheduleConsultation', [SpecialistId::fromExisting('test'), new \DateTime()]);
     }
 
-    function it_schedules_consultations()
+    function it_can_schedules_a_consultation()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
@@ -176,7 +176,7 @@ class ProjectSpec extends ObjectBehavior
         }
     }
 
-    function it_reports_consultations()
+    function it_can_report_a_consultation()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
@@ -184,7 +184,7 @@ class ProjectSpec extends ObjectBehavior
         $this->reportConsultation($consultationId, 60);
     }
 
-    function it_discards_consultations()
+    function it_can_discard_a_consultation()
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
@@ -210,5 +210,13 @@ class ProjectSpec extends ObjectBehavior
     {
         $this->shouldThrow(new \Exception('Cannot Reactivate a Project that is not On Hold'))
             ->during('reactivate');
+    }
+
+    function it_can_be_reactivated()
+    {
+        $status = new \ReflectionProperty($this->getWrappedObject(), 'status');
+        $status->setAccessible(true);
+        $status->setValue($this->getWrappedObject(), ProjectStatus::onHold());
+        $this->reactivate();
     }
 }

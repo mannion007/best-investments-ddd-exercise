@@ -12,7 +12,7 @@ class Project
     private $name;
     private $status;
     private $deadline;
-    private $unvettedSpecialits;
+    private $unvettedSpecialists;
     private $approvedSpecialists;
     private $discardedSpecialists;
 
@@ -24,7 +24,7 @@ class Project
         $this->clientId = $clientId;
         $this->name = $name;
         $this->deadline = $deadline;
-        $this->unvettedSpecialits = new SpecialistCollection();
+        $this->unvettedSpecialists = new SpecialistCollection();
         $this->approvedSpecialists = new SpecialistCollection();
         $this->discardedSpecialists = new SpecialistCollection();
         $this->consultations = new ConsultationCollection();
@@ -78,25 +78,25 @@ class Project
         if ($this->hasAdded($specialistId)) {
             throw new \Exception('Cannot add a specialist more than once');
         }
-        $this->unvettedSpecialits->add($specialistId);
+        $this->unvettedSpecialists->add($specialistId);
     }
 
     public function approveSpecialist(SpecialistId $specialistId)
     {
-        if (!$this->unvettedSpecialits->contains($specialistId)) {
+        if (!$this->unvettedSpecialists->contains($specialistId)) {
             throw new \Exception('Cannot approve a Specialist that is not un-vetted');
         }
-        $this->unvettedSpecialits->remove($specialistId);
+        $this->unvettedSpecialists->remove($specialistId);
         $this->approvedSpecialists->add($specialistId);
         EventPublisher::publish(new SpecialistApprovedEvent((string)$this->reference, (string)$specialistId));
     }
 
     public function discardSpecialist(SpecialistId $specialistId)
     {
-        if (!$this->unvettedSpecialits->contains($specialistId)) {
+        if (!$this->unvettedSpecialists->contains($specialistId)) {
             throw new \Exception('Cannot discard a Specialist that is not un-vetted');
         }
-        $this->unvettedSpecialits->remove($specialistId);
+        $this->unvettedSpecialists->remove($specialistId);
         $this->discardedSpecialists->add($specialistId);
         EventPublisher::publish(new SpecialistDiscardedEvent((string)$this->reference, (string)$specialistId));
     }
@@ -147,9 +147,9 @@ class Project
 
     private function hasAdded(SpecialistId $specialistId)
     {
-        return $this->unvettedSpecialits->contains($specialistId) ||
-        $this->approvedSpecialists->contains($specialistId) ||
-        $this->discardedSpecialists->contains($specialistId);
+        return $this->unvettedSpecialists->contains($specialistId)
+            || $this->approvedSpecialists->contains($specialistId)
+            || $this->discardedSpecialists->contains($specialistId);
     }
 
     private function nextConsultationId(): ConsultationId
