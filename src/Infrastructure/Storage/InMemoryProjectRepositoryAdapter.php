@@ -1,6 +1,6 @@
 <?php
 
-namespace Mannion007\BestInvestments\Storage;
+namespace Mannion007\BestInvestments\Infrastructure\Storage;
 
 use Mannion007\BestInvestments\Domain\ProjectManagement\Project;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectReference;
@@ -10,16 +10,16 @@ class InMemoryProjectRepositoryAdapter implements ProjectRepositoryInterface
 {
     private $items = [];
 
-    public function getByReference(ProjectReference $reference)
+    public function getByReference(ProjectReference $reference): Project
     {
-        $key = (string)$reference;
-        return isset($this->items[$key]) ? $this->items[$key] : null;
+        if (!isset($this->items[(string)$reference])) {
+            throw new \Exception('Project not found');
+        }
+        return $this->items[(string)$reference];
     }
 
-    public function save(Project $project)
+    public function save(Project $project): void
     {
-        $reflected = new \ReflectionClass($project);
-        $this->items[(string)$reflected->getProperty('reference')->getValue()]
-            = $reflected->getProperty('name')->getValue();
+        $this->items[(string)$project->getReference()] = $project;
     }
 }

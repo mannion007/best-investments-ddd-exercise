@@ -45,7 +45,7 @@ class Project
         return new self($clientId, $name, $deadline);
     }
 
-    public function start(ProjectManagerId $projectManagerId)
+    public function start(ProjectManagerId $projectManagerId): void
     {
         if ($this->status->isNot(ProjectStatus::DRAFT)) {
             throw new \Exception('Cannot Start a Project that is not in Draft state');
@@ -55,7 +55,7 @@ class Project
         EventPublisher::publish(new ProjectStartedEvent((string)$this->reference, (string)$this->projectManagerId));
     }
 
-    public function close()
+    public function close(): void
     {
         /** Cannot be event driven, may want to arrange more consultations at any time */
         /** @var Consultation $consultation */
@@ -70,7 +70,7 @@ class Project
         EventPublisher::publish(new ProjectClosedEvent((string)$this->reference));
     }
 
-    public function addSpecialist(SpecialistId $specialistId)
+    public function addSpecialist(SpecialistId $specialistId): void
     {
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('A specialist can only be added to an Active Project');
@@ -81,7 +81,7 @@ class Project
         $this->unvettedSpecialists->add($specialistId);
     }
 
-    public function approveSpecialist(SpecialistId $specialistId)
+    public function approveSpecialist(SpecialistId $specialistId): void
     {
         if (!$this->unvettedSpecialists->contains($specialistId)) {
             throw new \Exception('Cannot approve a Specialist that is not un-vetted');
@@ -91,7 +91,7 @@ class Project
         EventPublisher::publish(new SpecialistApprovedEvent((string)$this->reference, (string)$specialistId));
     }
 
-    public function discardSpecialist(SpecialistId $specialistId)
+    public function discardSpecialist(SpecialistId $specialistId): void
     {
         if (!$this->unvettedSpecialists->contains($specialistId)) {
             throw new \Exception('Cannot discard a Specialist that is not un-vetted');
@@ -101,7 +101,7 @@ class Project
         EventPublisher::publish(new SpecialistDiscardedEvent((string)$this->reference, (string)$specialistId));
     }
 
-    public function scheduleConsultation(SpecialistId $specialistId, \DateTimeInterface $time)
+    public function scheduleConsultation(SpecialistId $specialistId, \DateTimeInterface $time): ConsultationId
     {
         if ($this->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('Cannot schedule a Consultation for a Project that is not active');
@@ -119,17 +119,17 @@ class Project
         return $consultationId;
     }
 
-    public function reportConsultation(ConsultationId $consultationId, int $durationMinutes)
+    public function reportConsultation(ConsultationId $consultationId, int $durationMinutes): void
     {
         $this->consultations->get($consultationId)->report($durationMinutes);
     }
 
-    public function discardConsultation(ConsultationId $consultationId)
+    public function discardConsultation(ConsultationId $consultationId): void
     {
         $this->consultations->get($consultationId)->discard();
     }
 
-    public function putOnHold()
+    public function putOnHold(): void
     {
         if ($this->status->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('Cannot put a Project On Hold when it is not Active');
@@ -137,7 +137,7 @@ class Project
         $this->status = ProjectStatus::onHold();
     }
 
-    public function reactivate()
+    public function reactivate(): void
     {
         if ($this->status->isNot(ProjectStatus::ON_HOLD)) {
             throw new \Exception('Cannot Reactivate a Project that is not On Hold');
@@ -145,7 +145,7 @@ class Project
         $this->status = ProjectStatus::active();
     }
 
-    private function hasAdded(SpecialistId $specialistId)
+    private function hasAdded(SpecialistId $specialistId): bool
     {
         return $this->unvettedSpecialists->contains($specialistId)
             || $this->approvedSpecialists->contains($specialistId)
@@ -165,5 +165,10 @@ class Project
     public function is($status): bool
     {
         return $this->status->is($status);
+    }
+
+    public function getReference(): ProjectReference
+    {
+        return $this->reference;
     }
 }
