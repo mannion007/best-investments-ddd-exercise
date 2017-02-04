@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Mannion007\BestInvestments\Application\ProjectService;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectDraftedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectReference;
-use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectRepositoryInterface;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectStatus;
 use Mannion007\BestInvestments\Event\EventPublisher;
 use Mannion007\BestInvestments\Event\InMemoryHandler;
@@ -23,14 +22,16 @@ class ProjectManagementContext implements Context
     /** @var ProjectService */
     private $projectService;
 
-    /** @var ProjectRepositoryInterface */
+    /** @var InMemoryProjectRepositoryAdapter */
     private $projectRepository;
 
     /** @var InMemoryHandler */
     private $eventHandler;
 
+    /** @var string */
     private $clientId;
 
+    /** @var string */
     private $projectReference;
 
     /**
@@ -63,6 +64,16 @@ class ProjectManagementContext implements Context
     {
         $this->clientId = 'test-client-123';
     }
+
+    /**
+     * @Given I have a Draft Project
+     */
+    public function iHaveADraftProject()
+    {
+        $this->clientId = 'test-client-123';
+        $this->projectReference = $this->projectService->setUpProject($this->clientId, 'Test Project', '2020-05-20');
+    }
+
 
     /**
      * @When I Set Up a Project for the Client with the name :name and the deadline :deadline
@@ -103,5 +114,34 @@ class ProjectManagementContext implements Context
         if (!$this->eventHandler->hasPublished(ProjectDraftedEvent::EVENT_NAME)) {
             throw new \Exception('A Senior Project Manager has not been notified');
         }
+    }
+
+    /**
+     * @When I assign a Project Manager to the Project
+     */
+    public function iAssignAProjectManagerToTheProject()
+    {
+        $this->projectService->startProject($this->projectReference, 'test-manager-123');
+    }
+
+    /**
+     * @Then The Project should start
+     */
+    public function theProjectShouldStart()
+    {
+        $project = $this->projectRepository->getByReference(
+            ProjectReference::fromExisting($this->projectReference)
+        );
+        if ($project->isNot(ProjectStatus::ACTIVE)) {
+            throw new \Exception('The Project is not active');
+        }
+    }
+
+    /**
+     * @Then Specialists can be added to the Project
+     */
+    public function specialistsCanBeAddedToTheProject()
+    {
+        $this->projectService->addSpecialistToProject($this->projectReference, 'test-specialist-id');
     }
 }

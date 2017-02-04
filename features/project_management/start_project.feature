@@ -1,0 +1,9 @@
+Feature:
+  In order to be able to recommend Specialists to Clients
+  As a Senior Project Manager
+  I need to be able to start a Project
+  Scenario: Starting a Project
+    Given I have a Draft Project
+    When I assign a Project Manager to the Project
+    Then The Project should start
+    And Specialists can be added to the Project
