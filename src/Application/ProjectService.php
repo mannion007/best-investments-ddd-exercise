@@ -21,77 +21,75 @@ class ProjectService
 
     public function setUpProject(string $clientId, string $name, string $deadline): string
     {
-        $dead = new \DateTime();
-        $project = Project::setUp(ClientId::fromExisting($clientId), $name, $dead);
+        $clientId = ClientId::fromExisting($clientId);
+        $deadline = \DateTime::createFromFormat('Y-m-d', $deadline);
+        $project = Project::setUp($clientId, $name, $deadline);
         $this->projectRepository->save($project);
         return (string)$project->getReference();
     }
 
-    public function startProject(string $projectReference, string $projectManagerId): void
+    public function startProject(string $reference, string $projectManagerId): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->start(ProjectManagerId::fromExisting($projectManagerId));
         $this->projectRepository->save($project);
     }
 
-    public function closeProject(string $projectReference): void
+    public function closeProject(string $reference): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->close();
         $this->projectRepository->save($project);
     }
 
-    public function addSpecialistToProject(string $projectReference, string $specialistId): void
+    public function addSpecialistToProject(string $reference, string $specialistId): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->addSpecialist(SpecialistId::fromExisting($specialistId));
         $this->projectRepository->save($project);
     }
 
-    public function discardSpecialistFromProject(string $projectReference, string $specialistId): void
+    public function discardSpecialistFromProject(string $reference, string $specialistId): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->discardSpecialist(SpecialistId::fromExisting($specialistId));
         $this->projectRepository->save($project);
     }
 
-    public function scheduleConsultationForProject(
-        string $projectReference,
-        string $specialistId,
-        \DateTimeInterface $time
-    ): void {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
-        $project->scheduleConsultation(SpecialistId::fromExisting($specialistId), $time);
+    public function scheduleConsultationForProject(string $reference, string $specialistId, string $time): void
+    {
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
+        $project->scheduleConsultation(
+            SpecialistId::fromExisting($specialistId),
+            \DateTime::createFromFormat('Y-m-d', $time)
+        );
         $this->projectRepository->save($project);
     }
 
-    public function reportConsultationOnProject(
-        string $projectReference,
-        string $consultationId,
-        int $durationMinutes
-    ): void {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+    public function reportConsultationOnProject(string $reference, string $consultationId, int $durationMinutes): void
+    {
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->reportConsultation(ConsultationId::fromExisting($consultationId), $durationMinutes);
         $this->projectRepository->save($project);
     }
 
-    public function discardConsultationOnProject(string $projectReference, string $consultationId): void
+    public function discardConsultationOnProject(string $reference, string $consultationId): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->discardConsultation(ConsultationId::fromExisting($consultationId));
         $this->projectRepository->save($project);
     }
 
-    public function putProjectOnHold(string $projectReference): void
+    public function putProjectOnHold(string $reference): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->putOnHold();
         $this->projectRepository->save($project);
     }
 
-    public function reactivateProject(string $projectReference): void
+    public function reactivateProject(string $reference): void
     {
-        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($projectReference));
+        $project = $this->projectRepository->getByReference(ProjectReference::fromExisting($reference));
         $project->reactivate();
         $this->projectRepository->save($project);
     }
