@@ -1,4 +1,5 @@
 #Best Investments
+[![Build Status](https://travis-ci.org/mannion007/best-investments-ddd-exercise.svg?branch=master)](https://travis-ci.org/mannion007/best-investments-ddd-exercise)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mannion007/best-investments-ddd-exercise/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mannion007/best-investments-ddd-exercise/?branch=master)
 
 This codebase is being developed as a training exercise and introduction into Domain Driven Design and related topics. The task at hand is to develop an enterprise system for a fictional business, Best Investments.
