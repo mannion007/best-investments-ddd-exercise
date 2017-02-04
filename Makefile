@@ -14,6 +14,7 @@ test-spec:
 	vendor/bin/phpspec run
 
 ## Run Behat tests
+test-behat:
 	vendor/bin/behat
 
 ## Run php code sniffer
