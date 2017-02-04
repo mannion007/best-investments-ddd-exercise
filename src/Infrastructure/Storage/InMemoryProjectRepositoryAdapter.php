@@ -13,7 +13,9 @@ class InMemoryProjectRepositoryAdapter implements ProjectRepositoryInterface
     public function getByReference(ProjectReference $reference): Project
     {
         if (!isset($this->items[(string)$reference])) {
-            throw new \Exception('Project not found');
+            throw new \Exception(
+                sprintf('Project with reference %s not found', $reference)
+            );
         }
         return $this->items[(string)$reference];
     }
