@@ -7,11 +7,14 @@ composer.phar:
 	curl -sS https://getcomposer.org/installer | php
 
 ## Test the application
-test: phpcs test-spec
+test: phpcs test-spec test-behat
 
 ## Run PHP specification tests
 test-spec:
 	vendor/bin/phpspec run
+
+## Run Behat tests
+	vendor/bin/behat
 
 ## Run php code sniffer
 phpcs:
