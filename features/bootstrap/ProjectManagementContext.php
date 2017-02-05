@@ -3,36 +3,44 @@
 namespace Mannion007\BestInvestmentsBehat;
 
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
-use Mannion007\BestInvestments\Application\ProjectService;
+use Mannion007\BestInvestments\Domain\Invoicing\ConsultationId;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ClientId;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationCollection;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationScheduledEvent;
+use Mannion007\BestInvestments\Domain\ProjectManagement\Project;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectClosedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectDraftedEvent;
-use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectReference;
+use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistApprovedEvent;
+use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistDiscardedEvent;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectManagerId;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectStatus;
+use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistCollection;
+use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistId;
 use Mannion007\BestInvestments\Event\EventPublisher;
 use Mannion007\BestInvestments\Event\InMemoryHandler;
-use Mannion007\BestInvestments\Infrastructure\Storage\InMemoryProjectRepositoryAdapter;
-use Slim\Container;
 
 /**
  * Defines application features from the specific context.
  */
 class ProjectManagementContext implements Context
 {
-    /** @var ProjectService */
-    private $projectService;
-
-    /** @var InMemoryProjectRepositoryAdapter */
-    private $projectRepository;
-
     /** @var InMemoryHandler */
     private $eventHandler;
 
-    /** @var string */
+    /** @var ClientId */
     private $clientId;
 
-    /** @var string */
-    private $projectReference;
+    /** @var ProjectManagerId */
+    private $projectManagerId;
+
+    /** @var Project */
+    private $project;
+
+    /** @var SpecialistId */
+    private $specialistId;
+
+    /** @var ConsultationId */
+    private $consultationId;
 
     /**
      * Initializes context.
@@ -43,18 +51,12 @@ class ProjectManagementContext implements Context
      */
     public function __construct()
     {
-        $container = new Container;
-        $container['in_memory_project_repository'] = function () {
-            return new InMemoryProjectRepositoryAdapter();
-        };
-        $container['project_service'] = function ($container) {
-            return new ProjectService($container['in_memory_project_repository']);
-        };
-
-        $this->projectService = $container->get('project_service');
-        $this->projectRepository = $container->get('in_memory_project_repository');
         $this->eventHandler = new InMemoryHandler();
         EventPublisher::registerHandler($this->eventHandler);
+
+        $this->clientId = ClientId::fromExisting('test-client-123');
+        $this->projectManagerId = ProjectManagerId::fromExisting('project-manager-123');
+        $this->specialistId = SpecialistId::fromExisting('test-specialist-id');
     }
 
     /**
@@ -62,25 +64,30 @@ class ProjectManagementContext implements Context
      */
     public function iHaveAClient()
     {
-        $this->clientId = 'test-client-123';
     }
 
     /**
-     * @Given I have a Draft Project
+     * @Given I have a Specialist
      */
-    public function iHaveADraftProject()
+    public function iHaveASpecialist()
     {
-        $this->clientId = 'test-client-123';
-        $this->projectReference = $this->projectService->setUpProject($this->clientId, 'Test Project', '2020-05-20');
     }
 
+    /**
+     * @Given I have a drafted Project
+     */
+    public function iHaveADraftedProject()
+    {
+        $this->project = Project::setUp($this->clientId, 'My Lovely Project', new \DateTime('+1 year'));
+    }
 
     /**
      * @When I Set Up a Project for the Client with the name :name and the deadline :deadline
      */
     public function iSetUpAProjectForTheClientWithTheNameAndTheDeadline($name, $deadline)
     {
-        $this->projectReference = $this->projectService->setUpProject($this->clientId, $name, $deadline);
+        $deadline = \DateTime::createFromFormat('Y-m-d', $deadline);
+        $this->project = Project::setUp($this->clientId, $name, $deadline);
     }
 
     /**
@@ -88,10 +95,7 @@ class ProjectManagementContext implements Context
      */
     public function iShouldHaveADraftOfAProject()
     {
-        $project = $this->projectRepository->getByReference(
-            ProjectReference::fromExisting($this->projectReference)
-        );
-        if ($project->isNot(ProjectStatus::DRAFT)) {
+        if ($this->project->isNot(ProjectStatus::DRAFT)) {
             throw new \Exception('The project is not drafted');
         }
     }
@@ -101,18 +105,18 @@ class ProjectManagementContext implements Context
      */
     public function iShouldGetAProjectReference()
     {
-        if (is_null($this->projectReference)) {
+        if (is_null($this->project->getReference())) {
             throw new \Exception('I did not get a Project Reference');
         }
     }
 
     /**
-     * @Then A Senior Project Manager should be notified
+     * @Then A Senior Project Manager should be notified that the Project has been drafted
      */
-    public function aSeniorProjectManagerShouldBeNotified()
+    public function aSeniorProjectManagerShouldBeNotifiedThatTheProjectHasBeenDrafted()
     {
-        if (!$this->eventHandler->hasPublished(ProjectDraftedEvent::EVENT_NAME)) {
-            throw new \Exception('A Senior Project Manager has not been notified');
+        if ($this->eventHandler->hasNotPublished(ProjectDraftedEvent::EVENT_NAME)) {
+            throw new \Exception('A Senior Project Manager has not been notified that the Project has been drafted');
         }
     }
 
@@ -121,7 +125,7 @@ class ProjectManagementContext implements Context
      */
     public function iAssignAProjectManagerToTheProject()
     {
-        $this->projectService->startProject($this->projectReference, 'test-manager-123');
+        $this->project->start($this->projectManagerId);
     }
 
     /**
@@ -129,10 +133,7 @@ class ProjectManagementContext implements Context
      */
     public function theProjectShouldStart()
     {
-        $project = $this->projectRepository->getByReference(
-            ProjectReference::fromExisting($this->projectReference)
-        );
-        if ($project->isNot(ProjectStatus::ACTIVE)) {
+        if ($this->project->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('The Project is not active');
         }
     }
@@ -142,6 +143,181 @@ class ProjectManagementContext implements Context
      */
     public function specialistsCanBeAddedToTheProject()
     {
-        $this->projectService->addSpecialistToProject($this->projectReference, 'test-specialist-id');
+        $this->project->addSpecialist(SpecialistId::fromExisting('test-specialist-id'));
+    }
+
+    /**
+     * @Given I have an active Project
+     */
+    public function iHaveAnActiveProject()
+    {
+        $this->project = Project::setUp($this->clientId, 'My Lovely Project', new \DateTime('+1 year'));
+        $this->project->start($this->projectManagerId);
+    }
+
+    /**
+     * @When I close the Project
+     */
+    public function iCloseTheProject()
+    {
+        $this->project->close();
+    }
+
+    /**
+     * @Then The Project should be marked as closed
+     */
+    public function theProjectShouldBeMarkedAsClosed()
+    {
+        if ($this->project->isNot(ProjectStatus::CLOSED)) {
+            throw new \Exception('The Project is not closed');
+        }
+    }
+
+    /**
+     * @Then The Invoicing Team should be notified that the Project has closed
+     */
+    public function theInvoicingTeamShouldBeNotifiedThatTheProjectHasClosed()
+    {
+        if ($this->eventHandler->hasNotPublished(ProjectClosedEvent::EVENT_NAME)) {
+            throw new \Exception('The Invoicing Team has not been notified the Project has closed');
+        }
+    }
+
+    /**
+     * @When I add the Specialist to the Project
+     */
+    public function iAddTheSpecialistToTheProject()
+    {
+        $this->project->addSpecialist($this->specialistId);
+    }
+
+    /**
+     * @Then The specialist should be added and marked as un-vetted
+     */
+    public function theSpecialistShouldBeAddedAndMarkedAsUnvetted()
+    {
+        $reflectionProperty = new \ReflectionProperty($this->project, 'unvettedSpecialists');
+        $reflectionProperty->setAccessible(true);
+        /** @var SpecialistCollection */
+        $unvettedSpecialists = $reflectionProperty->getValue($this->project);
+        if (!$unvettedSpecialists->contains($this->specialistId)) {
+            throw new \Exception('The Specialist is not marked as un-vetted');
+        }
+    }
+
+    /**
+     * @Given The project has an un-vetted Specialist
+     */
+    public function theProjectHasAnUnvettedSpecialist()
+    {
+        $this->project->addSpecialist($this->specialistId);
+    }
+
+    /**
+     * @Given The Specialist is approved for the Project
+     */
+    public function theSpecialistIsApprovedForTheProject()
+    {
+        $this->project->addSpecialist($this->specialistId);
+        $this->project->approveSpecialist($this->specialistId);
+    }
+
+    /**
+     * @When I approve the Specialist
+     */
+    public function iApproveTheSpecialist()
+    {
+        $this->project->approveSpecialist($this->specialistId);
+    }
+
+    /**
+     * @Then The Specialist should be marked as approved
+     */
+    public function theSpecialistShouldBeMarkedAsApproved()
+    {
+        $reflectionProperty = new \ReflectionProperty($this->project, 'approvedSpecialists');
+        $reflectionProperty->setAccessible(true);
+        /** @var SpecialistCollection */
+        $approvedSpecialists = $reflectionProperty->getValue($this->project);
+        if (!$approvedSpecialists->contains($this->specialistId)) {
+            throw new \Exception('The Specialist is not marked as approved');
+        }
+    }
+
+    /**
+     * @Then The Project Management team should be notified that the Specialist has been approved
+     */
+    public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenApproved()
+    {
+        if ($this->eventHandler->hasNotPublished(SpecialistApprovedEvent::EVENT_NAME)) {
+            throw new \Exception('The Project Management Team has not been notified the Specialist has been approved');
+        }
+    }
+
+    /**
+     * @When I discard the Specialist
+     */
+    public function iDiscardTheSpecialist()
+    {
+        $this->project->discardSpecialist($this->specialistId);
+    }
+
+    /**
+     * @Then The Specialist should be marked as discarded
+     */
+    public function theSpecialistShouldBeMarkedAsDiscarded()
+    {
+        $reflectionProperty = new \ReflectionProperty($this->project, 'discardedSpecialists');
+        $reflectionProperty->setAccessible(true);
+        /** @var SpecialistCollection */
+        $discardedSpecialists = $reflectionProperty->getValue($this->project);
+        if (!$discardedSpecialists->contains($this->specialistId)) {
+            throw new \Exception('The Specialist is not marked as discarded');
+        }
+    }
+
+    /**
+     * @Then The Project Management team should be notified that the Specialist has been discarded
+     */
+    public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenDiscarded()
+    {
+        if ($this->eventHandler->hasNotPublished(SpecialistDiscardedEvent::EVENT_NAME)) {
+            throw new \Exception('The Project Management Team has not been notified the Specialist has been discarded');
+        }
+    }
+
+    /**
+     * @When I schedule a Consultation with the Specialist on the Project
+     */
+    public function iScheduleAConsultationWithTheSpecialistOnTheProject()
+    {
+        $this->consultationId = $this->project->scheduleConsultation($this->specialistId, new \DateTime('+1 week'));
+    }
+
+    /**
+     * @Then The Consultation should be scheduled with the Specialist on the Project
+     */
+    public function theConsultationShouldBeScheduledWithTheSpecialistOnTheProject()
+    {
+        $reflected = new \ReflectionProperty($this->project, 'consultations');
+        $reflected->setAccessible(true);
+        /** @var ConsultationCollection */
+        $consultations = $reflected->getValue($this->project);
+        if (!$consultations->contains($this->consultationId)) {
+            throw new \Exception('The Consultation has not been scheduled on the Project');
+        }
+    }
+
+    /**
+     * @Then The Project Management Team should be notified that the Consultation has been scheduled
+     */
+    public function theProjectManagementTeamShouldBeNotifiedThatTheConsultationHasBeenScheduled()
+    {
+        if ($this->eventHandler->hasNotPublished(ConsultationScheduledEvent::EVENT_NAME)) {
+            throw new \Exception(
+                'The Project Management Team has not been notified the Consultation has been scheduled'
+            );
+        }
     }
 }
+

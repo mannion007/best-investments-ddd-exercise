@@ -11,7 +11,12 @@ class InMemoryHandler implements EventHandlerInterface
         $this->events[$event->getEventName()] = $event;
     }
 
-    public function hasPublished(string $eventName)
+    public function hasNotPublished(string $eventName): bool
+    {
+        return !$this->hasPublished($eventName);
+    }
+
+    public function hasPublished(string $eventName): bool
     {
         return array_key_exists($eventName, $this->events);
     }

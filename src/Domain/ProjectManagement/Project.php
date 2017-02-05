@@ -15,7 +15,6 @@ class Project
     private $unvettedSpecialists;
     private $approvedSpecialists;
     private $discardedSpecialists;
-
     private $consultations;
 
     private function __construct(ClientId $clientId, string $name, \DateTimeInterface $deadline)

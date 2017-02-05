@@ -35,7 +35,7 @@ class ConsultationCollection implements \IteratorAggregate, \Countable
 
     public function contains(ConsultationId $consultationId): bool
     {
-        return is_numeric(array_search($consultationId, $this->consultations));
+        return array_key_exists((string)$consultationId, $this->consultations);
     }
 
     public function count()
