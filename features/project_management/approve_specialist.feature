@@ -1,7 +1,7 @@
 Feature:
-  In order recommend a Specialist to a Client's Analyst
   As a Research Manager
-  I need to be able to mark a specialist as approved by the Client's Compliance Officer
+  I want to be able to mark Specialist as approved by Clients' Compliance Officer
+  So that Specialists can be recommended to Clients
 
   Scenario: Approving a Specialist for a Project
     Given I have an active Project

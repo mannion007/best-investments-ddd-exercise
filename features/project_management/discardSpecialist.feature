@@ -1,7 +1,7 @@
 Feature:
-  In order to ensure that Specialist that do not meet the approval of the Compliance Officer are not recommended to a Client
   As a Research Manager
-  I need to be able to discard Specialists from Projects
+  I want to be able to discard Specialists from Projects
+  So that only Specialists that meet the approval of Compliance Officers are recommended to Clients
 
   Scenario: Discarding a Specialist from a Project
     Given I have an active Project

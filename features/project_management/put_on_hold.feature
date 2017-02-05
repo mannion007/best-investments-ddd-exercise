@@ -1,7 +1,7 @@
 Feature:
-  In order to suspend the service on the Client’s request
   As a Sales Manager
-  I need to be able to put all their active projects on hold
+  I want to be able to put a Client's active projects on hold
+  So that the Client’s service can be suspended at their request
 
   Scenario: Putting an active Project on hold
     Given I have an active Project

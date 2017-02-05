@@ -1,7 +1,7 @@
 Feature:
-  In order to obtain approval to recommend a Specialist to a Client's Analyst
   As a Research Manager
-  I need to be able to add Specialists to Projects
+  I want to be able to add Specialists to Projects
+  So that approval to recommend a Specialist to a Client's Analyst can be obtained
 
   Scenario: Adding a Specialist to a Project
     Given I have an active Project

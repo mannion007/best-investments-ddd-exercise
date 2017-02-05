@@ -1,7 +1,7 @@
 Feature:
-  In order to be able to recommend Specialists to Clients
   As a Senior Project Manager
-  I need to be able to start a Project
+  I want to be able to start Projects
+  So that Specialists can be recommended to Clients
 
   Scenario: Starting a Project
     Given I have a drafted Project

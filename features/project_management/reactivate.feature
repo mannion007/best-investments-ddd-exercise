@@ -1,7 +1,7 @@
 Feature:
-  In order to resume the service on the Client’s request
   As a Sales Manager
-  I need to be able to put reactivate all their on hold Projects
+  I want to be able to reactivate all of a Client's on hold Projects
+  So that their service can be resumed at their request
 
   Scenario: Reactivating an on hold Project
     Given I have an on hold Project

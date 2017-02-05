@@ -1,7 +1,7 @@
 Feature:
-  In order for Projects to be invoiced
   As a Research Manager
-  I need to be able to close Projects
+  I want to be able to close Projects
+  So that Projects can be invoiced
 
   Scenario: Closing a Project the Client has finished with
     Given I have an active Project

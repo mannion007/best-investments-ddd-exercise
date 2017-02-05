@@ -1,8 +1,8 @@
 @api
 Feature:
-  In order to facilitate Consultations between Clients and Specialists
   As a Research Manager
-  I need to be able to Set Up Projects
+  I want to Set Up Projects
+  So that Consultations can be facilitated between Clients and Specialists
 
   Scenario: Setting up a Project for a Client
     Given I have a Client
