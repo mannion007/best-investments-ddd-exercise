@@ -7,4 +7,4 @@ Feature:
     Given I have an active Project
     And I have a Specialist
     When I add the Specialist to the Project
-    Then The specialist should be added and marked as un-vetted
+    Then The Specialist should be added and marked as un-vetted

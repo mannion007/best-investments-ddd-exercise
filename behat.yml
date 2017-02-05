@@ -2,4 +2,4 @@ default:
     suites:
       project_management_features:
         paths: [%paths.base%/features/project_management]
-        contexts: [Mannion007\BestInvestmentsBehat\ProjectManagementContext]
+        contexts: [Mannion007\BestInvestmentsBehat\Domain\ProjectManagementContext]
