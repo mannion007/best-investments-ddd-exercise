@@ -2,6 +2,7 @@ Feature:
   In order for a Consultation to take place between a Clients and Specialists
   As a Research Manager
   I need to be able schedule Consultations
+
   Scenario: Scheduling a Consultation
     Given I have an active Project
     And I have a Specialist
