@@ -3,10 +3,11 @@
 namespace Mannion007\BestInvestmentsBehat\Domain;
 
 use Behat\Behat\Context\Context;
-use Mannion007\BestInvestments\Domain\Invoicing\ConsultationId;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationId;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ClientId;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationCollection;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationScheduledEvent;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationStatus;
 use Mannion007\BestInvestments\Domain\ProjectManagement\Project;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectClosedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectDraftedEvent;
@@ -131,6 +132,32 @@ class ProjectManagementContext implements Context
         $this->project = Project::setUp($this->clientId, 'My Lovely Project', new \DateTime('+1 year'));
         $this->project->start($this->projectManagerId);
         $this->project->putOnHold();
+    }
+
+    /**
+     * @Given The Project has an open Consultation
+     */
+    public function theProjectHasAnOpenConsultation()
+    {
+        $this->project->addSpecialist($this->specialistId);
+        $this->project->approveSpecialist($this->specialistId);
+        $this->consultationId = $this->project->scheduleConsultation($this->specialistId, new \DateTime('+1 year'));
+    }
+
+    /**
+     * @When I report the Consultation
+     */
+    public function iReportTheConsultation()
+    {
+        $this->project->reportConsultation($this->consultationId, 60);
+    }
+
+    /**
+     * @When I discard the Consultation
+     */
+    public function iDiscardTheConsultation()
+    {
+        $this->project->discardConsultation($this->consultationId);
     }
 
     /**
@@ -401,4 +428,30 @@ class ProjectManagementContext implements Context
         }
     }
 
+    /**
+     * @Then The Consultation should be marked as confirmed
+     */
+    public function theConsultationShouldBeMarkedAsConfirmed()
+    {
+        $this->theConsultationShouldBeMarkedAs(ConsultationStatus::CONFIRMED);
+    }
+
+    /**
+     * @Then The Consultation should be marked as discarded
+     */
+    public function theConsultationShouldBeMarkedAsDiscarded()
+    {
+        $this->theConsultationShouldBeMarkedAs(ConsultationStatus::DISCARDED);
+    }
+
+    private function theConsultationShouldBeMarkedAs(string $expected)
+    {
+        $reflected = new \ReflectionProperty($this->project, 'consultations');
+        $reflected->setAccessible(true);
+        /** @var ConsultationCollection $consultations */
+        $consultations = $reflected->getValue($this->project);
+        if ($consultations->get($this->consultationId)->isNot($expected)) {
+            throw new \Exception(sprintf('The Consultation is not marked as %s', $expected));
+        }
+    }
 }

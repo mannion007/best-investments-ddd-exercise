@@ -42,6 +42,11 @@ class Consultation
         $this->status = ConsultationStatus::discarded();
     }
 
+    public function isNot($status): bool
+    {
+        return !$this->is($status);
+    }
+
     public function is($status): bool
     {
         return $this->status->is($status);
