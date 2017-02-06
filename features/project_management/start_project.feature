@@ -5,6 +5,8 @@ Feature:
 
   Scenario: Starting a Project
     Given I have a drafted Project
-    When I assign a Project Manager to the Project
+    And I have a Project Manager
+    When I assign the Project Manager to the Project
     Then The Project should be marked as active
     And Specialists can be added to the Project
+    And The Project Management Team should be notified that the Project has started

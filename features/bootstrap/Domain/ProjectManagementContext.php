@@ -10,6 +10,7 @@ use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationScheduledEve
 use Mannion007\BestInvestments\Domain\ProjectManagement\Project;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectClosedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectDraftedEvent;
+use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectStartedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistApprovedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistDiscardedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectManagerId;
@@ -74,6 +75,25 @@ class ProjectManagementContext implements Context
     }
 
     /**
+     * @Given I have a Project Manager
+     */
+    public function iHaveAProjectManager()
+    {
+    }
+
+    /**
+     * @Given The Specialist has not been added to the Project
+     */
+    public function theSpecialistHasNotBeenAddedToTheProject()
+    {
+        $reflected = new \ReflectionMethod($this->project, 'hasAdded');
+        $reflected->setAccessible(true);
+        if ($reflected->invoke($this->project, $this->specialistId)) {
+            throw new \Exception('The Specialist has been added to the Project');
+        }
+    }
+
+    /**
      * @Given I have a drafted Project
      */
     public function iHaveADraftedProject()
@@ -89,6 +109,19 @@ class ProjectManagementContext implements Context
         $this->project = Project::setUp($this->clientId, 'My Lovely Project', new \DateTime('+1 year'));
         $this->project->start($this->projectManagerId);
     }
+
+    /**
+     * @Given The Project has no open Consultations
+     */
+    public function theProjectHasNoOpenConsultations()
+    {
+        $reflected = new \ReflectionMethod($this->project, 'hasAnOpenConsultation');
+        $reflected->setAccessible(true);
+        if ($reflected->invoke($this->project, 'hasAnOpenConsultation')) {
+            throw new \Exception('The Project has an open Consultation');
+        }
+    }
+
 
     /**
      * @Given I have an on hold Project
@@ -127,9 +160,9 @@ class ProjectManagementContext implements Context
     }
 
     /**
-     * @When I assign a Project Manager to the Project
+     * @When I assign the Project Manager to the Project
      */
-    public function iAssignAProjectManagerToTheProject()
+    public function iAssignTheProjectManagerToTheProject()
     {
         $this->project->start($this->projectManagerId);
     }
@@ -355,4 +388,17 @@ class ProjectManagementContext implements Context
             );
         }
     }
+
+    /**
+     * @Then The Project Management Team should be notified that the Project has started
+     */
+    public function theProjectManagementTeamShouldBeNotifiedThatTheProjectHasStarted()
+    {
+        if ($this->eventHandler->hasNotPublished(ProjectStartedEvent::EVENT_NAME)) {
+            throw new \Exception(
+                'The Project Management Team has not been notified the Project has started'
+            );
+        }
+    }
+
 }

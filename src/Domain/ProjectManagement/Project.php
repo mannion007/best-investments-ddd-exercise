@@ -57,16 +57,23 @@ class Project
     public function close(): void
     {
         /** Cannot be event driven, may want to arrange more consultations at any time */
-        /** @var Consultation $consultation */
-        foreach ($this->consultations->getIterator() as $consultation) {
-            if ($consultation->is(ConsultationStatus::OPEN)) {
-                throw new \Exception(
-                    'Cannot close Project until all open Consultations have been either Confirmed or Discarded'
-                );
-            }
+        if ($this->hasAnOpenConsultation()) {
+            throw new \Exception(
+                'Cannot close Project until all open Consultations have been either Confirmed or Discarded'
+            );
         }
         $this->status = ProjectStatus::closed();
         EventPublisher::publish(new ProjectClosedEvent((string)$this->reference));
+    }
+
+    private function hasAnOpenConsultation()
+    {
+        foreach ($this->consultations->getIterator() as $consultation) {
+            if ($consultation->is(ConsultationStatus::OPEN)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function addSpecialist(SpecialistId $specialistId): void

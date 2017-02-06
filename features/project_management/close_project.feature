@@ -5,6 +5,7 @@ Feature:
 
   Scenario: Closing a Project the Client has finished with
     Given I have an active Project
+    And The Project has no open Consultations
     When I close the Project
     Then The Project should be marked as closed
     And The Invoicing Team should be notified that the Project has closed
