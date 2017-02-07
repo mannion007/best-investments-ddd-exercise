@@ -64,7 +64,7 @@ class Package
             throw new \Exception('Cannot transfer hours into an Expired Package');
         }
         if ($timeToTransferIn->doesNotBelongTo($this->clientId)) {
-            throw new \Exception('Cannot transfer hours into an Package from a different client');
+            throw new \Exception('Cannot transfer hours into an Package that belongs to a different client');
         }
         $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn);
     }

@@ -81,7 +81,7 @@ class PackageSpec extends ObjectBehavior
     function it_does_not_transfer_in_hours_from_a_different_client()
     {
         $timeToTransferIn = new TransferredOutTimeIncrement(ClientId::fromExisting('client2'), 30);
-        $this->shouldThrow(new \Exception('Cannot transfer hours into an Package from a different client'))
+        $this->shouldThrow(new \Exception('Cannot transfer hours into an Package that belongs to a different client'))
             ->during('transferInHours', [$timeToTransferIn]);
     }
 
