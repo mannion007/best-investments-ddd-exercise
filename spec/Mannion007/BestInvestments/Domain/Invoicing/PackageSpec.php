@@ -8,7 +8,9 @@ use Mannion007\BestInvestments\Domain\Invoicing\ConsultationId;
 use Mannion007\BestInvestments\Domain\Invoicing\PackageDuration;
 use Mannion007\BestInvestments\Domain\Invoicing\PackageReference;
 use Mannion007\BestInvestments\Domain\Invoicing\ClientId;
+use Mannion007\BestInvestments\Domain\Invoicing\PackageStatus;
 use Mannion007\BestInvestments\Domain\Invoicing\TimeIncrement;
+use Mannion007\BestInvestments\Domain\Invoicing\TransferredOutTimeIncrement;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -66,5 +68,46 @@ class PackageSpec extends ObjectBehavior
         $duration = new TimeIncrement(30);
         $consultation = Consultation::schedule($consultationId, $clientId, $duration);
         $this->attach($consultation);
+    }
+
+    function it_does_not_transfer_in_hours_when_it_is_expired()
+    {
+        $this->makeExpired();
+        $timeToTransferIn = new TransferredOutTimeIncrement(ClientId::fromExisting('client1'), 30);
+        $this->shouldThrow(new \Exception('Cannot transfer hours into an Expired Package'))
+            ->during('transferInHours', [$timeToTransferIn]);
+    }
+
+    function it_does_not_transfer_in_hours_from_a_different_client()
+    {
+        $timeToTransferIn = new TransferredOutTimeIncrement(ClientId::fromExisting('client2'), 30);
+        $this->shouldThrow(new \Exception('Cannot transfer hours into an Package from a different client'))
+            ->during('transferInHours', [$timeToTransferIn]);
+    }
+
+    function it_transfers_in_hours()
+    {
+        $timeToTransferIn = new TransferredOutTimeIncrement(ClientId::fromExisting('client1'), 30);
+        $this->transferInHours($timeToTransferIn);
+    }
+
+    function it_does_not_transfer_out_hours_when_it_is_not_expired()
+    {
+        $this->shouldThrow(new \Exception('Cannot transfer hours out of a Package that has not yet Expired'))
+            ->during('transferOutHours');
+    }
+
+    function it_transfers_out_hours()
+    {
+        $this->makeExpired();
+        $this->transferOutHours();
+    }
+
+    private function makeExpired()
+    {
+        $expired = PackageStatus::determineFrom(new \DateTime('-5 years'), PackageDuration::sixMonths());
+        $status = new \ReflectionProperty($this->getWrappedObject(), 'status');
+        $status->setAccessible(true);
+        $status->setValue($this->getWrappedObject(), $expired);
     }
 }

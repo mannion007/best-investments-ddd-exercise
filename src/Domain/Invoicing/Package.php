@@ -21,7 +21,7 @@ class Package
         $this->clientId = $clientId;
         $this->nominalHours = $nominalHours;
         $this->transferredInHours = new TimeIncrement(0);
-        $this->transferredOutHours = new TimeIncrement(0);
+        $this->transferredOutHours = new TransferredOutTimeIncrement($this->clientId, 0);
         $this->status = PackageStatus::determineFrom($reference->getStartDate(), $reference->getMonths());
     }
 
@@ -58,21 +58,23 @@ class Package
         return $consultationHours->minus($this->transferredOutHours);
     }
 
-    public function transferInHours(TimeIncrement $timeToTransferIn)
+    public function transferInHours(TransferredOutTimeIncrement $timeToTransferIn): void
     {
         if ($this->status->is(PackageStatus::EXPIRED)) {
             throw new \Exception('Cannot transfer hours into an Expired Package');
         }
+        if ($timeToTransferIn->doesNotBelongTo($this->clientId)) {
+            throw new \Exception('Cannot transfer hours into an Package from a different client');
+        }
         $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn);
     }
 
-    public function transferOutHours(): TimeIncrement
+    public function transferOutHours(): TransferredOutTimeIncrement
     {
         if ($this->status->isNot(PackageStatus::EXPIRED)) {
             throw new \Exception('Cannot transfer hours out of a Package that has not yet Expired');
         }
-        /** No guard for 0 available time, it's probably not exceptional to transfer out no time... */
-        $this->transferredOutHours = $this->getRemainingHours();
+        $this->transferredOutHours->add($this->getRemainingHours());
         return $this->transferredOutHours;
     }
 }
