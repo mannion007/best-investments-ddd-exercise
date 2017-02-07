@@ -6,5 +6,5 @@ install:
 services:
   - redis-server
 before_script:
-  - make inbuilt-server
+  - make start-inbuilt-server
 script: make test

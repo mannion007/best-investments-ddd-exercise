@@ -26,5 +26,5 @@ phpcs-fix:
 	vendor/bin/phpcbf --standard=PSR2 ./src
 
 ## Run the PHP inbuilt server
-inbuilt-server:
-	php -S 127.0.0.1:8888 -t public public/index.php
+start-inbuilt-server:
+	nohup php -S 127.0.0.1:8888 -t public public/index.php >/dev/null 2>&1 &
