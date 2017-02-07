@@ -6,12 +6,12 @@ class ProjectStatus
 {
     const DRAFT = 'draft';
     const ACTIVE = 'active';
-    const ON_HOLD = 'on_hold';
+    const ON_HOLD = 'on hold';
     const CLOSED = 'closed';
 
     private $status;
 
-    private function __construct($status)
+    private function __construct(string $status)
     {
         $this->status = $status;
     }
@@ -44,5 +44,10 @@ class ProjectStatus
     public function isNot($status): bool
     {
         return !$this->is($status);
+    }
+
+    public function __toString()
+    {
+        return (string)$this->status;
     }
 }

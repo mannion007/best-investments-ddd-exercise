@@ -6,12 +6,6 @@ use Behat\Behat\Context\Context;
 use Pavlakis\Slim\Behat\Context\App;
 use Pavlakis\Slim\Behat\Context\KernelAwareContext;
 use \GuzzleHttp\Client;
-use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationScheduledEvent;
-use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectClosedEvent;
-use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectDraftedEvent;
-use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectStartedEvent;
-use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistApprovedEvent;
-use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistDiscardedEvent;
 
 /**
  * Defines application features from the specific context.
@@ -123,7 +117,6 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectHasNoOpenConsultations()
     {
-        //Read side...
     }
 
     /**
@@ -408,7 +401,13 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function iShouldHaveADraftOfAProject()
     {
-        //Read side
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        if ($decodedResponse->status->status !== 'draft') {
+            throw new \Exception('The project is not marked as a draft');
+        }
     }
 
     /**
@@ -416,7 +415,13 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectShouldBeMarkedAsActive()
     {
-        //Read side
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        if ($decodedResponse->status->status !== 'active') {
+            throw new \Exception('The project is not marked as active');
+        }
     }
 
     /**
@@ -424,7 +429,13 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectShouldBeMarkedAsClosed()
     {
-        //Read side
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        if ($decodedResponse->status->status !== 'closed') {
+            throw new \Exception('The project is not marked as closed');
+        }
     }
 
     /**
@@ -448,7 +459,16 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theSpecialistShouldBeAddedAndMarkedAsUnvetted()
     {
-        //Read side...
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        foreach ($decodedResponse->unvetted_specialists->specialists as $specialist) {
+            if ($specialist->specialist_id === $this->specialistId) {
+                return true;
+            }
+        }
+        throw new \Exception('The Specialist is not added and marked as un-vetted');
     }
 
     /**
@@ -456,7 +476,16 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theSpecialistShouldBeMarkedAsApproved()
     {
-        //Read side...
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        foreach ($decodedResponse->approved_specialists->specialists as $specialist) {
+            if ($specialist->specialist_id === $this->specialistId) {
+                return true;
+            }
+        }
+        throw new \Exception('The Specialist is not marked as approved');
     }
 
     /**
@@ -464,7 +493,16 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theSpecialistShouldBeMarkedAsDiscarded()
     {
-        //Read side...
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        foreach ($decodedResponse->discarded_specialists->specialists as $specialist) {
+            if ($specialist->specialist_id === $this->specialistId) {
+                return true;
+            }
+        }
+        throw new \Exception('The Specialist is not marked as discarded');
     }
 
     /**
@@ -473,7 +511,7 @@ class ProjectManagementContext implements Context, KernelAwareContext
     public function iScheduleAConsultationWithTheSpecialistOnTheProject()
     {
         //Add time?
-        $this->guzzle->post(
+        $response = $this->guzzle->post(
             sprintf('%s/project/schedule-consultation', $this->app->getContainer()->get('base_uri')),
             [
                 'form_params' => [
@@ -483,6 +521,8 @@ class ProjectManagementContext implements Context, KernelAwareContext
                 ]
             ]
         );
+        $decodedResponse = json_decode($response->getBody()->getContents());
+        $this->consultationId = $decodedResponse->consultation_id;
     }
 
     /**
@@ -490,7 +530,16 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theConsultationShouldBeScheduledWithTheSpecialistOnTheProject()
     {
-        //Read side...
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        foreach ($decodedResponse->consultations->consultations as $consultation) {
+            if ($consultation->consultation_id->consultation_id === $this->consultationId) {
+                return true;
+            }
+        }
+        throw new \Exception('The Consultation has not been scheduled with the Specialist on the Project');
     }
 
     /**
@@ -498,7 +547,13 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectShouldBeMarkedAsOnHold()
     {
-        //Read side...
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        if ($decodedResponse->status->status !== 'on hold') {
+            throw new \Exception('The project is not marked as on hold');
+        }
     }
 
     /**
@@ -506,10 +561,7 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function aSeniorProjectManagerShouldBeNotifiedThatTheProjectHasBeenDrafted()
     {
-        $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished(ProjectDraftedEvent::EVENT_NAME)) {
-            throw new \Exception('A Senior Project Manager has not been notified that the Project has been drafted');
-        }
+        $this->eventShouldHaveBeenPublishedNamed('project_drafted');
     }
 
     /**
@@ -517,10 +569,7 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theInvoicingTeamShouldBeNotifiedThatTheProjectHasClosed()
     {
-        $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished(ProjectClosedEvent::EVENT_NAME)) {
-            throw new \Exception('The Invoicing Team has not been notified the Project has closed');
-        }
+        $this->eventShouldHaveBeenPublishedNamed('project_closed');
     }
 
     /**
@@ -528,10 +577,7 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenApproved()
     {
-        $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished(SpecialistApprovedEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified the Specialist has been approved');
-        }
+        $this->eventShouldHaveBeenPublishedNamed('specialist_approved');
     }
 
     /**
@@ -539,10 +585,7 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenDiscarded()
     {
-        $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished(SpecialistDiscardedEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified the Specialist has been discarded');
-        }
+        $this->eventShouldHaveBeenPublishedNamed('specialist_discarded');
     }
 
     /**
@@ -550,12 +593,7 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheConsultationHasBeenScheduled()
     {
-        $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished(ConsultationScheduledEvent::EVENT_NAME)) {
-            throw new \Exception(
-                'The Project Management Team has not been notified the Consultation has been scheduled'
-            );
-        }
+        $this->eventShouldHaveBeenPublishedNamed('consultation_scheduled');
     }
 
     /**
@@ -563,10 +601,15 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheProjectHasStarted()
     {
+        $this->eventShouldHaveBeenPublishedNamed('project_started');
+    }
+
+    private function eventShouldHaveBeenPublishedNamed(string $eventName)
+    {
         $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished(ProjectStartedEvent::EVENT_NAME)) {
+        if ($eventHandler->hasNotPublished($eventName)) {
             throw new \Exception(
-                'The Project Management Team has not been notified the Project has started'
+                'The event has not been published'
             );
         }
     }
@@ -576,7 +619,13 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theConsultationShouldBeMarkedAsConfirmed()
     {
-        //Read side...
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        if ($decodedResponse->consultations->consultations[$this->consultationId]->status->status !== 'confirmed') {
+            throw new \Exception('The Consultation has not been marked as confirmed');
+        }
     }
 
     /**
@@ -584,6 +633,12 @@ class ProjectManagementContext implements Context, KernelAwareContext
      */
     public function theConsultationShouldBeMarkedAsDiscarded()
     {
-        //Read side..
+        $response = $this->guzzle->get(
+            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+        );
+        $decodedResponse = json_decode($response->getBody());
+        if ($decodedResponse->consultations->consultations[$this->consultationId]->status->status !== 'discarded') {
+            throw new \Exception('The Consultation has not been marked as discarded');
+        }
     }
 }

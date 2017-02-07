@@ -2,6 +2,8 @@
 
 namespace Mannion007\BestInvestments\Infrastructure\Storage;
 
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerBuilder;
 use Mannion007\BestInvestments\Domain\ProjectManagement\Project;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectReference;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectRepositoryInterface;
@@ -11,10 +13,14 @@ class RedisProjectRepositoryAdapter implements ProjectRepositoryInterface
     /** @var \Redis */
     private $redis;
 
+    /** @var Serializer */
+    private $serializer;
+
     public function __construct(string $host, int $port)
     {
         $this->redis = new \Redis();
         $this->redis->connect($host, $port);
+        $this->serializer = SerializerBuilder::create()->build();
     }
 
     public function getByReference(ProjectReference $reference): Project
@@ -29,6 +35,15 @@ class RedisProjectRepositoryAdapter implements ProjectRepositoryInterface
     public function save(Project $project): void
     {
         $this->redis->set((string)$project->getReference(), serialize($project));
+        $this->generateProjectView($project);
+    }
+
+    private function generateProjectView(Project $project)
+    {
+        $this->redis->set(
+            sprintf('%s-view', (string)$project->getReference()),
+            $this->serializer->serialize($project, 'json')
+        );
     }
 
     public function purge()

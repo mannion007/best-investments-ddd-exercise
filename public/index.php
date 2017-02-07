@@ -149,4 +149,22 @@
         }
     );
 
+    $app->get(
+        '/project/{project-reference}',
+        function (Request $request, Response $response, $args) {
+            $redis = new \Redis();
+            $redis->connect(
+                $this->get('redis_project_view_host'),
+                $this->get('redis_project_view_port')
+            );
+            $projectView = $redis->get(sprintf('%s-view', $args['project-reference']));
+            if (!$projectView) {
+                return $response->withStatus(404);
+            }
+            $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson(json_decode($projectView));
+        }
+    );
+
     $app->run();

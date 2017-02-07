@@ -9,6 +9,8 @@ $parameters = [
     'base_uri' => 'http://127.0.0.1:8888',
     'redis_project_repository_host' => '127.0.0.1',
     'redis_project_repository_port' => 6379,
+    'redis_project_view_host' => '127.0.0.1',
+    'redis_project_view_port' => 6379,
     'redis_event_handler_host' => '127.0.0.1',
     'redis_event_handler_port' => 6379
 ];
