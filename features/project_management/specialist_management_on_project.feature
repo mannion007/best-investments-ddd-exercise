@@ -1,3 +1,4 @@
+@api
 Feature:
   As a Research Manager
   I want to be able to manage Specialists to Projects

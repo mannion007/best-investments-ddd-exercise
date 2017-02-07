@@ -253,16 +253,6 @@ class ProjectManagementContext implements Context
     }
 
     /**
-     * @Then I should get a Project Reference
-     */
-    public function iShouldGetAProjectReference()
-    {
-        if (is_null($this->project->getReference())) {
-            throw new \Exception('I did not get a Project Reference');
-        }
-    }
-
-    /**
      * @Then The Project should be marked as active
      */
     public function theProjectShouldBeMarkedAsActive()

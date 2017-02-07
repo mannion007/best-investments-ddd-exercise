@@ -1,3 +1,4 @@
+@api
 Feature:
   As a Sales Manager
   I want to be able to manage a Client's account

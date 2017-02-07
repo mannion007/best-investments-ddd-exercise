@@ -1,5 +1,17 @@
 default:
+    extensions:
+      Pavlakis\Slim\Behat:
+        config_file: app/settings.php
     suites:
-      project_management_features:
-        paths: [%paths.base%/features/project_management]
-        contexts: [Mannion007\BestInvestmentsBehat\Domain\ProjectManagementContext]
+      project_management_domain_features:
+        paths:
+          - %paths.base%/features/project_management
+        contexts:
+          - Mannion007\BestInvestmentsBehat\Domain\ProjectManagementContext
+      project_management_api_features:
+        paths:
+          - %paths.base%/features/project_management
+        contexts:
+          - Mannion007\BestInvestmentsBehat\Api\ProjectManagementContext
+        filters:
+          tags: '@api'

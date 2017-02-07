@@ -2,5 +2,9 @@ language: php
 php:
   - '7.1'
 install:
-   - composer install
+  - composer install
+services:
+  - redis-server
+before_script:
+  - make inbuilt-server
 script: make test

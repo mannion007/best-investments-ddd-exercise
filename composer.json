@@ -16,7 +16,9 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "^2.7",
     "phpspec/phpspec": "^3.2",
-    "behat/behat": "^3.3"
+    "behat/behat": "^3.3",
+    "pavlakis/slim-behat-extension": "^1.0",
+    "guzzlehttp/guzzle": "^6.2"
   },
   "autoload": {
     "psr-4": {
