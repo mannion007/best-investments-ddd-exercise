@@ -28,4 +28,3 @@
 |Suspended||...|N|
 |Active||...|N|
 |client database system||A resource for managing clients and potential clients|N|
-
