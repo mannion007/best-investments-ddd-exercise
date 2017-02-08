@@ -45,7 +45,7 @@ class ProjectSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(Project::class);
-        if (!$this->handler->hasPublished(ProjectDraftedEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ProjectDraftedEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Project was Drafted');
         }
     }
@@ -81,7 +81,7 @@ class ProjectSpec extends ObjectBehavior
         $this->scheduleConsultation(SpecialistId::fromExisting('test'), (new \DateTime())->modify('+1 week'));
         $this->reportConsultation(new ConsultationId(0), 60);
         $this->close();
-        if (!$this->handler->hasPublished(ProjectClosedEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ProjectClosedEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Project was Closed');
         }
     }
@@ -124,7 +124,7 @@ class ProjectSpec extends ObjectBehavior
     {
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
-        if (!$this->handler->hasPublished(SpecialistApprovedEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(SpecialistApprovedEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Specialist was Approved');
         }
     }
@@ -171,7 +171,7 @@ class ProjectSpec extends ObjectBehavior
         $this->addSpecialist(SpecialistId::fromExisting('test'));
         $this->approveSpecialist(SpecialistId::fromExisting('test'));
         $this->scheduleConsultation(SpecialistId::fromExisting('test'), new \DateTime());
-        if (!$this->handler->hasPublished(ConsultationScheduledEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ConsultationScheduledEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Consultation was Scheduled');
         }
     }

@@ -51,7 +51,7 @@ class Client
 
     public function resumeOperations()
     {
-        if ($this->status->is(ClientStatus::ACTIVE)) {
+        if ($this->status->isNot(ClientStatus::SUSPENDED)) {
             throw new \Exception('Cannot resume operations of a Client that is not suspended');
         }
         $this->status = ClientStatus::active();

@@ -40,7 +40,7 @@ class ProspectSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(Prospect::class);
-        if (!$this->handler->hasPublished(ProspectReceivedEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ProspectReceivedEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Prospect was received');
         }
     }
@@ -73,7 +73,7 @@ class ProspectSpec extends ObjectBehavior
     function it_registers()
     {
         $this->register(new Money(100));
-        if (!$this->handler->hasPublished(ProspectRegisteredEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ProspectRegisteredEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Prospect was Registered');
         }
     }
@@ -91,7 +91,7 @@ class ProspectSpec extends ObjectBehavior
     function it_declares_not_interested()
     {
         $this->declareNotInterested();
-        if (!$this->handler->hasPublished(ProspectNotInterestedEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ProspectNotInterestedEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Prospect was Declared Not Interested');
         }
     }
@@ -109,7 +109,7 @@ class ProspectSpec extends ObjectBehavior
     function it_gives_up()
     {
         $this->giveUp();
-        if (!$this->handler->hasPublished(ProspectGivenUpOnEvent::EVENT_NAME)) {
+        if ($this->handler->hasNotPublished(ProspectGivenUpOnEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Prospect was Given Up On');
         }
     }
