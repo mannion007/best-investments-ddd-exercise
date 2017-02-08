@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/mannion007/best-investments-ddd-exercise.svg?branch=master)](https://travis-ci.org/mannion007/best-investments-ddd-exercise)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mannion007/best-investments-ddd-exercise/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mannion007/best-investments-ddd-exercise/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/a03181d9-5bd8-4fb2-8230-a6d5cd8c9009/mini.png)](https://insight.sensiolabs.com/projects/a03181d9-5bd8-4fb2-8230-a6d5cd8c9009)
+
 This codebase is being developed as a training exercise and introduction into Domain Driven Design and related topics. The task at hand is to develop an enterprise system for a fictional business, Best Investments.
 
 An initial mock conversation between the developers and the domain experts of the domain the company is in went down as follows:
