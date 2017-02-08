@@ -8,7 +8,7 @@ class PotentialClient
     private $name;
     private $contactDetails;
 
-    private function __construct(string $name, ContactDetails $contactDetails)
+    public function __construct(string $name, ContactDetails $contactDetails)
     {
         $this->clientId = new ClientId();
         $this->name = $name;

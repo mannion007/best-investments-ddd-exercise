@@ -45,7 +45,6 @@ class Client
             throw new \Exception('Cannot suspend the Service of a Client when it is already suspended');
         }
         $this->status = ClientStatus::suspended();
-
         EventPublisher::publish(new ServiceSuspendedEvent((string)$this->clientId));
     }
 
@@ -55,7 +54,6 @@ class Client
             throw new \Exception('Cannot resume operations of a Client that is not suspended');
         }
         $this->status = ClientStatus::active();
-
         EventPublisher::publish(new OperationsResumedEvent((string)$this->clientId));
     }
 }

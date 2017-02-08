@@ -8,6 +8,7 @@ use Mannion007\BestInvestments\Domain\Sales\ClientSignedUpEvent;
 use Mannion007\BestInvestments\Domain\Sales\ClientStatus;
 use Mannion007\BestInvestments\Domain\Sales\ContactDetails;
 use Mannion007\BestInvestments\Domain\Sales\Money;
+use Mannion007\BestInvestments\Domain\Sales\OperationsResumedEvent;
 use Mannion007\BestInvestments\Domain\Sales\PackageDuration;
 use Mannion007\BestInvestments\Domain\Sales\ServiceSuspendedEvent;
 use Mannion007\BestInvestments\Event\EventPublisher;
@@ -77,6 +78,9 @@ class ClientSpec extends ObjectBehavior
     {
         $this->makeSuspended();
         $this->resumeOperations();
+        if ($this->handler->hasNotPublished(OperationsResumedEvent::EVENT_NAME)) {
+            throw new \Exception('An event should have been published when the Operations were resumed');
+        }
     }
 
     private function makeSuspended()
