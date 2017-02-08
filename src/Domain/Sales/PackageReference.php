@@ -6,7 +6,6 @@ class PackageReference
 {
     const REFERENCE_FORMAT = '%s-%s-%s-%s';
 
-    private $name;
     private $startDate;
     private $months;
     private $reference;
@@ -16,7 +15,6 @@ class PackageReference
         \DateTimeInterface $startDate,
         PackageDuration $months
     ) {
-        $this->name = $name;
         $this->startDate = $startDate;
         $this->months = $months;
 
