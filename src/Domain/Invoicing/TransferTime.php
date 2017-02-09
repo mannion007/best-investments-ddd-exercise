@@ -2,14 +2,15 @@
 
 namespace Mannion007\BestInvestments\Domain\Invoicing;
 
-class TransferredOutTimeIncrement extends TimeIncrement
+class TransferTime
 {
     private $clientId;
+    private $time;
 
     public function __construct(ClientId $clientId, int $minutes)
     {
-        parent::__construct($minutes);
         $this->clientId = $clientId;
+        $this->time = new TimeIncrement($minutes);
     }
 
     public function doesNotBelongTo(ClientId $clientId): bool
@@ -20,5 +21,10 @@ class TransferredOutTimeIncrement extends TimeIncrement
     public function belongsTo(ClientId $clientId): bool
     {
         return $clientId->is($this->clientId);
+    }
+
+    public function getTime(): TimeIncrement
+    {
+        return $this->time;
     }
 }
