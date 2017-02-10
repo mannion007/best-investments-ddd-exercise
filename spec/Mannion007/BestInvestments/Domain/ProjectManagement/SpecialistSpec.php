@@ -15,17 +15,17 @@ use Prophecy\Argument;
  */
 class SpecialistSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    function let()
     {
-        $this->shouldHaveType(Specialist::class);
-    }
-
-    function it_registers()
-    {
-        Specialist::register(
+        $this->beConstructedWith(
             SpecialistId::fromExisting('test-specialist-id'),
             'Test Specialist',
             new Money(100)
         );
+    }
+
+    function it_is_initializable()
+    {
+        $this->shouldHaveType(Specialist::class);
     }
 }

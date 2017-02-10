@@ -10,7 +10,7 @@
     $app = new \Slim\App($settings);
     EventPublisher::registerHandler($app->getContainer()->get('redis_handler'));
 
-    /** Routes */
+    /** Project Routes */
     $app->post(
         '/project/set-up',
         function (Request $request, Response $response) {
@@ -161,7 +161,40 @@
             if (!$projectView) {
                 return $response->withStatus(404);
             }
+            $response = $response->withStatus(200);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson(json_decode($projectView));
+        }
+    );
+
+    /** Specialist Routes */
+    $app->post(
+        '/potential-specialist/put-on-list',
+        function (Request $request, Response $response) {
+            $specialistId = $this->get('specialist_service')->putPotentialSpecialistOnList(
+                $request->getParsedBody()['project-manager-id'],
+                $request->getParsedBody()['name'],
+                $request->getParsedBody()['notes']
+            );
             $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson(['specialist_id' => $specialistId]);
+        }
+    );
+
+    $app->get(
+        '/potential-specialist/{id}',
+        function (Request $request, Response $response, $args) {
+            $redis = new \Redis();
+            $redis->connect(
+                $this->get('redis_potential_specialist_view_host'),
+                $this->get('redis_potential_specialist_view_port')
+            );
+            $projectView = $redis->get(sprintf('%s-view', $args['id']));
+            if (!$projectView) {
+                return $response->withStatus(404);
+            }
+            $response = $response->withStatus(200);
             $response = $response->withHeader('Content-Type', 'application/json');
             return $response->withJson(json_decode($projectView));
         }

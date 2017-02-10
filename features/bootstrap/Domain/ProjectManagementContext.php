@@ -8,6 +8,7 @@ use Mannion007\BestInvestments\Domain\ProjectManagement\ClientId;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationCollection;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationScheduledEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ConsultationStatus;
+use Mannion007\BestInvestments\Domain\ProjectManagement\PotentialSpecialist;
 use Mannion007\BestInvestments\Domain\ProjectManagement\Project;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectClosedEvent;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectDraftedEvent;
@@ -18,6 +19,7 @@ use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectManagerId;
 use Mannion007\BestInvestments\Domain\ProjectManagement\ProjectStatus;
 use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistCollection;
 use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistId;
+use Mannion007\BestInvestments\Domain\ProjectManagement\SpecialistPutOnListEvent;
 use Mannion007\BestInvestments\Event\EventPublisher;
 use Mannion007\BestInvestments\Event\InMemoryHandler;
 
@@ -43,6 +45,9 @@ class ProjectManagementContext implements Context
 
     /** @var ConsultationId */
     private $consultationId;
+
+    /** PotentialSpecialist */
+    private $potentialSpecialist;
 
     /**
      * Initializes context.
@@ -142,6 +147,13 @@ class ProjectManagementContext implements Context
         $this->project->addSpecialist($this->specialistId);
         $this->project->approveSpecialist($this->specialistId);
         $this->consultationId = $this->project->scheduleConsultation($this->specialistId, new \DateTime('+1 year'));
+    }
+
+    /**
+     * @Given I have a Potential Specialist
+     */
+    public function iHaveAPotentialSpecialist()
+    {
     }
 
     /**
@@ -331,6 +343,18 @@ class ProjectManagementContext implements Context
     }
 
     /**
+     * @When I add the Specialist to the list
+     */
+    public function iAddTheSpecialistToTheList()
+    {
+        $this->potentialSpecialist = PotentialSpecialist::putOnList(
+            ProjectManagerId::fromExisting('test-project-manager-id'),
+            'Test Specialist',
+            'This is just a test'
+        );
+    }
+
+    /**
      * @Then The Consultation should be scheduled with the Specialist on the Project
      */
     public function theConsultationShouldBeScheduledWithTheSpecialistOnTheProject()
@@ -419,6 +443,16 @@ class ProjectManagementContext implements Context
     }
 
     /**
+     * @Then The Prospecting Team should be notified that a Potential Specialist has been put on the list
+     */
+    public function theProspectingTeamShouldBeNotifiedThatAPotentialSpecialistHasBeenPutOnTheList()
+    {
+        if ($this->eventHandler->hasNotPublished(SpecialistPutOnListEvent::EVENT_NAME)) {
+            throw new \Exception('The Prospecting team was not notified that the Specialist was put on the list.');
+        }
+    }
+
+    /**
      * @Then The Consultation should be marked as confirmed
      */
     public function theConsultationShouldBeMarkedAsConfirmed()
@@ -442,6 +476,16 @@ class ProjectManagementContext implements Context
         $consultations = $reflected->getValue($this->project);
         if ($consultations->get($this->consultationId)->isNot($expected)) {
             throw new \Exception(sprintf('The Consultation is not marked as %s', $expected));
+        }
+    }
+
+    /**
+     * @Then I should have a Potential Specialist
+     */
+    public function iShouldHaveAPotentialSpecialist()
+    {
+        if (is_null($this->potentialSpecialist)) {
+            throw new \Exception('I do not have a Potential Specialist');
         }
     }
 }

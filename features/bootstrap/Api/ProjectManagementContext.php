@@ -195,6 +195,13 @@ class ProjectManagementContext implements Context, KernelAwareContext
     }
 
     /**
+     * @Given I have a Potential Specialist
+     */
+    public function iHaveAPotentialSpecialist()
+    {
+    }
+
+    /**
      * @When I report the Consultation
      */
     public function iReportTheConsultation()
@@ -405,8 +412,11 @@ class ProjectManagementContext implements Context, KernelAwareContext
             sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
         );
         $decodedResponse = json_decode($response->getBody());
+        if (200 !== $response->getStatusCode()) {
+            throw new \Exception('I do not have a Project');
+        }
         if ($decodedResponse->status->status !== 'draft') {
-            throw new \Exception('The project is not marked as a draft');
+            throw new \Exception('The Project is not marked as a draft');
         }
     }
 
@@ -526,6 +536,25 @@ class ProjectManagementContext implements Context, KernelAwareContext
     }
 
     /**
+     * @When I add the Specialist to the list
+     */
+    public function iAddTheSpecialistToTheList()
+    {
+        $response = $this->guzzle->post(
+            sprintf('%s/potential-specialist/put-on-list', $this->app->getContainer()->get('base_uri')),
+            [
+                'form_params' => [
+                    'project-manager-id' => $this->projectManagerId,
+                    'name' => 'Test Specialist',
+                    'notes' => 'This is just a test'
+                ]
+            ]
+        );
+        $decodedResponse = json_decode($response->getBody()->getContents());
+        $this->specialistId = $decodedResponse->specialist_id;
+    }
+
+    /**
      * @Then The Consultation should be scheduled with the Specialist on the Project
      */
     public function theConsultationShouldBeScheduledWithTheSpecialistOnTheProject()
@@ -604,6 +633,14 @@ class ProjectManagementContext implements Context, KernelAwareContext
         $this->eventShouldHaveBeenPublishedNamed('project_started');
     }
 
+    /**
+     * @Then The Prospecting Team should be notified that a Potential Specialist has been put on the list
+     */
+    public function theProspectingTeamShouldBeNotifiedThatAPotentialSpecialistHasBeenPutOnTheList()
+    {
+        $this->eventShouldHaveBeenPublishedNamed('specialist_put_on_list');
+    }
+
     private function eventShouldHaveBeenPublishedNamed(string $eventName)
     {
         $eventHandler = $this->app->getContainer()->get('redis_handler');
@@ -639,6 +676,19 @@ class ProjectManagementContext implements Context, KernelAwareContext
         $decodedResponse = json_decode($response->getBody());
         if ($decodedResponse->consultations->consultations[$this->consultationId]->status->status !== 'discarded') {
             throw new \Exception('The Consultation has not been marked as discarded');
+        }
+    }
+
+    /**
+     * @Then I should have a Potential Specialist
+     */
+    public function iShouldHaveAPotentialSpecialist()
+    {
+        $response = $this->guzzle->get(
+            sprintf('%s/potential-specialist/%s', $this->app->getContainer()->get('base_uri'), $this->specialistId)
+        );
+        if (200 !== $response->getStatusCode()) {
+            throw new \Exception('I do not have a Potential Specialist');
         }
     }
 }
