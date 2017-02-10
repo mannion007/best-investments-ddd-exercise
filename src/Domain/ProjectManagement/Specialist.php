@@ -14,5 +14,4 @@ class Specialist
         $this->name = $name;
         $this->hourlyRate = $hourlyRate;
     }
-
 }
