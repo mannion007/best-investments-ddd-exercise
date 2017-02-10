@@ -27,7 +27,7 @@
 |Join up||When a new Specialist becomes available to be added to Projects|N|
 |List||The current set of identified Potential specialists the Prospecting team are in the process of attempting to get to Join Up|N|
 |Database||A resource which contains the lists Specialists that can be Assigned to a Project|N|
-|Potential Specialist||An approved specialist to be considered for arranging a consultation with an Investor|N|
+|Specialist||An approved specialist to be considered for arranging a consultation with an Investor|N|
 |Report [on a consultation]||When the specialist declares the duration a Consultation lasted for|N|
 |Recommend|Push|Put forward a Specialist to the Client's Analyst with a view to Scheduling a Consultation between the Specialist and the Client|N|
 
