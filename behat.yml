@@ -1,17 +1,29 @@
 default:
-    extensions:
-      Pavlakis\Slim\Behat:
-        config_file: app/settings.php
-    suites:
-      project_management_domain_features:
-        paths:
-          - %paths.base%/features/project_management
-        contexts:
-          - Mannion007\BestInvestmentsBehat\Domain\ProjectManagementContext
-      project_management_api_features:
-        paths:
-          - %paths.base%/features/project_management
-        contexts:
-          - Mannion007\BestInvestmentsBehat\Api\ProjectManagementContext
-        filters:
-          tags: '@api'
+  extensions:
+    Pavlakis\Slim\Behat:
+      config_file: app/settings.php
+  suites:
+    project_management_domain_features:
+      paths:
+        - %paths.base%/features/project_management
+      contexts:
+        - Mannion007\BestInvestmentsBehat\ProjectManagement\DomainContext
+    project_management_api_features:
+      paths:
+        - %paths.base%/features/project_management
+      contexts:
+        - Mannion007\BestInvestmentsBehat\ProjectManagement\ApiContext
+      filters:
+        tags: '@api'
+    prospecting_domain_features:
+      paths:
+        - %paths.base%/features/prospecting
+      contexts:
+        - Mannion007\BestInvestmentsBehat\Prospecting\DomainContext
+    prospecting_api_features:
+      paths:
+        - %paths.base%/features/prospecting
+      contexts:
+        - Mannion007\BestInvestmentsBehat\Prospecting\ApiContext
+      filters:
+        tags: '@api'

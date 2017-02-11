@@ -2,6 +2,7 @@
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Message\ResponseInterface as Response;
     use Mannion007\BestInvestments\Event\EventPublisher;
+    use Mannion007\BestInvestments\Command\Command;
 
     require __DIR__ . '/../vendor/autoload.php';
 
@@ -9,6 +10,20 @@
     $settings = require __DIR__ . '/../app/settings.php';
     $app = new \Slim\App($settings);
     EventPublisher::registerHandler($app->getContainer()->get('redis_handler'));
+
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
+    $dispatcher = $app->getContainer()->get('command_dispatcher');
+    $dispatcher->addListener('register_prospect', [$app->getContainer()->get('register_prospect_handler'), 'handle']);
+    $dispatcher->addListener('receive_prospect', [$app->getContainer()->get('receive_prospect_handler'), 'handle']);
+    $dispatcher->addListener('chase_up_prospect', [$app->getContainer()->get('chase_up_prospect_handler'), 'handle']);
+    $dispatcher->addListener(
+        'declare_prospect_not_interested',
+        [$app->getContainer()->get('declare_prospect_not_interested_handler'), 'handle']
+    );
+    $dispatcher->addListener(
+        'give_up_on_prospect',
+        [$app->getContainer()->get('give_up_on_prospect_handler'), 'handle']
+    );
 
     /** Project Routes */
     $app->post(
@@ -197,6 +212,107 @@
             $response = $response->withStatus(200);
             $response = $response->withHeader('Content-Type', 'application/json');
             return $response->withJson(json_decode($projectView));
+        }
+    );
+
+    $app->put(
+        '/prospect/receive/{prospect-id}',
+        function (Request $request, Response $response, $args) {
+            $command = new Command(
+                'receive_prospect',
+                [
+                    'prospect-id' => $args['prospect-id'],
+                    'name' => $request->getParsedBody()['name'],
+                    'notes' => $request->getParsedBody()['notes']
+                ]
+            );
+            $this->get('command_dispatcher')->dispatch($command->getName(), $command);
+            $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson([]);
+        }
+    );
+
+    $app->post(
+        '/prospect/chase-up',
+        function (Request $request, Response $response) {
+            $command = new Command(
+                'chase_up_prospect',
+                [
+                    'prospect-id' => $request->getParsedBody()['prospect-id']
+                ]
+            );
+            $this->get('command_dispatcher')->dispatch($command->getName(), $command);
+            $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson([]);
+        }
+    );
+
+    $app->post(
+        '/prospect/register',
+        function (Request $request, Response $response) {
+            $command = new Command(
+                'register_prospect',
+                [
+                    'prospect-id' => $request->getParsedBody()['prospect-id'],
+                    'hourly-rate' => $request->getParsedBody()['hourly-rate']
+                ]
+            );
+            $this->get('command_dispatcher')->dispatch($command->getName(), $command);
+            $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson([]);
+        }
+    );
+
+    $app->post(
+        '/prospect/declare-not-interested',
+        function (Request $request, Response $response) {
+            $command = new Command(
+                'declare_prospect_not_interested',
+                [
+                    'prospect-id' => $request->getParsedBody()['prospect-id']
+                ]
+            );
+            $this->get('command_dispatcher')->dispatch($command->getName(), $command);
+            $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson([]);
+        }
+    );
+
+    $app->post(
+        '/prospect/give-up',
+        function (Request $request, Response $response) {
+            $command = new Command(
+                'give_up_on_prospect',
+                [
+                    'prospect-id' => $request->getParsedBody()['prospect-id']
+                ]
+            );
+            $this->get('command_dispatcher')->dispatch($command->getName(), $command);
+            $response = $response->withStatus(201);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson([]);
+        }
+    );
+
+    $app->get(
+        '/prospect/{prospect-id}',
+        function (Request $request, Response $response, $args) {
+            $redis = new \Redis();
+            $redis->connect(
+                $this->get('redis_prospect_view_host'),
+                $this->get('redis_prospect_view_port')
+            );
+            $prospectView = $redis->get(sprintf('%s-view', $args['prospect-id']));
+            if (!$prospectView) {
+                return $response->withStatus(404);
+            }
+            $response = $response->withStatus(200);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson(json_decode($prospectView));
         }
     );
 
