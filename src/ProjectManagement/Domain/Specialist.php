@@ -14,4 +14,9 @@ class Specialist
         $this->name = $name;
         $this->hourlyRate = $hourlyRate;
     }
+
+    public function getSpecialistId(): SpecialistId
+    {
+        return $this->specialistId;
+    }
 }
