@@ -10,7 +10,7 @@ use Mannion007\BestInvestments\Prospecting\Domain\ProspectNotInterestedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectReceivedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRegisteredEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectStatus;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
+use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 use Mannion007\BestInvestments\Event\EventPublisher;
 use PhpSpec\ObjectBehavior;
 
@@ -21,14 +21,14 @@ use PhpSpec\ObjectBehavior;
  */
 class ProspectSpec extends ObjectBehavior
 {
-    /** @var InMemoryHandler */
+    /** @var InMemoryEventPublisher */
     private $handler;
 
     function let()
     {
         /** Find before suite annotation to improve this */
-        $this->handler = new InMemoryHandler();
-        EventPublisher::registerHandler($this->handler);
+        $this->handler = new InMemoryEventPublisher();
+        EventPublisher::registerPublisher($this->handler);
 
         $this->beConstructedThrough(
             'receive',

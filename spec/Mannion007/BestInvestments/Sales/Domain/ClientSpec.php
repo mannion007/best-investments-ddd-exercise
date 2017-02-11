@@ -12,7 +12,7 @@ use Mannion007\BestInvestments\Sales\Domain\OperationsResumedEvent;
 use Mannion007\BestInvestments\Sales\Domain\PackageDuration;
 use Mannion007\BestInvestments\Sales\Domain\ServiceSuspendedEvent;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
+use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -22,14 +22,13 @@ use PhpSpec\ObjectBehavior;
  */
 class ClientSpec extends ObjectBehavior
 {
-    /** @var InMemoryHandler */
-    private $handler;
+    /** @var InMemoryEventPublisher */
+    private $publisher;
 
     function let()
     {
-        /** Find before suite annotation to improve this */
-        $this->handler = new InMemoryHandler();
-        EventPublisher::registerHandler($this->handler);
+        $this->publisher = new InMemoryEventPublisher();
+        EventPublisher::registerPublisher($this->publisher);
 
         $this->beConstructedWith(
             ClientId::fromExisting('test-client-id'),
@@ -42,7 +41,7 @@ class ClientSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType(Client::class);
-        if ($this->handler->hasNotPublished(ClientSignedUpEvent::EVENT_NAME)) {
+        if ($this->publisher->hasNotPublished(ClientSignedUpEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when there was a new Client');
         }
     }
@@ -62,7 +61,7 @@ class ClientSpec extends ObjectBehavior
     function it_suspends_service()
     {
         $this->suspendService();
-        if ($this->handler->hasNotPublished(ServiceSuspendedEvent::EVENT_NAME)) {
+        if ($this->publisher->hasNotPublished(ServiceSuspendedEvent::EVENT_NAME)) {
             throw new \Exception('An event should have been published when the Client\'s service was suspended');
         }
     }
@@ -77,8 +76,8 @@ class ClientSpec extends ObjectBehavior
     {
         $this->makeSuspended();
         $this->resumeOperations();
-        if ($this->handler->hasNotPublished(OperationsResumedEvent::EVENT_NAME)) {
-            throw new \Exception('An event should have been published when the Operations were resumed');
+        if ($this->publisher->hasNotPublished(OperationsResumedEvent::EVENT_NAME)) {
+            throw new \Exception('An event should have been published when operations were resumed');
         }
     }
 

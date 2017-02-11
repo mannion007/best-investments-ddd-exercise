@@ -2,11 +2,11 @@
 
 namespace Mannion007\BestInvestments\Event;
 
-class InMemoryHandler implements EventHandlerInterface
+class InMemoryEventPublisher implements EventPublisherInterface
 {
     private $events = [];
 
-    public function handle(EventInterface $event)
+    public function publish(EventInterface $event)
     {
         $this->events[$event->getEventName()] = $event;
     }

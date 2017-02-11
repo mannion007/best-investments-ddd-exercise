@@ -11,15 +11,15 @@ use Mannion007\BestInvestments\Prospecting\Domain\ProspectNotInterestedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRegisteredEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectStatus;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
+use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 
 /**
  * Defines application features from the specific context.
  */
 class DomainContext implements Context
 {
-    /** @var InMemoryHandler */
-    private $eventHandler;
+    /** @var InMemoryEventPublisher */
+    private $eventPublisher;
 
     /** @var ProspectId */
     private $prospectId;
@@ -36,8 +36,8 @@ class DomainContext implements Context
      */
     public function __construct()
     {
-        $this->eventHandler = new InMemoryHandler();
-        EventPublisher::registerHandler($this->eventHandler);
+        $this->eventPublisher = new InMemoryEventPublisher();
+        EventPublisher::registerPublisher($this->eventPublisher);
         $this->prospectId = ProspectId::fromExisting('test-prospect-id');
     }
 
@@ -127,7 +127,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheProspectHasRegistered()
     {
-        if ($this->eventHandler->hasNotPublished(ProspectRegisteredEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ProspectRegisteredEvent::EVENT_NAME)) {
             throw new \Exception('The Project Management Team has not been notified that Prospect has registered');
         }
     }
@@ -137,7 +137,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheProspectIsNotInterested()
     {
-        if ($this->eventHandler->hasNotPublished(ProspectNotInterestedEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ProspectNotInterestedEvent::EVENT_NAME)) {
             throw new \Exception('The Project Management Team has not been notified that Prospect is not interested');
         }
     }
@@ -147,7 +147,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheProspectHasBeenGivenUpOn()
     {
-        if ($this->eventHandler->hasNotPublished(ProspectGivenUpOnEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ProspectGivenUpOnEvent::EVENT_NAME)) {
             throw new \Exception('The Project Management Team has not been notified that Prospect is not reachable');
         }
     }

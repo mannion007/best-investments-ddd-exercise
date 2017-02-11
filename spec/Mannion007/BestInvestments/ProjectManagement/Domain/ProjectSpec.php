@@ -13,7 +13,7 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistApprovedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectClosedEvent;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
+use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -23,14 +23,14 @@ use PhpSpec\ObjectBehavior;
  */
 class ProjectSpec extends ObjectBehavior
 {
-    /** @var InMemoryHandler */
+    /** @var InMemoryEventPublisher */
     private $handler;
 
     function let()
     {
         /** Find before suite annotation to improve this */
-        $this->handler = new InMemoryHandler();
-        EventPublisher::registerHandler($this->handler);
+        $this->handler = new InMemoryEventPublisher();
+        EventPublisher::registerPublisher($this->handler);
 
         $clientId = ClientId::fromExisting('test123');
         $name = 'test-project';

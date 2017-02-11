@@ -10,8 +10,7 @@ use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\ChaseUpPro
 use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\DeclareProspectNotInterestedHandler;
 use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\GiveUpOnProspectHandler;
 use Mannion007\BestInvestments\Prospecting\Infrastructure\Storage\RedisProspectRepositoryAdapter;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
-use Mannion007\BestInvestments\Event\RedisHandler;
+use Mannion007\BestInvestments\Event\RedisEventPublisher;
 
 $parameters = [
     'base_uri' => 'http://127.0.0.1:8888',
@@ -69,11 +68,8 @@ $services = [
             $container['redis_specialist_repository']
         );
     },
-    'in_memory_handler' => function () {
-        return new InMemoryHandler();
-    },
-    'redis_handler' => function ($container) {
-        return new RedisHandler(
+    'redis_publisher' => function ($container) {
+        return new RedisEventPublisher(
             $container['redis_event_handler_host'],
             $container['redis_event_handler_port']
         );

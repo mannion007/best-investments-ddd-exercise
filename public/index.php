@@ -9,7 +9,7 @@
     /** Bootstrap */
     $settings = require __DIR__ . '/../app/settings.php';
     $app = new \Slim\App($settings);
-    EventPublisher::registerHandler($app->getContainer()->get('redis_handler'));
+    EventPublisher::registerPublisher($app->getContainer()->get('redis_publisher'));
 
     /** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
     $dispatcher = $app->getContainer()->get('command_dispatcher');

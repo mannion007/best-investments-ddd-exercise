@@ -7,7 +7,7 @@ use Mannion007\BestInvestments\Sales\Domain\Package;
 use Mannion007\BestInvestments\Sales\Domain\PackageDuration;
 use Mannion007\BestInvestments\Sales\Domain\PackagePurchasedEvent;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
+use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -17,14 +17,14 @@ use PhpSpec\ObjectBehavior;
  */
 class PackageSpec extends ObjectBehavior
 {
-    /** @var InMemoryHandler */
+    /** @var InMemoryEventPublisher */
     private $handler;
 
     function let()
     {
         /** Find before suite annotation to improve this */
-        $this->handler = new InMemoryHandler();
-        EventPublisher::registerHandler($this->handler);
+        $this->handler = new InMemoryEventPublisher();
+        EventPublisher::registerPublisher($this->handler);
 
         $this->beConstructedWith(
             ClientId::fromExisting('test-client-id'),

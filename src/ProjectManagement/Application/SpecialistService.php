@@ -33,7 +33,8 @@ class SpecialistService
         return (string)$potentialSpecialist->getSpecialistId();
     }
 
-    public function joinUpSpecialist(string $specialistId, int $hourlyRate): void
+    //Not yet tested...
+    public function joinUpSpecialist(string $specialistId, string $hourlyRate): void
     {
         $potentialSpecialist = $this->potentialSpecialistRepository->getById(SpecialistId::fromExisting($specialistId));
         if (!$potentialSpecialist) {

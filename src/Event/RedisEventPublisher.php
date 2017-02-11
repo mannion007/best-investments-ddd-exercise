@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Event;
 
-class RedisHandler implements EventHandlerInterface
+class RedisEventPublisher implements EventPublisherInterface
 {
     /** @var \Redis */
     private $redis;
@@ -13,7 +13,7 @@ class RedisHandler implements EventHandlerInterface
         $this->redis->connect($host, $port);
     }
 
-    public function handle(EventInterface $event)
+    public function publish(EventInterface $event)
     {
         $this->redis->set($event->getEventName(), serialize($event));
     }

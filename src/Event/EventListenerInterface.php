@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Event;
 
-interface EventHandlerInterface
+interface EventListenerInterface
 {
     public function handle(EventInterface $event);
 }

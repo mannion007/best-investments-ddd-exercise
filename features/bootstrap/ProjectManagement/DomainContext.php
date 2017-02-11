@@ -21,15 +21,15 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistCollection;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistPutOnListEvent;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryHandler;
+use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 
 /**
  * Defines application features from the specific context.
  */
 class DomainContext implements Context
 {
-    /** @var InMemoryHandler */
-    private $eventHandler;
+    /** @var InMemoryEventPublisher */
+    private $eventPublisher;
 
     /** @var ClientId */
     private $clientId;
@@ -58,8 +58,8 @@ class DomainContext implements Context
      */
     public function __construct()
     {
-        $this->eventHandler = new InMemoryHandler();
-        EventPublisher::registerHandler($this->eventHandler);
+        $this->eventPublisher = new InMemoryEventPublisher();
+        EventPublisher::registerPublisher($this->eventPublisher);
 
         $this->clientId = ClientId::fromExisting('test-client-123');
         $this->projectManagerId = ProjectManagerId::fromExisting('project-manager-123');
@@ -383,7 +383,7 @@ class DomainContext implements Context
      */
     public function aSeniorProjectManagerShouldBeNotifiedThatTheProjectHasBeenDrafted()
     {
-        if ($this->eventHandler->hasNotPublished(ProjectDraftedEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ProjectDraftedEvent::EVENT_NAME)) {
             throw new \Exception('A Senior Project Manager has not been notified that the Project has been drafted');
         }
     }
@@ -393,7 +393,7 @@ class DomainContext implements Context
      */
     public function theInvoicingTeamShouldBeNotifiedThatTheProjectHasClosed()
     {
-        if ($this->eventHandler->hasNotPublished(ProjectClosedEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ProjectClosedEvent::EVENT_NAME)) {
             throw new \Exception('The Invoicing Team has not been notified the Project has closed');
         }
     }
@@ -403,7 +403,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenApproved()
     {
-        if ($this->eventHandler->hasNotPublished(SpecialistApprovedEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(SpecialistApprovedEvent::EVENT_NAME)) {
             throw new \Exception('The Project Management Team has not been notified the Specialist has been approved');
         }
     }
@@ -413,7 +413,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenDiscarded()
     {
-        if ($this->eventHandler->hasNotPublished(SpecialistDiscardedEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(SpecialistDiscardedEvent::EVENT_NAME)) {
             throw new \Exception('The Project Management Team has not been notified the Specialist has been discarded');
         }
     }
@@ -423,7 +423,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheConsultationHasBeenScheduled()
     {
-        if ($this->eventHandler->hasNotPublished(ConsultationScheduledEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ConsultationScheduledEvent::EVENT_NAME)) {
             throw new \Exception(
                 'The Project Management Team has not been notified the Consultation has been scheduled'
             );
@@ -435,7 +435,7 @@ class DomainContext implements Context
      */
     public function theProjectManagementTeamShouldBeNotifiedThatTheProjectHasStarted()
     {
-        if ($this->eventHandler->hasNotPublished(ProjectStartedEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(ProjectStartedEvent::EVENT_NAME)) {
             throw new \Exception(
                 'The Project Management Team has not been notified the Project has started'
             );
@@ -447,7 +447,7 @@ class DomainContext implements Context
      */
     public function theProspectingTeamShouldBeNotifiedThatAPotentialSpecialistHasBeenPutOnTheList()
     {
-        if ($this->eventHandler->hasNotPublished(SpecialistPutOnListEvent::EVENT_NAME)) {
+        if ($this->eventPublisher->hasNotPublished(SpecialistPutOnListEvent::EVENT_NAME)) {
             throw new \Exception('The Prospecting team was not notified that the Specialist was put on the list.');
         }
     }

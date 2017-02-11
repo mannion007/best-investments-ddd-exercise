@@ -160,8 +160,8 @@ class ApiContext implements Context, KernelAwareContext
 
     private function eventShouldHaveBeenPublishedNamed(string $eventName)
     {
-        $eventHandler = $this->app->getContainer()->get('redis_handler');
-        if ($eventHandler->hasNotPublished($eventName)) {
+        $eventPublisher = $this->app->getContainer()->get('redis_publisher');
+        if ($eventPublisher->hasNotPublished($eventName)) {
             throw new \Exception(
                 'The event has not been published'
             );
