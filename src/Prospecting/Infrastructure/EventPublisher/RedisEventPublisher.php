@@ -1,6 +1,9 @@
 <?php
 
-namespace Mannion007\BestInvestments\Event;
+namespace Mannion007\BestInvestments\Prospecting\Infrastructure\EventPublisher;
+
+use Mannion007\BestInvestments\Event\EventPublisherInterface;
+use Mannion007\BestInvestments\Event\EventInterface;
 
 class RedisEventPublisher implements EventPublisherInterface
 {

@@ -6,8 +6,8 @@ use Mannion007\BestInvestments\Sales\Domain\ClientId;
 use Mannion007\BestInvestments\Sales\Domain\Package;
 use Mannion007\BestInvestments\Sales\Domain\PackageDuration;
 use Mannion007\BestInvestments\Sales\Domain\PackagePurchasedEvent;
+use Mannion007\BestInvestments\Sales\Infrastructure\EventPublisher\InMemoryEventPublisher;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**

@@ -69,7 +69,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iHaveADraftedProject()
     {
         $response = $this->guzzle->post(
-            sprintf('%s/project/set_up', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/set_up', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'client_id' => $this->clientId,
@@ -88,7 +88,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iHaveAnActiveProject()
     {
         $response = $this->guzzle->post(
-            sprintf('%s/project/set_up', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/set_up', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'client_id' => $this->clientId,
@@ -102,7 +102,7 @@ class ApiContext implements Context, KernelAwareContext
         $this->projectReference = $decodedResponse->project_reference;
 
         $this->guzzle->post(
-            sprintf('%s/project/start', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/start', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -125,7 +125,7 @@ class ApiContext implements Context, KernelAwareContext
     public function theProjectHasAnOpenConsultation()
     {
         $this->guzzle->post(
-            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -134,7 +134,7 @@ class ApiContext implements Context, KernelAwareContext
             ]
         );
         $this->guzzle->post(
-            sprintf('%s/project/approve_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/approve_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -143,7 +143,7 @@ class ApiContext implements Context, KernelAwareContext
             ]
         );
         $response = $this->guzzle->post(
-            sprintf('%s/project/schedule_consultation', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/schedule_consultation', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -169,7 +169,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iReportTheConsultation()
     {
         $this->guzzle->post(
-            sprintf('%s/project/report_consultation', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/report_consultation', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -186,7 +186,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iDiscardTheConsultation()
     {
         $this->guzzle->post(
-            sprintf('%s/project/discard_consultation', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/discard_consultation', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -202,7 +202,7 @@ class ApiContext implements Context, KernelAwareContext
     public function theProjectHasAnUnvettedSpecialist()
     {
         $this->guzzle->post(
-            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -218,7 +218,7 @@ class ApiContext implements Context, KernelAwareContext
     public function theSpecialistIsApprovedForTheProject()
     {
         $this->guzzle->post(
-            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -227,7 +227,7 @@ class ApiContext implements Context, KernelAwareContext
             ]
         );
         $this->guzzle->post(
-            sprintf('%s/project/approve_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/approve_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -243,7 +243,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iSetUpAProjectForTheClientWithTheNameAndTheDeadline(string $name, string $deadline)
     {
         $response = $this->guzzle->post(
-            sprintf('%s/project/set_up', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/set_up', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'client_id' => $this->clientId,
@@ -262,7 +262,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iAssignTheProjectManagerToTheProject()
     {
         $this->guzzle->post(
-            sprintf('%s/project/start', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/start', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -278,7 +278,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iCloseTheProject()
     {
         $this->guzzle->post(
-            sprintf('%s/project/close', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/close', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference
@@ -293,7 +293,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iAddTheSpecialistToTheProject()
     {
         $this->guzzle->post(
-            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -309,7 +309,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iApproveTheSpecialist()
     {
         $this->guzzle->post(
-            sprintf('%s/project/approve_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/approve_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -325,7 +325,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iDiscardTheSpecialist()
     {
         $this->guzzle->post(
-            sprintf('%s/project/discard_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/discard_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -341,7 +341,11 @@ class ApiContext implements Context, KernelAwareContext
     public function iShouldHaveADraftOfAProject()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         if (200 !== $response->getStatusCode()) {
@@ -358,7 +362,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theProjectShouldBeMarkedAsActive()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         if ($decodedResponse->status->status !== 'active') {
@@ -372,7 +380,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theProjectShouldBeMarkedAsClosed()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         if ($decodedResponse->status->status !== 'closed') {
@@ -386,7 +398,7 @@ class ApiContext implements Context, KernelAwareContext
     public function specialistsCanBeAddedToTheProject()
     {
         $this->guzzle->post(
-            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/add_specialist', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -402,7 +414,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theSpecialistShouldBeAddedAndMarkedAsUnvetted()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         foreach ($decodedResponse->unvetted_specialists->specialists as $specialist) {
@@ -419,7 +435,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theSpecialistShouldBeMarkedAsApproved()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         foreach ($decodedResponse->approved_specialists->specialists as $specialist) {
@@ -436,7 +456,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theSpecialistShouldBeMarkedAsDiscarded()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         foreach ($decodedResponse->discarded_specialists->specialists as $specialist) {
@@ -454,7 +478,7 @@ class ApiContext implements Context, KernelAwareContext
     {
         //Add time?
         $response = $this->guzzle->post(
-            sprintf('%s/project/schedule_consultation', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/project/schedule_consultation', $this->app->getContainer()->get('project_management_base_uri')),
             [
                 'form_params' => [
                     'project_reference' => $this->projectReference,
@@ -473,7 +497,10 @@ class ApiContext implements Context, KernelAwareContext
     public function iAddTheSpecialistToTheList()
     {
         $response = $this->guzzle->post(
-            sprintf('%s/potential_specialist/put_on_list', $this->app->getContainer()->get('base_uri')),
+            sprintf(
+                '%s/potential_specialist/put_on_list',
+                $this->app->getContainer()->get('project_management_base_uri')
+            ),
             [
                 'form_params' => [
                     'project_manager_id' => $this->projectManagerId,
@@ -492,7 +519,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theConsultationShouldBeScheduledWithTheSpecialistOnTheProject()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         foreach ($decodedResponse->consultations->consultations as $consultation) {
@@ -565,7 +596,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theConsultationShouldBeMarkedAsConfirmed()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         if ($decodedResponse->consultations->consultations[$this->consultationId]->status->status !== 'confirmed') {
@@ -579,7 +614,11 @@ class ApiContext implements Context, KernelAwareContext
     public function theConsultationShouldBeMarkedAsDiscarded()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/project/%s', $this->app->getContainer()->get('base_uri'), $this->projectReference)
+            sprintf(
+                '%s/project/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->projectReference
+            )
         );
         $decodedResponse = json_decode($response->getBody());
         if ($decodedResponse->consultations->consultations[$this->consultationId]->status->status !== 'discarded') {
@@ -593,7 +632,11 @@ class ApiContext implements Context, KernelAwareContext
     public function iShouldHaveAPotentialSpecialist()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/potential_specialist/%s', $this->app->getContainer()->get('base_uri'), $this->specialistId)
+            sprintf(
+                '%s/potential_specialist/%s',
+                $this->app->getContainer()->get('project_management_base_uri'),
+                $this->specialistId
+            )
         );
         if (200 !== $response->getStatusCode()) {
             throw new \Exception('I do not have a Potential Specialist');
@@ -602,7 +645,7 @@ class ApiContext implements Context, KernelAwareContext
 
     private function eventShouldHaveBeenPublishedNamed(string $eventName)
     {
-        $eventPublisher = $this->app->getContainer()->get('redis_publisher');
+        $eventPublisher = $this->app->getContainer()->get('project_management_redis_publisher');
         if ($eventPublisher->hasNotPublished($eventName)) {
             throw new \Exception(
                 'The event has not been published'

@@ -39,7 +39,7 @@ class ApiContext implements Context, KernelAwareContext
         $this->guzzle->put(
             sprintf(
                 '%s/prospect/receive/%s',
-                $this->app->getContainer()->get('base_uri'),
+                $this->app->getContainer()->get('prospecting_base_uri'),
                 $this->prospectId
             ),
             [
@@ -57,7 +57,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iChaseUpTheProspect()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/chase_up', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/prospect/chase_up', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
     }
@@ -68,7 +68,7 @@ class ApiContext implements Context, KernelAwareContext
     public function theProspectRegisters()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/register', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/prospect/register', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId, 'hourly_rate' => '150']]
         );
     }
@@ -79,7 +79,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iDeclareTheProspectAsNotInterested()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/declare_not_interested', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/prospect/declare_not_interested', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
     }
@@ -90,7 +90,7 @@ class ApiContext implements Context, KernelAwareContext
     public function iGiveUpOnTheProspect()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/give_up', $this->app->getContainer()->get('base_uri')),
+            sprintf('%s/prospect/give_up', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
     }
@@ -101,7 +101,7 @@ class ApiContext implements Context, KernelAwareContext
     public function theDateAndTimeOfTheChaseUpShouldBeRecorded()
     {
         $response = $this->guzzle->get(
-            sprintf('%s/prospect/%s', $this->app->getContainer()->get('base_uri'), $this->prospectId)
+            sprintf('%s/prospect/%s', $this->app->getContainer()->get('prospecting_base_uri'), $this->prospectId)
         );
         $decodedResponse = json_decode($response->getBody());
         if (empty($decodedResponse->chase_ups)) {
@@ -143,7 +143,7 @@ class ApiContext implements Context, KernelAwareContext
 
     private function eventShouldHaveBeenPublishedNamed(string $eventName)
     {
-        $eventPublisher = $this->app->getContainer()->get('redis_publisher');
+        $eventPublisher = $this->app->getContainer()->get('prospecting_redis_publisher');
         if ($eventPublisher->hasNotPublished($eventName)) {
             throw new \Exception(
                 'The event has not been published'
@@ -154,7 +154,7 @@ class ApiContext implements Context, KernelAwareContext
     private function prospectShouldBe(string $status)
     {
         $response = $this->guzzle->get(
-            sprintf('%s/prospect/%s', $this->app->getContainer()->get('base_uri'), $this->prospectId)
+            sprintf('%s/prospect/%s', $this->app->getContainer()->get('prospecting_base_uri'), $this->prospectId)
         );
         $decodedResponse = json_decode($response->getBody());
         if ($status !== $decodedResponse->status->status) {

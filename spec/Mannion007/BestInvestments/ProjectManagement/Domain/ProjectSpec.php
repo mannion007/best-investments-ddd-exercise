@@ -12,8 +12,8 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectStatus;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistApprovedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectClosedEvent;
+use Mannion007\BestInvestments\ProjectManagement\Infrastructure\EventPublisher\InMemoryEventPublisher;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**

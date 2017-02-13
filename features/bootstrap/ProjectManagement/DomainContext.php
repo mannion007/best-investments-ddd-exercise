@@ -22,8 +22,8 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectStatus;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistCollection;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistPutOnListEvent;
+Use Mannion007\BestInvestments\ProjectManagement\Infrastructure\EventPublisher\InMemoryEventPublisher;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 
 /**
  * Defines application features from the specific context.

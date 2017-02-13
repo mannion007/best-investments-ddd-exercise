@@ -27,4 +27,4 @@ phpcs-fix:
 
 ## Run the PHP inbuilt server
 start-inbuilt-server:
-	nohup php -S 127.0.0.1:8888 -t public public/index.php >/dev/null 2>&1 &
+	nohup php -S 127.0.0.1:8888 -t public/ >/dev/null 2>&1 &

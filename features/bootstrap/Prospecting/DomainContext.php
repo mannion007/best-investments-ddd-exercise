@@ -10,8 +10,8 @@ use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectNotInterestedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRegisteredEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectStatus;
+use Mannion007\BestInvestments\Prospecting\Infrastructure\EventPublisher\InMemoryEventPublisher;
 use Mannion007\BestInvestments\Event\EventPublisher;
-use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
 
 /**
  * Defines application features from the specific context.

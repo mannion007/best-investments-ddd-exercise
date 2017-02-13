@@ -13,9 +13,10 @@ use Mannion007\BestInvestments\Prospecting\Infrastructure\Storage\RedisProspectR
 use Mannion007\BestInvestments\ProjectManagement\Listener\JoinUpSpecialistListener;
 use Mannion007\BestInvestments\ProjectManagement\Listener\PutClientProjectsOnHoldListener;
 use Mannion007\BestInvestments\ProjectManagement\Listener\ReactivateClientProjectsListener;
-use Mannion007\BestInvestments\Event\RedisEventPublisher;
 
 $parameters = [
+    'project_management_base_uri' => 'http://127.0.0.1:8888/project_management_endpoint.php',
+    'prospecting_base_uri' => 'http://127.0.0.1:8888/prospecting_endpoint.php',
     'base_uri' => 'http://127.0.0.1:8888',
     'redis_project_repository_host' => '127.0.0.1',
     'redis_project_repository_port' => 6379,
@@ -71,8 +72,14 @@ $services = [
             $container['redis_specialist_repository']
         );
     },
-    'redis_publisher' => function ($container) {
-        return new RedisEventPublisher(
+    'prospecting_redis_publisher' => function ($container) {
+        return new \Mannion007\BestInvestments\Prospecting\Infrastructure\EventPublisher\RedisEventPublisher(
+            $container['redis_event_handler_host'],
+            $container['redis_event_handler_port']
+        );
+    },
+    'project_management_redis_publisher' => function ($container) {
+        return new \Mannion007\BestInvestments\ProjectManagement\Infrastructure\EventPublisher\RedisEventPublisher(
             $container['redis_event_handler_host'],
             $container['redis_event_handler_port']
         );
