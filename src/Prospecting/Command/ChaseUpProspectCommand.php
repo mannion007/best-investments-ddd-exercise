@@ -1,6 +1,6 @@
 <?php
 
-namespace Mannion007\BestInvestments\Prospecting\Application\Command;
+namespace Mannion007\BestInvestments\Prospecting\Command;
 
 class ChaseUpProspectCommand
 {
@@ -16,8 +16,8 @@ class ChaseUpProspectCommand
         return $this->prospectId;
     }
 
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): ChaseUpProspectCommand
     {
-        return new self($payload['prospect-id']);
+        return new self($payload['prospect_id']);
     }
 }

@@ -8,11 +8,13 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\ClientId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationCollection;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationScheduledEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationStatus;
+use Mannion007\BestInvestments\ProjectManagement\Domain\Money;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Project;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectClosedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectDraftedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectStartedEvent;
+use Mannion007\BestInvestments\ProjectManagement\Domain\Specialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistApprovedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistDiscardedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectManagerId;
@@ -46,8 +48,11 @@ class DomainContext implements Context
     /** @var ConsultationId */
     private $consultationId;
 
-    /** PotentialSpecialist */
+    /** @var PotentialSpecialist */
     private $potentialSpecialist;
+
+    /** @var Specialist */
+    private $specialist;
 
     /**
      * Initializes context.
@@ -215,17 +220,17 @@ class DomainContext implements Context
     }
 
     /**
-     * @When I put the Project on hold
+     * @When The Project is put on hold
      */
-    public function iPutTheProjectOnHold()
+    public function TheProjectIsPutOnHold()
     {
         $this->project->putOnHold();
     }
 
     /**
-     * @When I reactivate the Project
+     * @When The Project is reactivated
      */
-    public function iReactivateTheProject()
+    public function TheProjectIsReactivated()
     {
         $this->project->reactivate();
     }
@@ -486,6 +491,37 @@ class DomainContext implements Context
     {
         if (is_null($this->potentialSpecialist)) {
             throw new \Exception('I do not have a Potential Specialist');
+        }
+    }
+
+    /**
+     * @Given I have put a Potential Specialist on the list
+     */
+    public function iHavePutAPotentialSpecialistOnTheList()
+    {
+        $this->potentialSpecialist =
+            PotentialSpecialist::putOnList(
+                $this->projectManagerId,
+                'Test Specialist',
+                'This is just a test'
+            );
+    }
+
+    /**
+     * @When The Potential Specialist registers
+     */
+    public function thePotentialSpecialistRegisters()
+    {
+        $this->specialist = $this->potentialSpecialist->register(new Money(100));
+    }
+
+    /**
+     * @Then The Specialist should be available for me to push to Clients
+     */
+    public function theSpecialistShouldBeAvailableToPushToClients()
+    {
+        if (is_null($this->specialist)) {
+            throw new \Exception('I do not have a Specialist available to push to clients');
         }
     }
 }

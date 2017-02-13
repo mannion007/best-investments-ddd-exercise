@@ -1,8 +1,8 @@
 <?php
 
-namespace Mannion007\BestInvestments\Prospecting\Application\Command;
+namespace Mannion007\BestInvestments\Prospecting\Command;
 
-class DeclareProspectNotInterestedCommand
+class GiveUpOnProspectCommand
 {
     private $prospectId;
 
@@ -16,8 +16,8 @@ class DeclareProspectNotInterestedCommand
         return $this->prospectId;
     }
 
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): GiveUpOnProspectCommand
     {
-        return new self($payload['prospect-id']);
+        return new self($payload['prospect_id']);
     }
 }

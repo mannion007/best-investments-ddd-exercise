@@ -57,12 +57,8 @@ class ApiContext implements Context, KernelAwareContext
     public function iChaseUpTheProspect()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/chase-up', $this->app->getContainer()->get('base_uri')),
-            [
-                'form_params' => [
-                    'prospect-id' => $this->prospectId
-                ]
-            ]
+            sprintf('%s/prospect/chase_up', $this->app->getContainer()->get('base_uri')),
+            ['form_params' => ['prospect_id' => $this->prospectId]]
         );
     }
 
@@ -73,12 +69,7 @@ class ApiContext implements Context, KernelAwareContext
     {
         $this->guzzle->post(
             sprintf('%s/prospect/register', $this->app->getContainer()->get('base_uri')),
-            [
-                'form_params' => [
-                    'prospect-id' => $this->prospectId,
-                    'hourly-rate' => '150'
-                ]
-            ]
+            ['form_params' => ['prospect_id' => $this->prospectId, 'hourly_rate' => '150']]
         );
     }
 
@@ -88,12 +79,8 @@ class ApiContext implements Context, KernelAwareContext
     public function iDeclareTheProspectAsNotInterested()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/declare-not-interested', $this->app->getContainer()->get('base_uri')),
-            [
-                'form_params' => [
-                    'prospect-id' => $this->prospectId
-                ]
-            ]
+            sprintf('%s/prospect/declare_not_interested', $this->app->getContainer()->get('base_uri')),
+            ['form_params' => ['prospect_id' => $this->prospectId]]
         );
     }
 
@@ -103,12 +90,8 @@ class ApiContext implements Context, KernelAwareContext
     public function iGiveUpOnTheProspect()
     {
         $this->guzzle->post(
-            sprintf('%s/prospect/give-up', $this->app->getContainer()->get('base_uri')),
-            [
-                'form_params' => [
-                    'prospect-id' => $this->prospectId
-                ]
-            ]
+            sprintf('%s/prospect/give_up', $this->app->getContainer()->get('base_uri')),
+            ['form_params' => ['prospect_id' => $this->prospectId]]
         );
     }
 

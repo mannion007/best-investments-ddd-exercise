@@ -1,6 +1,6 @@
 <?php
 
-namespace Mannion007\BestInvestments\ProjectManagement\Application;
+namespace Mannion007\BestInvestments\ProjectManagement\Service;
 
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectRepositoryInterface;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Project;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Mannion007\BestInvestments\Prospecting\Application\CommandHandler;
+namespace Mannion007\BestInvestments\Prospecting\CommandHandler;
 
 use Mannion007\BestInvestments\Command\CommandInterface;
 use Mannion007\BestInvestments\Command\CommandHandlerInterface;
-use Mannion007\BestInvestments\Prospecting\Application\Command\GiveUpOnProspectCommand;
+use Mannion007\BestInvestments\Prospecting\Command\ChaseUpProspectCommand;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRepositoryInterface;
 
-class GiveUpOnProspectHandler implements CommandHandlerInterface
+class ChaseUpProspectHandler implements CommandHandlerInterface
 {
     private $prospectRepository;
 
@@ -19,11 +19,11 @@ class GiveUpOnProspectHandler implements CommandHandlerInterface
 
     public function handle(CommandInterface $command): void
     {
-        $giveUpCommand = GiveUpOnProspectCommand::fromPayload($command->getPayload());
+        $chaseUpCommand = ChaseUpProspectCommand::fromPayload($command->getPayload());
         $prospect = $this->prospectRepository->getByProspectId(
-            ProspectId::fromExisting($giveUpCommand->getProspectId())
+            ProspectId::fromExisting($chaseUpCommand->getProspectId())
         );
-        $prospect->giveUp();
+        $prospect->chaseUp();
         $this->prospectRepository->save($prospect);
     }
 }

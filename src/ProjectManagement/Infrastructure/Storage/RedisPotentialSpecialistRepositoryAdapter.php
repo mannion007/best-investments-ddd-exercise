@@ -25,7 +25,7 @@ class RedisPotentialSpecialistRepositoryAdapter implements PotentialSpecialistRe
 
     public function getById(SpecialistId $specialistId): PotentialSpecialist
     {
-        $potentialSpecialist = $this->redis->get((string)$specialistId);
+        $potentialSpecialist = $this->redis->get(sprintf('potential-specialist-%s', (string)$specialistId));
         if (!$potentialSpecialist) {
             throw new \Exception(sprintf('Potential Specialist with id %s not found', $specialistId));
         }
@@ -34,14 +34,17 @@ class RedisPotentialSpecialistRepositoryAdapter implements PotentialSpecialistRe
 
     public function save(PotentialSpecialist $potentialSpecialist): void
     {
-        $this->redis->set((string)$potentialSpecialist->getSpecialistId(), serialize($potentialSpecialist));
+        $this->redis->set(
+            sprintf('potential-specialist-%s', (string)$potentialSpecialist->getSpecialistId()),
+            serialize($potentialSpecialist)
+        );
         $this->generateProjectView($potentialSpecialist);
     }
 
     private function generateProjectView(PotentialSpecialist $potentialSpecialist): void
     {
         $this->redis->set(
-            sprintf('%s-view', (string)$potentialSpecialist->getSpecialistId()),
+            sprintf('potential-specialist-%s-view', (string)$potentialSpecialist->getSpecialistId()),
             $this->serializer->serialize($potentialSpecialist, 'json')
         );
     }

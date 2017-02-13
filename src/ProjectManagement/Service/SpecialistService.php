@@ -1,6 +1,6 @@
 <?php
 
-namespace Mannion007\BestInvestments\ProjectManagement\Application;
+namespace Mannion007\BestInvestments\ProjectManagement\Service;
 
 use Mannion007\BestInvestments\ProjectManagement\Domain\Money;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialist;
@@ -33,7 +33,6 @@ class SpecialistService
         return (string)$potentialSpecialist->getSpecialistId();
     }
 
-    //Not yet tested...
     public function joinUpSpecialist(string $specialistId, string $hourlyRate): void
     {
         $potentialSpecialist = $this->potentialSpecialistRepository->getById(SpecialistId::fromExisting($specialistId));

@@ -4,6 +4,7 @@ namespace Mannion007\BestInvestments\ProjectManagement\Infrastructure\Storage;
 
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use Mannion007\BestInvestments\ProjectManagement\Domain\ClientId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Project;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectReference;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectRepositoryInterface;
@@ -30,6 +31,24 @@ class RedisProjectRepositoryAdapter implements ProjectRepositoryInterface
             throw new \Exception(sprintf('Project with reference %s not found', $reference));
         }
         return unserialize($project);
+    }
+
+    public function getBelongingTo(ClientId $clientId): array
+    {
+        /** @var Project[] $allProjects */
+        $allProjects = $this->redis->get('*');
+        $belongingToClient = array_filter(
+            $allProjects,
+            function (ClientId $clientId, Project $project) {
+                $reflected = new \ReflectionProperty($project, 'clientId');
+                $reflected->setAccessible(true);
+                return $reflected->getValue($project)->is($clientId);
+            }
+        );
+        if (empty($belongingToClient)) {
+            throw new \Exception(sprintf('No projects for Client with ID %s found', (string)$clientId));
+        }
+        return $belongingToClient;
     }
 
     public function save(Project $project): void

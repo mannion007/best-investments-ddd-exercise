@@ -25,12 +25,12 @@
         [$app->getContainer()->get('give_up_on_prospect_handler'), 'handle']
     );
 
-    /** Project Routes */
+    /** Project Management Routes */
     $app->post(
-        '/project/set-up',
+        '/project/set_up',
         function (Request $request, Response $response) {
             $projectReference = $this->get('project_service')->setUpProject(
-                $request->getParsedBody()['client-id'],
+                $request->getParsedBody()['client_id'],
                 $request->getParsedBody()['name'],
                 $request->getParsedBody()['deadline']
             );
@@ -44,8 +44,8 @@
         '/project/start',
         function (Request $request, Response $response) {
             $this->get('project_service')->startProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['project-manager-id']
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['project_manager_id']
             );
             $response = $response->withStatus(201);
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -54,11 +54,11 @@
     );
 
     $app->post(
-        '/project/add-specialist',
+        '/project/add_specialist',
         function (Request $request, Response $response) {
             $this->get('project_service')->addSpecialistToProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['specialist-id']
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['specialist_id']
             );
             $response = $response->withStatus(201);
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -67,11 +67,11 @@
     );
 
     $app->post(
-        '/project/approve-specialist',
+        '/project/approve_specialist',
         function (Request $request, Response $response) {
             $this->get('project_service')->approveSpecialistForProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['specialist-id']
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['specialist_id']
             );
             $response = $response->withStatus(201);
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -80,11 +80,11 @@
     );
 
     $app->post(
-        '/project/discard-specialist',
+        '/project/discard_specialist',
         function (Request $request, Response $response) {
             $this->get('project_service')->discardSpecialistFromProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['specialist-id']
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['specialist_id']
             );
             $response = $response->withStatus(201);
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -93,11 +93,11 @@
     );
 
     $app->post(
-        '/project/schedule-consultation',
+        '/project/schedule_consultation',
         function (Request $request, Response $response) {
             $consultationId = $this->get('project_service')->scheduleConsultationForProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['specialist-id'],
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['specialist_id'],
                 $request->getParsedBody()['time']
             );
             $response = $response->withStatus(201);
@@ -107,48 +107,26 @@
     );
 
     $app->post(
-        '/project/report-consultation',
+        '/project/report_consultation',
         function (Request $request, Response $response) {
             $this->get('project_service')->reportConsultationOnProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['consultation-id'],
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['consultation_id'],
                 $request->getParsedBody()['duration']
             );
-            $response->getBody()->write('{}');
+            $response->withJson([]);
             return $response;
         }
     );
 
     $app->post(
-        '/project/discard-consultation',
+        '/project/discard_consultation',
         function (Request $request, Response $response) {
             $this->get('project_service')->discardConsultationFromProject(
-                $request->getParsedBody()['project-reference'],
-                $request->getParsedBody()['consultation-id']
+                $request->getParsedBody()['project_reference'],
+                $request->getParsedBody()['consultation_id']
             );
-            $response->getBody()->write('{}');
-            return $response;
-        }
-    );
-
-    $app->post(
-        '/project/put-on-hold',
-        function (Request $request, Response $response) {
-            $this->get('project_service')->putProjectOnHold(
-                $request->getParsedBody()['project-reference']
-            );
-            $response->getBody()->write('{}');
-            return $response;
-        }
-    );
-
-    $app->post(
-        '/project/reactivate',
-        function (Request $request, Response $response) {
-            $this->get('project_service')->reactivateProject(
-                $request->getParsedBody()['project-reference']
-            );
-            $response->getBody()->write('{}');
+            $response->withJson([]);
             return $response;
         }
     );
@@ -157,22 +135,22 @@
         '/project/close',
         function (Request $request, Response $response) {
             $this->get('project_service')->closeProject(
-                $request->getParsedBody()['project-reference']
+                $request->getParsedBody()['project_reference']
             );
-            $response->getBody()->write('{}');
+            $response->withJson([]);
             return $response;
         }
     );
 
     $app->get(
-        '/project/{project-reference}',
+        '/project/{project_reference}',
         function (Request $request, Response $response, $args) {
             $redis = new \Redis();
             $redis->connect(
                 $this->get('redis_project_view_host'),
                 $this->get('redis_project_view_port')
             );
-            $projectView = $redis->get(sprintf('%s-view', $args['project-reference']));
+            $projectView = $redis->get(sprintf('%s-view', $args['project_reference']));
             if (!$projectView) {
                 return $response->withStatus(404);
             }
@@ -182,12 +160,11 @@
         }
     );
 
-    /** Specialist Routes */
     $app->post(
-        '/potential-specialist/put-on-list',
+        '/potential_specialist/put_on_list',
         function (Request $request, Response $response) {
             $specialistId = $this->get('specialist_service')->putPotentialSpecialistOnList(
-                $request->getParsedBody()['project-manager-id'],
+                $request->getParsedBody()['project_manager_id'],
                 $request->getParsedBody()['name'],
                 $request->getParsedBody()['notes']
             );
@@ -198,14 +175,14 @@
     );
 
     $app->get(
-        '/potential-specialist/{id}',
+        '/potential_specialist/{id}',
         function (Request $request, Response $response, $args) {
             $redis = new \Redis();
             $redis->connect(
                 $this->get('redis_potential_specialist_view_host'),
                 $this->get('redis_potential_specialist_view_port')
             );
-            $projectView = $redis->get(sprintf('%s-view', $args['id']));
+            $projectView = $redis->get(sprintf('potential-specialist-%s-view', $args['id']));
             if (!$projectView) {
                 return $response->withStatus(404);
             }
@@ -215,13 +192,32 @@
         }
     );
 
+    $app->get(
+        '/specialist/{id}',
+        function (Request $request, Response $response, $args) {
+            $redis = new \Redis();
+            $redis->connect(
+                $this->get('redis_specialist_view_host'),
+                $this->get('redis_specialist_view_port')
+            );
+            $specialistView = $redis->get(sprintf('%s-view', $args['id']));
+            if (!$specialistView) {
+                return $response->withStatus(404);
+            }
+            $response = $response->withStatus(200);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response->withJson(json_decode($specialistView));
+        }
+    );
+
+    /** Prospecting routes */
     $app->put(
-        '/prospect/receive/{prospect-id}',
+        '/prospect/receive/{prospect_id}',
         function (Request $request, Response $response, $args) {
             $command = new Command(
                 'receive_prospect',
                 [
-                    'prospect-id' => $args['prospect-id'],
+                    'prospect_id' => $args['prospect_id'],
                     'name' => $request->getParsedBody()['name'],
                     'notes' => $request->getParsedBody()['notes']
                 ]
@@ -234,12 +230,12 @@
     );
 
     $app->post(
-        '/prospect/chase-up',
+        '/prospect/chase_up',
         function (Request $request, Response $response) {
             $command = new Command(
                 'chase_up_prospect',
                 [
-                    'prospect-id' => $request->getParsedBody()['prospect-id']
+                    'prospect_id' => $request->getParsedBody()['prospect_id']
                 ]
             );
             $this->get('command_dispatcher')->dispatch($command->getName(), $command);
@@ -255,8 +251,8 @@
             $command = new Command(
                 'register_prospect',
                 [
-                    'prospect-id' => $request->getParsedBody()['prospect-id'],
-                    'hourly-rate' => $request->getParsedBody()['hourly-rate']
+                    'prospect_id' => $request->getParsedBody()['prospect_id'],
+                    'hourly_rate' => $request->getParsedBody()['hourly_rate']
                 ]
             );
             $this->get('command_dispatcher')->dispatch($command->getName(), $command);
@@ -267,12 +263,12 @@
     );
 
     $app->post(
-        '/prospect/declare-not-interested',
+        '/prospect/declare_not_interested',
         function (Request $request, Response $response) {
             $command = new Command(
                 'declare_prospect_not_interested',
                 [
-                    'prospect-id' => $request->getParsedBody()['prospect-id']
+                    'prospect_id' => $request->getParsedBody()['prospect_id']
                 ]
             );
             $this->get('command_dispatcher')->dispatch($command->getName(), $command);
@@ -283,12 +279,12 @@
     );
 
     $app->post(
-        '/prospect/give-up',
+        '/prospect/give_up',
         function (Request $request, Response $response) {
             $command = new Command(
                 'give_up_on_prospect',
                 [
-                    'prospect-id' => $request->getParsedBody()['prospect-id']
+                    'prospect_id' => $request->getParsedBody()['prospect_id']
                 ]
             );
             $this->get('command_dispatcher')->dispatch($command->getName(), $command);
@@ -299,14 +295,14 @@
     );
 
     $app->get(
-        '/prospect/{prospect-id}',
+        '/prospect/{prospect_id}',
         function (Request $request, Response $response, $args) {
             $redis = new \Redis();
             $redis->connect(
                 $this->get('redis_prospect_view_host'),
                 $this->get('redis_prospect_view_port')
             );
-            $prospectView = $redis->get(sprintf('%s-view', $args['prospect-id']));
+            $prospectView = $redis->get(sprintf('%s-view', $args['prospect_id']));
             if (!$prospectView) {
                 return $response->withStatus(404);
             }

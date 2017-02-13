@@ -1,6 +1,6 @@
 <?php
 
-namespace Mannion007\BestInvestments\Prospecting\Application\Command;
+namespace Mannion007\BestInvestments\Prospecting\Command;
 
 class RegisterProspectCommand
 {
@@ -23,8 +23,8 @@ class RegisterProspectCommand
         return $this->hourlyRate;
     }
 
-    public static function fromPayload(array $payload)
+    public static function fromPayload(array $payload): RegisterProspectCommand
     {
-        return new self($payload['prospect-id'], $payload['hourly-rate']);
+        return new self($payload['prospect_id'], $payload['hourly_rate']);
     }
 }

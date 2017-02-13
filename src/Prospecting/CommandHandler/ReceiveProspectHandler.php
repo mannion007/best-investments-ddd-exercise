@@ -1,15 +1,15 @@
 <?php
 
-namespace Mannion007\BestInvestments\Prospecting\Application\CommandHandler;
+namespace Mannion007\BestInvestments\Prospecting\CommandHandler;
 
 use Mannion007\BestInvestments\Command\CommandInterface;
 use Mannion007\BestInvestments\Command\CommandHandlerInterface;
-use Mannion007\BestInvestments\Prospecting\Application\Command\RegisterProspectCommand;
-use Mannion007\BestInvestments\Prospecting\Domain\Money;
+use Mannion007\BestInvestments\Prospecting\Command\ReceiveProspectCommand;
+use Mannion007\BestInvestments\Prospecting\Domain\Prospect;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRepositoryInterface;
 
-class RegisterProspectHandler implements CommandHandlerInterface
+class ReceiveProspectHandler implements CommandHandlerInterface
 {
     private $prospectRepository;
 
@@ -20,11 +20,12 @@ class RegisterProspectHandler implements CommandHandlerInterface
 
     public function handle(CommandInterface $command): void
     {
-        $registerCommand = RegisterProspectCommand::fromPayload($command->getPayload());
-        $prospect = $this->prospectRepository->getByProspectId(
-            ProspectId::fromExisting($registerCommand->getProspectId())
+        $receiveCommand = ReceiveProspectCommand::fromPayload($command->getPayload());
+        $prospect = Prospect::receive(
+            ProspectId::fromExisting($receiveCommand->getProspectId()),
+            $receiveCommand->getName(),
+            $receiveCommand->getNotes()
         );
-        $prospect->register(new Money($registerCommand->getHourlyRate()));
         $this->prospectRepository->save($prospect);
     }
 }

@@ -1,15 +1,18 @@
 <?php
-use Mannion007\BestInvestments\ProjectManagement\Application\ProjectService;
-use Mannion007\BestInvestments\ProjectManagement\Application\SpecialistService;
+use Mannion007\BestInvestments\ProjectManagement\Service\ProjectService;
+use Mannion007\BestInvestments\ProjectManagement\Service\SpecialistService;
 use Mannion007\BestInvestments\ProjectManagement\Infrastructure\Storage\RedisProjectRepositoryAdapter;
 use Mannion007\BestInvestments\ProjectManagement\Infrastructure\Storage\RedisPotentialSpecialistRepositoryAdapter;
 use Mannion007\BestInvestments\ProjectManagement\Infrastructure\Storage\RedisSpecialistRepositoryAdapter;
-use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\RegisterProspectHandler;
-use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\ReceiveProspectHandler;
-use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\ChaseUpProspectHandler;
-use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\DeclareProspectNotInterestedHandler;
-use Mannion007\BestInvestments\Prospecting\Application\CommandHandler\GiveUpOnProspectHandler;
+use Mannion007\BestInvestments\Prospecting\CommandHandler\RegisterProspectHandler;
+use Mannion007\BestInvestments\Prospecting\CommandHandler\ReceiveProspectHandler;
+use Mannion007\BestInvestments\Prospecting\CommandHandler\ChaseUpProspectHandler;
+use Mannion007\BestInvestments\Prospecting\CommandHandler\DeclareProspectNotInterestedHandler;
+use Mannion007\BestInvestments\Prospecting\CommandHandler\GiveUpOnProspectHandler;
 use Mannion007\BestInvestments\Prospecting\Infrastructure\Storage\RedisProspectRepositoryAdapter;
+use Mannion007\BestInvestments\ProjectManagement\Listener\JoinUpSpecialistListener;
+use Mannion007\BestInvestments\ProjectManagement\Listener\PutClientProjectsOnHoldListener;
+use Mannion007\BestInvestments\ProjectManagement\Listener\ReactivateClientProjectsListener;
 use Mannion007\BestInvestments\Event\RedisEventPublisher;
 
 $parameters = [
@@ -99,7 +102,22 @@ $services = [
             $container['redis_prospect_repository']
         );
     },
-    'command_dispatcher' => function ($container) {
+    'join_up_specialist_listener' => function ($container) {
+        return new JoinUpSpecialistListener(
+            $container['specialist_service']
+        );
+    },
+    'put_client_projects_on_hold_listener' => function ($container) {
+        return new PutClientProjectsOnHoldListener(
+            $container['redis_project_repository']
+        );
+    },
+    'reactivate_client_projects' => function ($container) {
+        return new ReactivateClientProjectsListener(
+            $container['redis_project_repository']
+        );
+    },
+    'command_dispatcher' => function () {
         return new \Symfony\Component\EventDispatcher\EventDispatcher();
     }
 ];
