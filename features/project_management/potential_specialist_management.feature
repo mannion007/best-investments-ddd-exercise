@@ -8,4 +8,3 @@ Feature:
     Given I have a Potential Specialist
     When I add the Specialist to the list
     Then I should have a Potential Specialist
-    And The Prospecting Team should be notified that a Potential Specialist has been put on the list

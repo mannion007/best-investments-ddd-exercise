@@ -10,7 +10,6 @@ Feature:
     And The Specialist is approved for the Project
     When I schedule a Consultation with the Specialist on the Project
     Then The Consultation should be scheduled with the Specialist on the Project
-    And The Project Management Team should be notified that the Consultation has been scheduled
 
   Scenario: Reporting a Consultation
     Given I have an active Project

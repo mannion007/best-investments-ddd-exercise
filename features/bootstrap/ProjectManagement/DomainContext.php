@@ -201,6 +201,7 @@ class DomainContext implements Context
     {
         $deadline = \DateTime::createFromFormat('Y-m-d', $deadline);
         $this->project = Project::setUp($this->clientId, $name, $deadline);
+        $this->eventShouldHaveBeenPublishedNamed(ProjectDraftedEvent::EVENT_NAME);
     }
 
     /**
@@ -209,6 +210,7 @@ class DomainContext implements Context
     public function iAssignTheProjectManagerToTheProject()
     {
         $this->project->start($this->projectManagerId);
+        $this->eventShouldHaveBeenPublishedNamed(ProjectStartedEvent::EVENT_NAME);
     }
 
     /**
@@ -217,6 +219,7 @@ class DomainContext implements Context
     public function iCloseTheProject()
     {
         $this->project->close();
+        $this->eventShouldHaveBeenPublishedNamed(ProjectClosedEvent::EVENT_NAME);
     }
 
     /**
@@ -249,6 +252,7 @@ class DomainContext implements Context
     public function iApproveTheSpecialist()
     {
         $this->project->approveSpecialist($this->specialistId);
+        $this->eventShouldHaveBeenPublishedNamed(SpecialistApprovedEvent::EVENT_NAME);
     }
 
     /**
@@ -257,6 +261,7 @@ class DomainContext implements Context
     public function iDiscardTheSpecialist()
     {
         $this->project->discardSpecialist($this->specialistId);
+        $this->eventShouldHaveBeenPublishedNamed(SpecialistDiscardedEvent::EVENT_NAME);
     }
 
     /**
@@ -357,6 +362,7 @@ class DomainContext implements Context
             'Test Specialist',
             'This is just a test'
         );
+        $this->eventShouldHaveBeenPublishedNamed(SpecialistPutOnListEvent::EVENT_NAME);
     }
 
     /**
@@ -371,6 +377,7 @@ class DomainContext implements Context
         if (!$consultations->contains($this->consultationId)) {
             throw new \Exception('The Consultation has not been scheduled on the Project');
         }
+        $this->eventShouldHaveBeenPublishedNamed(ConsultationScheduledEvent::EVENT_NAME);
     }
 
     /**
@@ -380,80 +387,6 @@ class DomainContext implements Context
     {
         if ($this->project->isNot(ProjectStatus::ON_HOLD)) {
             throw new \Exception('The Project is not on hold');
-        }
-    }
-
-    /**
-     * @Then A Senior Project Manager should be notified that the Project has been drafted
-     */
-    public function aSeniorProjectManagerShouldBeNotifiedThatTheProjectHasBeenDrafted()
-    {
-        if ($this->eventPublisher->hasNotPublished(ProjectDraftedEvent::EVENT_NAME)) {
-            throw new \Exception('A Senior Project Manager has not been notified that the Project has been drafted');
-        }
-    }
-
-    /**
-     * @Then The Invoicing Team should be notified that the Project has closed
-     */
-    public function theInvoicingTeamShouldBeNotifiedThatTheProjectHasClosed()
-    {
-        if ($this->eventPublisher->hasNotPublished(ProjectClosedEvent::EVENT_NAME)) {
-            throw new \Exception('The Invoicing Team has not been notified the Project has closed');
-        }
-    }
-
-    /**
-     * @Then The Project Management team should be notified that the Specialist has been approved
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenApproved()
-    {
-        if ($this->eventPublisher->hasNotPublished(SpecialistApprovedEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified the Specialist has been approved');
-        }
-    }
-
-    /**
-     * @Then The Project Management team should be notified that the Specialist has been discarded
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenDiscarded()
-    {
-        if ($this->eventPublisher->hasNotPublished(SpecialistDiscardedEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified the Specialist has been discarded');
-        }
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Consultation has been scheduled
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheConsultationHasBeenScheduled()
-    {
-        if ($this->eventPublisher->hasNotPublished(ConsultationScheduledEvent::EVENT_NAME)) {
-            throw new \Exception(
-                'The Project Management Team has not been notified the Consultation has been scheduled'
-            );
-        }
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Project has started
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProjectHasStarted()
-    {
-        if ($this->eventPublisher->hasNotPublished(ProjectStartedEvent::EVENT_NAME)) {
-            throw new \Exception(
-                'The Project Management Team has not been notified the Project has started'
-            );
-        }
-    }
-
-    /**
-     * @Then The Prospecting Team should be notified that a Potential Specialist has been put on the list
-     */
-    public function theProspectingTeamShouldBeNotifiedThatAPotentialSpecialistHasBeenPutOnTheList()
-    {
-        if ($this->eventPublisher->hasNotPublished(SpecialistPutOnListEvent::EVENT_NAME)) {
-            throw new \Exception('The Prospecting team was not notified that the Specialist was put on the list.');
         }
     }
 
@@ -522,6 +455,15 @@ class DomainContext implements Context
     {
         if (is_null($this->specialist)) {
             throw new \Exception('I do not have a Specialist available to push to clients');
+        }
+    }
+
+    private function eventShouldHaveBeenPublishedNamed(string $eventName)
+    {
+        if ($this->eventPublisher->hasNotPublished($eventName)) {
+            throw new \Exception(
+                'The event has not been published'
+            );
         }
     }
 }

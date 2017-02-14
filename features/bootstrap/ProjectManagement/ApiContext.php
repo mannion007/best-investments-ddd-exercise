@@ -254,6 +254,7 @@ class ApiContext implements Context, KernelAwareContext
         );
         $decodedResponse = json_decode($response->getBody()->getContents());
         $this->projectReference = $decodedResponse->project_reference;
+        $this->eventShouldHaveBeenPublishedNamed('project_drafted');
     }
 
     /**
@@ -270,6 +271,7 @@ class ApiContext implements Context, KernelAwareContext
                 ]
             ]
         );
+        $this->eventShouldHaveBeenPublishedNamed('project_started');
     }
 
     /**
@@ -285,6 +287,7 @@ class ApiContext implements Context, KernelAwareContext
                 ]
             ]
         );
+        $this->eventShouldHaveBeenPublishedNamed('project_closed');
     }
 
     /**
@@ -317,6 +320,7 @@ class ApiContext implements Context, KernelAwareContext
                 ]
             ]
         );
+        $this->eventShouldHaveBeenPublishedNamed('specialist_approved');
     }
 
     /**
@@ -333,6 +337,7 @@ class ApiContext implements Context, KernelAwareContext
                 ]
             ]
         );
+        $this->eventShouldHaveBeenPublishedNamed('specialist_discarded');
     }
 
     /**
@@ -489,6 +494,8 @@ class ApiContext implements Context, KernelAwareContext
         );
         $decodedResponse = json_decode($response->getBody()->getContents());
         $this->consultationId = $decodedResponse->consultation_id;
+
+        $this->eventShouldHaveBeenPublishedNamed('consultation_scheduled');
     }
 
     /**
@@ -511,6 +518,7 @@ class ApiContext implements Context, KernelAwareContext
         );
         $decodedResponse = json_decode($response->getBody()->getContents());
         $this->specialistId = $decodedResponse->specialist_id;
+        $this->eventShouldHaveBeenPublishedNamed('specialist_put_on_list');
     }
 
     /**
@@ -532,62 +540,6 @@ class ApiContext implements Context, KernelAwareContext
             }
         }
         throw new \Exception('The Consultation has not been scheduled with the Specialist on the Project');
-    }
-
-    /**
-     * @Then A Senior Project Manager should be notified that the Project has been drafted
-     */
-    public function aSeniorProjectManagerShouldBeNotifiedThatTheProjectHasBeenDrafted()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('project_drafted');
-    }
-
-    /**
-     * @Then The Invoicing Team should be notified that the Project has closed
-     */
-    public function theInvoicingTeamShouldBeNotifiedThatTheProjectHasClosed()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('project_closed');
-    }
-
-    /**
-     * @Then The Project Management team should be notified that the Specialist has been approved
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenApproved()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('specialist_approved');
-    }
-
-    /**
-     * @Then The Project Management team should be notified that the Specialist has been discarded
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheSpecialistHasBeenDiscarded()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('specialist_discarded');
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Consultation has been scheduled
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheConsultationHasBeenScheduled()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('consultation_scheduled');
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Project has started
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProjectHasStarted()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('project_started');
-    }
-
-    /**
-     * @Then The Prospecting Team should be notified that a Potential Specialist has been put on the list
-     */
-    public function theProspectingTeamShouldBeNotifiedThatAPotentialSpecialistHasBeenPutOnTheList()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('specialist_put_on_list');
     }
 
     /**
