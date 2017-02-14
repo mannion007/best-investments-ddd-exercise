@@ -63,6 +63,7 @@ class DomainContext implements Context
     public function theProspectRegisters()
     {
         $this->prospect->register(new Money(100));
+        $this->eventShouldHaveBeenPublishedNamed(ProspectRegisteredEvent::EVENT_NAME);
     }
 
     /**
@@ -71,6 +72,7 @@ class DomainContext implements Context
     public function iDeclareTheProspectAsNotInterested()
     {
         $this->prospect->declareNotInterested();
+        $this->eventShouldHaveBeenPublishedNamed(ProspectNotInterestedEvent::EVENT_NAME);
     }
 
     /**
@@ -79,6 +81,7 @@ class DomainContext implements Context
     public function iGiveUpOnTheProspect()
     {
         $this->prospect->giveUp();
+        $this->eventShouldHaveBeenPublishedNamed(ProspectGivenUpOnEvent::EVENT_NAME);
     }
 
     /**
@@ -122,40 +125,17 @@ class DomainContext implements Context
         }
     }
 
-    /**
-     * @Then The Project Management Team should be notified that the Prospect has registered
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProspectHasRegistered()
-    {
-        if ($this->eventPublisher->hasNotPublished(ProspectRegisteredEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified that Prospect has registered');
-        }
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Prospect is not interested
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProspectIsNotInterested()
-    {
-        if ($this->eventPublisher->hasNotPublished(ProspectNotInterestedEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified that Prospect is not interested');
-        }
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Prospect has been given up on
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProspectHasBeenGivenUpOn()
-    {
-        if ($this->eventPublisher->hasNotPublished(ProspectGivenUpOnEvent::EVENT_NAME)) {
-            throw new \Exception('The Project Management Team has not been notified that Prospect is not reachable');
-        }
-    }
-
     private function getStatus(): ProspectStatus
     {
         $reflected = new \ReflectionProperty($this->prospect, 'status');
         $reflected->setAccessible(true);
         return $reflected->getValue($this->prospect);
+    }
+
+    private function eventShouldHaveBeenPublishedNamed(string $eventName)
+    {
+        if ($this->eventPublisher->hasNotPublished($eventName)) {
+            throw new \Exception(sprintf('An event with name %s event has not been published', $eventName));
+        }
     }
 }

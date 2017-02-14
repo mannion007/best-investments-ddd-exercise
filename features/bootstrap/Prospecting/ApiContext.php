@@ -71,6 +71,7 @@ class ApiContext implements Context, KernelAwareContext
             sprintf('%s/prospect/register', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId, 'hourly_rate' => '150']]
         );
+        $this->eventShouldHaveBeenPublishedNamed('prospect_registered');
     }
 
     /**
@@ -82,6 +83,7 @@ class ApiContext implements Context, KernelAwareContext
             sprintf('%s/prospect/declare_not_interested', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
+        $this->eventShouldHaveBeenPublishedNamed('prospect_not_interested');
     }
 
     /**
@@ -93,6 +95,7 @@ class ApiContext implements Context, KernelAwareContext
             sprintf('%s/prospect/give_up', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
+        $this->eventShouldHaveBeenPublishedNamed('prospect_given_up_on');
     }
 
     /**
@@ -115,30 +118,6 @@ class ApiContext implements Context, KernelAwareContext
     public function theProspectShouldBeMarkedAs(string $status)
     {
         $this->prospectShouldBe($status);
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Prospect has registered
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProspectHasRegistered()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('prospect_registered');
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Prospect is not interested
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProspectIsNotInterested()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('prospect_not_interested');
-    }
-
-    /**
-     * @Then The Project Management Team should be notified that the Prospect has been given up on
-     */
-    public function theProjectManagementTeamShouldBeNotifiedThatTheProspectHasBeenGivenUpOn()
-    {
-        $this->eventShouldHaveBeenPublishedNamed('prospect_given_up_on');
     }
 
     private function eventShouldHaveBeenPublishedNamed(string $eventName)
