@@ -27,4 +27,5 @@ phpcs-fix:
 
 ## Run the PHP inbuilt server
 start-inbuilt-server:
+	kill `ps -A | grep '[1]27.0.0.1:8888' | awk '{print $1}'` >/dev/null 2>&1
 	nohup php -S 127.0.0.1:8888 -t public/ >/dev/null 2>&1 &
