@@ -2,8 +2,8 @@
 
 namespace Mannion007\BestInvestments\Sales\Infrastructure\EventPublisher;
 
-use Mannion007\BestInvestments\Event\EventPublisherInterface;
-use Mannion007\BestInvestments\Event\EventInterface;
+use Mannion007\Interfaces\Event\EventInterface;
+use Mannion007\Interfaces\EventPublisher\EventPublisherInterface;
 
 class InMemoryEventPublisher implements EventPublisherInterface
 {

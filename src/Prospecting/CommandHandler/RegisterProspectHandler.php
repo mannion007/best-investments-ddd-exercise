@@ -2,8 +2,8 @@
 
 namespace Mannion007\BestInvestments\Prospecting\CommandHandler;
 
-use Mannion007\BestInvestments\Command\CommandInterface;
-use Mannion007\BestInvestments\Command\CommandHandlerInterface;
+use Mannion007\Interfaces\Command\CommandInterface;
+use Mannion007\Interfaces\CommandHandler\CommandHandlerInterface;
 use Mannion007\BestInvestments\Prospecting\Command\RegisterProspectCommand;
 use Mannion007\BestInvestments\Prospecting\Domain\Money;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;

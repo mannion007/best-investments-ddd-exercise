@@ -4,6 +4,8 @@ namespace Mannion007\BestInvestments\Prospecting\Infrastructure\Storage;
 
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use Mannion007\Interfaces\EventPublisher\EventPublisherInterface;
+use Mannion007\BestInvestments\Event\TransactionSucceededEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\Prospect;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRepositoryInterface;
@@ -16,11 +18,15 @@ class RedisProspectRepositoryAdapter implements ProspectRepositoryInterface
     /** @var Serializer */
     private $serializer;
 
-    public function __construct(string $host, int $port)
+    /** @var EventPublisherInterface */
+    private $eventPublisher;
+
+    public function __construct(string $host, int $port, EventPublisherInterface $eventPublisher)
     {
         $this->redis = new \Redis();
         $this->redis->connect($host, $port);
         $this->serializer = SerializerBuilder::create()->build();
+        $this->eventPublisher = $eventPublisher;
     }
 
     public function getByProspectId(ProspectId $prospectId): Prospect
@@ -36,6 +42,7 @@ class RedisProspectRepositoryAdapter implements ProspectRepositoryInterface
     {
         $this->redis->set((string)$prospect->getProspectId(), serialize($prospect));
         $this->generateProjectView($prospect);
+        $this->eventPublisher->publish(new TransactionSucceededEvent());
     }
 
     private function generateProjectView(Prospect $prospect): void

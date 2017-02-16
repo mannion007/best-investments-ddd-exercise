@@ -71,7 +71,6 @@ class ApiContext implements Context, KernelAwareContext
             sprintf('%s/prospect/register', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId, 'hourly_rate' => '150']]
         );
-        $this->eventShouldHaveBeenPublishedNamed('prospect_registered');
     }
 
     /**
@@ -83,7 +82,6 @@ class ApiContext implements Context, KernelAwareContext
             sprintf('%s/prospect/declare_not_interested', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
-        $this->eventShouldHaveBeenPublishedNamed('prospect_not_interested');
     }
 
     /**
@@ -95,7 +93,6 @@ class ApiContext implements Context, KernelAwareContext
             sprintf('%s/prospect/give_up', $this->app->getContainer()->get('prospecting_base_uri')),
             ['form_params' => ['prospect_id' => $this->prospectId]]
         );
-        $this->eventShouldHaveBeenPublishedNamed('prospect_given_up_on');
     }
 
     /**
@@ -117,6 +114,19 @@ class ApiContext implements Context, KernelAwareContext
      */
     public function theProspectShouldBeMarkedAs(string $status)
     {
+        switch ($status) {
+            case 'registered':
+                $this->eventShouldHaveBeenPublishedNamed('prospect_registered');
+                break;
+            case 'not interested':
+                $this->eventShouldHaveBeenPublishedNamed('prospect_not_interested');
+                break;
+            case 'not reachable':
+                $this->eventShouldHaveBeenPublishedNamed('prospect_given_up_on');
+                break;
+            default:
+                throw new \Exception(sprintf('Unknown status: %s', $status));
+        }
         $this->prospectShouldBe($status);
     }
 

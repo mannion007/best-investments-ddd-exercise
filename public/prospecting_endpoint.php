@@ -1,7 +1,7 @@
 <?php
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Message\ResponseInterface as Response;
-    use Mannion007\BestInvestments\Event\EventPublisher;
+    use Mannion007\BestInvestments\EventPublisher\EventPublisher;
     use Mannion007\BestInvestments\Command\Command;
 
     require __DIR__ . '/../vendor/autoload.php';
@@ -9,7 +9,7 @@
     /** Bootstrap */
     $settings = require __DIR__ . '/../app/settings.php';
     $app = new \Slim\App($settings);
-    EventPublisher::registerPublisher($app->getContainer()->get('project_management_redis_publisher'));
+    EventPublisher::registerPublisher($app->getContainer()->get('buffer_publisher'));
 
     /** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
     $dispatcher = $app->getContainer()->get('command_dispatcher');

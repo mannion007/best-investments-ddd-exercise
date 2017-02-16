@@ -4,6 +4,8 @@ namespace Mannion007\BestInvestments\ProjectManagement\Infrastructure\Storage;
 
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use Mannion007\Interfaces\EventPublisher\EventPublisherInterface;
+use Mannion007\BestInvestments\Event\TransactionSucceededEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ClientId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Project;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectReference;
@@ -17,11 +19,15 @@ class RedisProjectRepositoryAdapter implements ProjectRepositoryInterface
     /** @var Serializer */
     private $serializer;
 
-    public function __construct(string $host, int $port)
+    /** @var EventPublisherInterface */
+    private $eventPublisher;
+
+    public function __construct(string $host, int $port, EventPublisherInterface $eventPublisher)
     {
         $this->redis = new \Redis();
         $this->redis->connect($host, $port);
         $this->serializer = SerializerBuilder::create()->build();
+        $this->eventPublisher = $eventPublisher;
     }
 
     public function getByReference(ProjectReference $reference): Project
@@ -55,6 +61,7 @@ class RedisProjectRepositoryAdapter implements ProjectRepositoryInterface
     {
         $this->redis->set((string)$project->getReference(), serialize($project));
         $this->generateProjectView($project);
+        $this->eventPublisher->publish(new TransactionSucceededEvent());
     }
 
     private function generateProjectView(Project $project)

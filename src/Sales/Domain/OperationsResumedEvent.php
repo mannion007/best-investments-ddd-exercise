@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\Sales\Domain;
 
-use Mannion007\BestInvestments\Event\EventInterface;
+use Mannion007\Interfaces\Event\EventInterface;
 
 class OperationsResumedEvent implements EventInterface
 {

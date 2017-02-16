@@ -2,8 +2,8 @@
 
 namespace Mannion007\BestInvestments\ProjectManagement\Listener;
 
-use Mannion007\BestInvestments\Event\EventInterface;
-use Mannion007\BestInvestments\Event\EventListenerInterface;
+use Mannion007\Interfaces\Event\EventInterface;
+use Mannion007\Interfaces\EventListener\EventListenerInterface;
 use Mannion007\BestInvestments\ProjectManagement\Service\SpecialistService;
 
 class JoinUpSpecialistListener implements EventListenerInterface

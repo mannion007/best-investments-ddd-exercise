@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\ProjectManagement\Domain;
 
-use Mannion007\BestInvestments\Event\EventInterface;
+use Mannion007\Interfaces\Event\EventInterface;
 
 class ConsultationScheduledEvent implements EventInterface
 {

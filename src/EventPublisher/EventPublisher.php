@@ -1,6 +1,9 @@
 <?php
 
-namespace Mannion007\BestInvestments\Event;
+namespace Mannion007\BestInvestments\EventPublisher;
+
+use Mannion007\Interfaces\Event\EventInterface;
+use Mannion007\Interfaces\EventPublisher\EventPublisherInterface;
 
 class EventPublisher
 {
@@ -9,7 +12,6 @@ class EventPublisher
 
     public static function registerPublisher(EventPublisherInterface $publisher)
     {
-        /** This needs to be called before any requests can be handled */
         self::$publisher = $publisher;
     }
 

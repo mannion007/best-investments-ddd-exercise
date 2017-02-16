@@ -2,7 +2,7 @@
 
 namespace Mannion007\BestInvestments\ProjectManagement\Domain;
 
-use Mannion007\BestInvestments\Event\EventPublisher;
+use Mannion007\BestInvestments\EventPublisher\EventPublisher;
 
 class PotentialSpecialist
 {

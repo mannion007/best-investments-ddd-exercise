@@ -10,8 +10,8 @@ use Mannion007\BestInvestments\Prospecting\Domain\ProspectNotInterestedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectReceivedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRegisteredEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectStatus;
-use Mannion007\BestInvestments\Event\InMemoryEventPublisher;
-use Mannion007\BestInvestments\Event\EventPublisher;
+use Mannion007\BestInvestments\Prospecting\Infrastructure\EventPublisher\InMemoryEventPublisher;
+use Mannion007\BestInvestments\EventPublisher\EventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**

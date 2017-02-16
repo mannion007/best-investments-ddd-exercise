@@ -11,7 +11,7 @@ use Mannion007\BestInvestments\Prospecting\Domain\ProspectNotInterestedEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRegisteredEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectStatus;
 use Mannion007\BestInvestments\Prospecting\Infrastructure\EventPublisher\InMemoryEventPublisher;
-use Mannion007\BestInvestments\Event\EventPublisher;
+use Mannion007\BestInvestments\EventPublisher\EventPublisher;
 
 /**
  * Defines application features from the specific context.
@@ -63,7 +63,6 @@ class DomainContext implements Context
     public function theProspectRegisters()
     {
         $this->prospect->register(new Money(100));
-        $this->eventShouldHaveBeenPublishedNamed(ProspectRegisteredEvent::EVENT_NAME);
     }
 
     /**
@@ -72,7 +71,6 @@ class DomainContext implements Context
     public function iDeclareTheProspectAsNotInterested()
     {
         $this->prospect->declareNotInterested();
-        $this->eventShouldHaveBeenPublishedNamed(ProspectNotInterestedEvent::EVENT_NAME);
     }
 
     /**
@@ -81,7 +79,6 @@ class DomainContext implements Context
     public function iGiveUpOnTheProspect()
     {
         $this->prospect->giveUp();
-        $this->eventShouldHaveBeenPublishedNamed(ProspectGivenUpOnEvent::EVENT_NAME);
     }
 
     /**
@@ -104,15 +101,18 @@ class DomainContext implements Context
         switch ($expected) {
             case 'registered':
                 $status = ProspectStatus::REGISTERED;
+                $this->eventShouldHaveBeenPublishedNamed(ProspectRegisteredEvent::EVENT_NAME);
                 break;
             case 'in progress':
                 $status = ProspectStatus::IN_PROGRESS;
                 break;
             case 'not interested':
                 $status = ProspectStatus::NOT_INTERESTED;
+                $this->eventShouldHaveBeenPublishedNamed(ProspectNotInterestedEvent::EVENT_NAME);
                 break;
             case 'not reachable':
                 $status = ProspectStatus::NOT_REACHABLE;
+                $this->eventShouldHaveBeenPublishedNamed(ProspectGivenUpOnEvent::EVENT_NAME);
                 break;
             default:
                 throw new \Exception(sprintf('Unknown status type:', $expected));

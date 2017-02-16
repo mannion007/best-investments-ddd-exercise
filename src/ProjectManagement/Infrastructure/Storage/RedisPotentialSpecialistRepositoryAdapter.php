@@ -4,6 +4,8 @@ namespace Mannion007\BestInvestments\ProjectManagement\Infrastructure\Storage;
 
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use Mannion007\Interfaces\EventPublisher\EventPublisherInterface;
+use Mannion007\BestInvestments\Event\TransactionSucceededEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialistRepositoryInterface;
@@ -16,11 +18,15 @@ class RedisPotentialSpecialistRepositoryAdapter implements PotentialSpecialistRe
     /** @var Serializer */
     private $serializer;
 
-    public function __construct(string $host, int $port)
+    /** @var EventPublisherInterface */
+    private $eventPublisher;
+
+    public function __construct(string $host, int $port, EventPublisherInterface $eventPublisher)
     {
         $this->redis = new \Redis();
         $this->redis->connect($host, $port);
         $this->serializer = SerializerBuilder::create()->build();
+        $this->eventPublisher = $eventPublisher;
     }
 
     public function getById(SpecialistId $specialistId): PotentialSpecialist
@@ -39,6 +45,7 @@ class RedisPotentialSpecialistRepositoryAdapter implements PotentialSpecialistRe
             serialize($potentialSpecialist)
         );
         $this->generateProjectView($potentialSpecialist);
+        $this->eventPublisher->publish(new TransactionSucceededEvent());
     }
 
     private function generateProjectView(PotentialSpecialist $potentialSpecialist): void

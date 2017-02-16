@@ -12,7 +12,7 @@ use Mannion007\BestInvestments\Sales\Domain\OperationsResumedEvent;
 use Mannion007\BestInvestments\Sales\Domain\PackageDuration;
 use Mannion007\BestInvestments\Sales\Domain\ServiceSuspendedEvent;
 use Mannion007\BestInvestments\Sales\Infrastructure\EventPublisher\InMemoryEventPublisher;
-use Mannion007\BestInvestments\Event\EventPublisher;
+use Mannion007\BestInvestments\EventPublisher\EventPublisher;
 use PhpSpec\ObjectBehavior;
 
 /**
