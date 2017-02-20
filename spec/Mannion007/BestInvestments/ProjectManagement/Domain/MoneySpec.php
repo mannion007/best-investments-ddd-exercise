@@ -47,4 +47,9 @@ class MoneySpec extends ObjectBehavior
     {
         $this->isLessThan(new Money(1000, Currency::gbp()))->shouldBe(true);
     }
+
+    function it_casts_to_a_string_in_the_correct_format()
+    {
+        $this->__toString()->shouldBe('GBP 1.00');
+    }
 }

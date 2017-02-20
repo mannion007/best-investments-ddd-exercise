@@ -59,6 +59,11 @@ class Money
 
     public function __toString()
     {
-        return (string)$this->amount;
+        return sprintf(
+            "%s %s.%s",
+            strtoupper((string)$this->currency),
+            substr($this->amount, 0, strlen($this->amount) - 2),
+            substr($this->amount, -1 * 2)
+        );
     }
 }
