@@ -15,12 +15,7 @@ class Currency
     {
         return new self('gbp');
     }
-
-    public static function usd()
-    {
-        return new self('usd');
-    }
-
+    
     public function isNot(Currency $other)
     {
         return !$this->is($other);
