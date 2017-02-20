@@ -2,6 +2,7 @@
 
 namespace spec\Mannion007\BestInvestments\ProjectManagement\Domain;
 
+use Mannion007\BestInvestments\ProjectManagement\Domain\Currency;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Money;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Specialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
@@ -19,7 +20,7 @@ class SpecialistSpec extends ObjectBehavior
         $this->beConstructedWith(
             SpecialistId::fromExisting('test-specialist-id'),
             'Test Specialist',
-            new Money(100)
+            new Money(100, Currency::gbp())
         );
     }
 

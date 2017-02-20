@@ -8,6 +8,7 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\ClientId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationCollection;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationScheduledEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationStatus;
+use Mannion007\BestInvestments\ProjectManagement\Domain\Currency;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Money;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Project;
@@ -445,7 +446,7 @@ class DomainContext implements Context
      */
     public function thePotentialSpecialistRegisters()
     {
-        $this->specialist = $this->potentialSpecialist->register(new Money(100));
+        $this->specialist = $this->potentialSpecialist->register(new Money(100, Currency::gbp()));
     }
 
     /**
