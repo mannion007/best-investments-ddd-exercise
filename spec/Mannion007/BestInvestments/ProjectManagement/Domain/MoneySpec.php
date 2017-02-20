@@ -47,14 +47,4 @@ class MoneySpec extends ObjectBehavior
     {
         $this->isLessThan(new Money(1000, Currency::gbp()))->shouldBe(true);
     }
-
-    function it_is_not_equal_to_when_given_a_different_amount()
-    {
-        $this->isEqualTo(new Money(400, Currency::gbp()))->shouldBe(false);
-    }
-
-    function it_is_equal_to_when_given_the_same_amount()
-    {
-        $this->isEqualTo($this)->shouldBe(true);
-    }
 }

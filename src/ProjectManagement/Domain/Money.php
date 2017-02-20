@@ -49,11 +49,6 @@ class Money
         return $this->compareWith($other) < 1;
     }
 
-    public function isEqualTo(Money $other): bool
-    {
-        return $this->compareWith($other) === 0;
-    }
-
     private function compareWith(Money $other): int
     {
         if ($other->getCurrency()->isNot($this->getCurrency())) {
