@@ -2,6 +2,8 @@
 
 namespace Mannion007\BestInvestments\ProjectManagement\Domain;
 
+use Mannion007\BestInvestments\EventPublisher\EventPublisher;
+
 class Consultation
 {
     private $consultationId;
@@ -32,6 +34,13 @@ class Consultation
         }
         $this->duration = $this->duration->add(new TimeIncrement($durationMinutes));
         $this->status = ConsultationStatus::confirmed();
+        EventPublisher::publish(
+            new ConsultationReportedEvent(
+                (string)$this->projectReference,
+                (string)$this->consultationId,
+                $this->duration->inMinutes()
+            )
+        );
     }
 
     public function discard()
@@ -40,6 +49,12 @@ class Consultation
             throw new \Exception('Cannot discard a report on a consultation that is not open');
         }
         $this->status = ConsultationStatus::discarded();
+        EventPublisher::publish(
+            new ConsultationDiscardedEvent(
+                (string)$this->projectReference,
+                (string)$this->consultationId
+            )
+        );
     }
 
     public function isNot($status): bool

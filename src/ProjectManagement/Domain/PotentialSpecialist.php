@@ -22,7 +22,12 @@ class PotentialSpecialist
         $this->notes = $notes;
 
         EventPublisher::publish(
-            new SpecialistPutOnListEvent($this->specialistId, $this->projectManagerId, $this->name, $this->notes)
+            new SpecialistPutOnListEvent(
+                (string)$this->specialistId,
+                (string)$this->projectManagerId,
+                $this->name,
+                $this->notes
+            )
         );
     }
 

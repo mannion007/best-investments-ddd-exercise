@@ -254,7 +254,6 @@ class ApiContext implements Context, KernelAwareContext
         );
         $decodedResponse = json_decode($response->getBody()->getContents());
         $this->projectReference = $decodedResponse->project_reference;
-        $this->eventShouldHaveBeenPublishedNamed('project_drafted');
     }
 
     /**
@@ -271,7 +270,6 @@ class ApiContext implements Context, KernelAwareContext
                 ]
             ]
         );
-        $this->eventShouldHaveBeenPublishedNamed('project_started');
     }
 
     /**
@@ -287,7 +285,6 @@ class ApiContext implements Context, KernelAwareContext
                 ]
             ]
         );
-        $this->eventShouldHaveBeenPublishedNamed('project_closed');
     }
 
     /**
@@ -359,6 +356,7 @@ class ApiContext implements Context, KernelAwareContext
         if ($decodedResponse->status->status !== 'draft') {
             throw new \Exception('The Project is not marked as a draft');
         }
+        $this->eventShouldHaveBeenPublishedNamed('project_drafted');
     }
 
     /**
@@ -377,6 +375,7 @@ class ApiContext implements Context, KernelAwareContext
         if ($decodedResponse->status->status !== 'active') {
             throw new \Exception('The project is not marked as active');
         }
+        $this->eventShouldHaveBeenPublishedNamed('project_started');
     }
 
     /**
@@ -395,6 +394,7 @@ class ApiContext implements Context, KernelAwareContext
         if ($decodedResponse->status->status !== 'closed') {
             throw new \Exception('The project is not marked as closed');
         }
+        $this->eventShouldHaveBeenPublishedNamed('project_closed');
     }
 
     /**

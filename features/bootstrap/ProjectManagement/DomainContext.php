@@ -3,9 +3,11 @@
 namespace Mannion007\BestInvestmentsBehat\ProjectManagement;
 
 use Behat\Behat\Context\Context;
+use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationDiscardedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ClientId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationCollection;
+use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationReportedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationScheduledEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationStatus;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Currency;
@@ -202,7 +204,6 @@ class DomainContext implements Context
     {
         $deadline = \DateTime::createFromFormat('Y-m-d', $deadline);
         $this->project = Project::setUp($this->clientId, $name, $deadline);
-        $this->eventShouldHaveBeenPublishedNamed(ProjectDraftedEvent::EVENT_NAME);
     }
 
     /**
@@ -211,7 +212,6 @@ class DomainContext implements Context
     public function iAssignTheProjectManagerToTheProject()
     {
         $this->project->start($this->projectManagerId);
-        $this->eventShouldHaveBeenPublishedNamed(ProjectStartedEvent::EVENT_NAME);
     }
 
     /**
@@ -220,7 +220,6 @@ class DomainContext implements Context
     public function iCloseTheProject()
     {
         $this->project->close();
-        $this->eventShouldHaveBeenPublishedNamed(ProjectClosedEvent::EVENT_NAME);
     }
 
     /**
@@ -253,7 +252,6 @@ class DomainContext implements Context
     public function iApproveTheSpecialist()
     {
         $this->project->approveSpecialist($this->specialistId);
-        $this->eventShouldHaveBeenPublishedNamed(SpecialistApprovedEvent::EVENT_NAME);
     }
 
     /**
@@ -262,7 +260,6 @@ class DomainContext implements Context
     public function iDiscardTheSpecialist()
     {
         $this->project->discardSpecialist($this->specialistId);
-        $this->eventShouldHaveBeenPublishedNamed(SpecialistDiscardedEvent::EVENT_NAME);
     }
 
     /**
@@ -273,6 +270,7 @@ class DomainContext implements Context
         if ($this->project->isNot(ProjectStatus::DRAFT)) {
             throw new \Exception('The project is not drafted');
         }
+        $this->eventShouldHaveBeenPublishedNamed(ProjectDraftedEvent::EVENT_NAME);
     }
 
     /**
@@ -283,6 +281,7 @@ class DomainContext implements Context
         if ($this->project->isNot(ProjectStatus::ACTIVE)) {
             throw new \Exception('The Project is not active');
         }
+        $this->eventShouldHaveBeenPublishedNamed(ProjectStartedEvent::EVENT_NAME);
     }
 
     /**
@@ -293,6 +292,7 @@ class DomainContext implements Context
         if ($this->project->isNot(ProjectStatus::CLOSED)) {
             throw new \Exception('The Project is not closed');
         }
+        $this->eventShouldHaveBeenPublishedNamed(ProjectClosedEvent::EVENT_NAME);
     }
 
     /**
@@ -329,6 +329,7 @@ class DomainContext implements Context
         if (!$approvedSpecialists->contains($this->specialistId)) {
             throw new \Exception('The Specialist is not marked as approved');
         }
+        $this->eventShouldHaveBeenPublishedNamed(SpecialistApprovedEvent::EVENT_NAME);
     }
 
     /**
@@ -343,6 +344,7 @@ class DomainContext implements Context
         if (!$discardedSpecialists->contains($this->specialistId)) {
             throw new \Exception('The Specialist is not marked as discarded');
         }
+        $this->eventShouldHaveBeenPublishedNamed(SpecialistDiscardedEvent::EVENT_NAME);
     }
 
     /**
@@ -397,6 +399,7 @@ class DomainContext implements Context
     public function theConsultationShouldBeMarkedAsConfirmed()
     {
         $this->theConsultationShouldBeMarkedAs(ConsultationStatus::CONFIRMED);
+        $this->eventShouldHaveBeenPublishedNamed(ConsultationReportedEvent::EVENT_NAME);
     }
 
     /**
@@ -405,6 +408,7 @@ class DomainContext implements Context
     public function theConsultationShouldBeMarkedAsDiscarded()
     {
         $this->theConsultationShouldBeMarkedAs(ConsultationStatus::DISCARDED);
+        $this->eventShouldHaveBeenPublishedNamed(ConsultationDiscardedEvent::EVENT_NAME);
     }
 
     private function theConsultationShouldBeMarkedAs(string $expected)

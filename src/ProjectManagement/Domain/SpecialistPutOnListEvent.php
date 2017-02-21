@@ -15,8 +15,8 @@ class SpecialistPutOnListEvent implements EventInterface
     private $occurredAt;
 
     public function __construct(
-        SpecialistId $specialistId,
-        ProjectManagerId $projectManagerId,
+        string $specialistId,
+        string $projectManagerId,
         string $name,
         string $notes,
         \DateTimeInterface $occurredAt = null

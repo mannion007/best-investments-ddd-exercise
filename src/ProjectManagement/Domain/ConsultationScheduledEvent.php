@@ -13,8 +13,12 @@ class ConsultationScheduledEvent implements EventInterface
     private $time;
     private $occurredAt;
 
-    public function __construct($reference, $specialistId, $time, \DateTimeInterface $occurredAt = null)
-    {
+    public function __construct(
+        string $reference,
+        string$specialistId,
+        string $time,
+        \DateTimeInterface $occurredAt = null
+    ) {
         $this->reference = $reference;
         $this->specialistId = $specialistId;
         $this->time = $time;

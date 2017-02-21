@@ -12,7 +12,7 @@ class SpecialistDiscardedEvent implements EventInterface
     private $specialistId;
     private $occurredAt;
 
-    public function __construct($reference, $specialistId, \DateTimeInterface $occurredAt = null)
+    public function __construct(string $reference, string $specialistId, \DateTimeInterface $occurredAt = null)
     {
         $this->reference = $reference;
         $this->specialistId = $specialistId;

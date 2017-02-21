@@ -12,8 +12,11 @@ class ProjectStartedEvent implements EventInterface
     private $projectManagerId;
     private $occurredAt;
 
-    public function __construct($reference, $projectManagerId, \DateTimeInterface $occurredAt = null)
-    {
+    public function __construct(
+        string $reference,
+        string $projectManagerId,
+        \DateTimeInterface $occurredAt = null
+    ) {
         $this->reference = $reference;
         $this->projectManagerId = $projectManagerId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
