@@ -60,6 +60,9 @@ class Package
 
     public function transferInHours(TransferTime $timeToTransferIn): void
     {
+        if ($this->status->is(PackageStatus::ACTIVE)) {
+            throw new \Exception('Cannot transfer hours into an Active Package');
+        }
         if ($this->status->is(PackageStatus::EXPIRED)) {
             throw new \Exception('Cannot transfer hours into an Expired Package');
         }

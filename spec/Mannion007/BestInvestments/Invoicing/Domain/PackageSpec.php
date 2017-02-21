@@ -29,14 +29,9 @@ class PackageSpec extends ObjectBehavior
         $this->beConstructedWith($reference, $clientId, $nominalHours);
     }
 
-    function it_does_not_attach_a_consultation_when_it_is_not_active(
-        ClientId $clientId,
-        TimeIncrement $nominalHours,
-        Consultation $consultation
-    ) {
-        $tomorrow = (new \DateTime())->modify('+1 day');
-        $reference = new PackageReference('test-ref', $tomorrow, PackageDuration::sixMonths());
-        $this->beConstructedWith($reference, $clientId, $nominalHours);
+    function it_does_not_attach_a_consultation_when_it_is_not_active(Consultation $consultation)
+    {
+        $this->makeInactive();
         $this->shouldThrow(new \Exception('Cannot attach a consultation to a Package that is not Active'))
             ->during('attach', [$consultation]);
     }
@@ -70,6 +65,13 @@ class PackageSpec extends ObjectBehavior
         $this->attach($consultation);
     }
 
+    function it_does_not_transfer_in_hours_when_it_is_active()
+    {
+        $timeToTransferIn = new TransferTime(ClientId::fromExisting('client1'), 30);
+        $this->shouldThrow(new \Exception('Cannot transfer hours into an Active Package'))
+            ->during('transferInHours', [$timeToTransferIn]);
+    }
+
     function it_does_not_transfer_in_hours_when_it_is_expired()
     {
         $this->makeExpired();
@@ -80,6 +82,7 @@ class PackageSpec extends ObjectBehavior
 
     function it_does_not_transfer_in_hours_from_a_different_client()
     {
+        $this->makeInactive();
         $timeToTransferIn = new TransferTime(ClientId::fromExisting('client2'), 30);
         $this->shouldThrow(new \Exception('Cannot transfer hours into an Package that belongs to a different client'))
             ->during('transferInHours', [$timeToTransferIn]);
@@ -87,6 +90,7 @@ class PackageSpec extends ObjectBehavior
 
     function it_transfers_in_hours()
     {
+        $this->makeInactive();
         $timeToTransferIn = new TransferTime(ClientId::fromExisting('client1'), 30);
         $this->transferInHours($timeToTransferIn);
     }
@@ -101,6 +105,14 @@ class PackageSpec extends ObjectBehavior
     {
         $this->makeExpired();
         $this->transferOutHours();
+    }
+
+    private function makeInactive()
+    {
+        $started = PackageStatus::determineFrom(new \DateTime('+1 day'), PackageDuration::sixMonths());
+        $status = new \ReflectionProperty($this->getWrappedObject(), 'status');
+        $status->setAccessible(true);
+        $status->setValue($this->getWrappedObject(), $started);
     }
 
     private function makeExpired()
