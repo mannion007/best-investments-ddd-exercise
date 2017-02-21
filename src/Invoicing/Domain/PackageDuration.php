@@ -30,4 +30,9 @@ class PackageDuration
     {
         return (string)$this->months;
     }
+
+    public static function fromExisting(string $existing): PackageDuration
+    {
+        return new self((int)$existing);
+    }
 }
