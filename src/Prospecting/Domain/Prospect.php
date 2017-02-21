@@ -51,7 +51,7 @@ class Prospect
             throw new \Exception('Cannot declare not interested for Prospect that is not In Progress');
         }
         $this->status = ProspectStatus::notInterested();
-        EventPublisher::publish(new ProspectNotInterestedEvent($this->prospectId));
+        EventPublisher::publish(new ProspectNotInterestedEvent((string)$this->prospectId));
     }
 
     public function giveUp()
@@ -60,7 +60,7 @@ class Prospect
             throw new \Exception('Cannot give up on Prospect that is not In Progress');
         }
         $this->status = ProspectStatus::notReachable();
-        EventPublisher::publish(new ProspectGivenUpOnEvent($this->prospectId));
+        EventPublisher::publish(new ProspectGivenUpOnEvent((string)$this->prospectId));
     }
 
     public function getProspectId(): ProspectId

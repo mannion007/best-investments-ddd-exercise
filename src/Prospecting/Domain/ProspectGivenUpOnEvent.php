@@ -11,7 +11,7 @@ class ProspectGivenUpOnEvent implements EventInterface
     private $prospectId;
     private $occurredAt;
 
-    public function __construct($prospectId, \DateTimeInterface $occurredAt = null)
+    public function __construct(string $prospectId, \DateTimeInterface $occurredAt = null)
     {
         $this->prospectId = $prospectId;
         $this->occurredAt = is_null($occurredAt) ? new \DateTime() : $occurredAt;
@@ -34,9 +34,7 @@ class ProspectGivenUpOnEvent implements EventInterface
 
     public function getPayload(): array
     {
-        return [
-            'prospect_id' => $this->prospectId
-        ];
+        return ['prospect_id' => $this->prospectId];
     }
 
     public static function fromPayload(array $payload): ProspectGivenUpOnEvent

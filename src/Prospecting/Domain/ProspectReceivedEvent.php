@@ -13,8 +13,12 @@ class ProspectReceivedEvent implements EventInterface
     private $notes;
     private $occurredAt;
 
-    public function __construct($prospectId, $name, $notes, \DateTimeInterface $occurredAt = null)
-    {
+    public function __construct(
+        string $prospectId,
+        string $name,
+        string $notes,
+        \DateTimeInterface $occurredAt = null
+    ) {
         $this->prospectId = $prospectId;
         $this->name = $name;
         $this->notes = $notes;
