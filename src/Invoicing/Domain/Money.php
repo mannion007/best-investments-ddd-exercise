@@ -28,6 +28,9 @@ class Money
 
     public function add(Money $other): Money
     {
+        if ($other->getCurrency()->isNot($this->getCurrency())) {
+            throw new \InvalidArgumentException('Cannot add because currencies do not match');
+        }
         return new static($this->amount + $other->getAmount(), $this->currency);
     }
 
