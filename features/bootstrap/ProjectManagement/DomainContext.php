@@ -3,6 +3,7 @@
 namespace Mannion007\BestInvestmentsBehat\ProjectManagement;
 
 use Behat\Behat\Context\Context;
+use Mannion007\ValueObjects\Currency;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationDiscardedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ClientId;
@@ -10,8 +11,7 @@ use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationCollection;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationReportedEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationScheduledEvent;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ConsultationStatus;
-use Mannion007\BestInvestments\ProjectManagement\Domain\Currency;
-use Mannion007\BestInvestments\ProjectManagement\Domain\Money;
+use Mannion007\BestInvestments\ProjectManagement\Domain\HourlyRate;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\Project;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectClosedEvent;
@@ -450,7 +450,7 @@ class DomainContext implements Context
      */
     public function thePotentialSpecialistRegisters()
     {
-        $this->specialist = $this->potentialSpecialist->register(new Money(100, Currency::gbp()));
+        $this->specialist = $this->potentialSpecialist->register(new HourlyRate(100, Currency::gbp()));
     }
 
     /**
