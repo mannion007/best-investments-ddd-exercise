@@ -2,12 +2,13 @@
 
 namespace Mannion007\BestInvestments\Prospecting\CommandHandler;
 
+use Mannion007\BestInvestments\Prospecting\Domain\HourlyRate;
 use Mannion007\Interfaces\Command\CommandInterface;
 use Mannion007\Interfaces\CommandHandler\CommandHandlerInterface;
 use Mannion007\BestInvestments\Prospecting\Command\RegisterProspectCommand;
-use Mannion007\BestInvestments\Prospecting\Domain\Money;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectRepositoryInterface;
+use Mannion007\ValueObjects\Currency;
 
 class RegisterProspectHandler implements CommandHandlerInterface
 {
@@ -24,7 +25,7 @@ class RegisterProspectHandler implements CommandHandlerInterface
         $prospect = $this->prospectRepository->getByProspectId(
             ProspectId::fromExisting($registerCommand->getProspectId())
         );
-        $prospect->register(new Money($registerCommand->getHourlyRate()));
+        $prospect->register(new HourlyRate($registerCommand->getHourlyRate(), Currency::gbp()));
         $this->prospectRepository->save($prospect);
     }
 }

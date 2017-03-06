@@ -3,7 +3,7 @@
 namespace Mannion007\BestInvestmentsBehat\Prospecting;
 
 use Behat\Behat\Context\Context;
-use Mannion007\BestInvestments\Prospecting\Domain\Money;
+use Mannion007\BestInvestments\Prospecting\Domain\HourlyRate;
 use Mannion007\BestInvestments\Prospecting\Domain\Prospect;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectGivenUpOnEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectId;
@@ -12,6 +12,7 @@ use Mannion007\BestInvestments\Prospecting\Domain\ProspectRegisteredEvent;
 use Mannion007\BestInvestments\Prospecting\Domain\ProspectStatus;
 use Mannion007\BestInvestments\Prospecting\Infrastructure\EventPublisher\InMemoryEventPublisher;
 use Mannion007\BestInvestments\EventPublisher\EventPublisher;
+use Mannion007\ValueObjects\Currency;
 
 /**
  * Defines application features from the specific context.
@@ -62,7 +63,7 @@ class DomainContext implements Context
      */
     public function theProspectRegisters()
     {
-        $this->prospect->register(new Money(100));
+        $this->prospect->register(new HourlyRate(100, Currency::gbp()));
     }
 
     /**

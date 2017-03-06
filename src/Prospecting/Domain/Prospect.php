@@ -35,7 +35,7 @@ class Prospect
         $this->chaseUps[] = new \DateTime();
     }
 
-    public function register(Money $hourlyRate)
+    public function register(HourlyRate $hourlyRate)
     {
         if ($this->status->isNot(ProspectStatus::IN_PROGRESS)) {
             throw new \Exception('Cannot register Prospect that is not In Progress');
