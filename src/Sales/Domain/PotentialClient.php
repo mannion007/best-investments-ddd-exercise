@@ -15,7 +15,7 @@ class PotentialClient
         $this->contactDetails = $contactDetails;
     }
 
-    public function signUp(Money $payAsYouGoRate)
+    public function signUp(PayAsYouGoRate $payAsYouGoRate)
     {
         return new Client($this->clientId, $this->name, $this->contactDetails, $payAsYouGoRate);
     }

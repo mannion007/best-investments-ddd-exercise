@@ -4,7 +4,9 @@ namespace spec\Mannion007\BestInvestments\Sales\Domain;
 
 use Mannion007\BestInvestments\Sales\Domain\ContactDetails;
 use Mannion007\BestInvestments\Sales\Domain\Money;
+use Mannion007\BestInvestments\Sales\Domain\PayAsYouGoRate;
 use Mannion007\BestInvestments\Sales\Domain\PotentialClient;
+use Mannion007\ValueObjects\Currency;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -29,6 +31,7 @@ class PotentialClientSpec extends ObjectBehavior
 
     function it_signs_up()
     {
-        $this->signUp(new Money(100))->shouldBeAnInstanceOf('Mannion007\BestInvestments\Sales\Domain\Client');
+        $this->signUp(new PayAsYouGoRate(100, Currency::gbp()))
+            ->shouldBeAnInstanceOf('Mannion007\BestInvestments\Sales\Domain\Client');
     }
 }

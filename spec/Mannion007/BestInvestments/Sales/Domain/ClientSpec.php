@@ -7,12 +7,13 @@ use Mannion007\BestInvestments\Sales\Domain\Client;
 use Mannion007\BestInvestments\Sales\Domain\ClientSignedUpEvent;
 use Mannion007\BestInvestments\Sales\Domain\ClientStatus;
 use Mannion007\BestInvestments\Sales\Domain\ContactDetails;
-use Mannion007\BestInvestments\Sales\Domain\Money;
 use Mannion007\BestInvestments\Sales\Domain\OperationsResumedEvent;
 use Mannion007\BestInvestments\Sales\Domain\PackageDuration;
+use Mannion007\BestInvestments\Sales\Domain\PayAsYouGoRate;
 use Mannion007\BestInvestments\Sales\Domain\ServiceSuspendedEvent;
 use Mannion007\BestInvestments\Sales\Infrastructure\EventPublisher\InMemoryEventPublisher;
 use Mannion007\BestInvestments\EventPublisher\EventPublisher;
+use Mannion007\ValueObjects\Currency;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -34,7 +35,7 @@ class ClientSpec extends ObjectBehavior
             ClientId::fromExisting('test-client-id'),
             'Test Client',
             ContactDetails::fromExisting('07790567765'),
-            new Money(100)
+            new PayAsYouGoRate(100, Currency::gbp())
         );
     }
 

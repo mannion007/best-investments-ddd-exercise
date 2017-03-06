@@ -12,8 +12,12 @@ class Client
     private $payAsYouGoRate;
     private $status;
 
-    public function __construct(ClientId $clientId, string $name, ContactDetails $contactDetails, Money $payAsYouGoRate)
-    {
+    public function __construct(
+        ClientId $clientId,
+        string $name,
+        ContactDetails $contactDetails,
+        PayAsYouGoRate $payAsYouGoRate
+    ) {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->contactDetails = $contactDetails;
