@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "67c3947c97c17b3e594dee9208cfc34e",
-    "content-hash": "fbaf547a825dd082583119487b3f1857",
+    "hash": "b2fc4f303ac01b351b77d2ea5b4882e7",
+    "content-hash": "8f3d7c990c091d1a6aa1ca64e17ea09b",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -411,6 +411,47 @@
             ],
             "description": "A handful of useful interfaces",
             "time": "2017-02-15 17:25:03"
+        },
+        {
+            "name": "mannion007/value-objects",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mannion007/value-objects.git",
+                "reference": "51ce11d01f41b29e2a9fbc240df1133abd14c6fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mannion007/value-objects/zipball/51ce11d01f41b29e2a9fbc240df1133abd14c6fb",
+                "reference": "51ce11d01f41b29e2a9fbc240df1133abd14c6fb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "php": ">=7.1",
+                "phpspec/phpspec": "^3.2",
+                "squizlabs/php_codesniffer": "^2.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mannion007\\ValueObjects\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Mannion",
+                    "email": "mannion007@gmail.com"
+                }
+            ],
+            "description": "A collection of generic value objects",
+            "support": {
+                "source": "https://github.com/mannion007/value-objects/tree/master",
+                "issues": "https://github.com/mannion007/value-objects/issues"
+            },
+            "time": "2017-03-06 11:54:57"
         },
         {
             "name": "nikic/fast-route",
@@ -3141,8 +3182,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "mannion007/value-objects": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
