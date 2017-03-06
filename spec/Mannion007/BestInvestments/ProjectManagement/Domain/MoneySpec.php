@@ -18,38 +18,47 @@ class MoneySpec extends ObjectBehavior
         $this->shouldHaveType(Money::class);
     }
 
-    function it_adds()
+    public function it_does_not_initialize_with_a_negative_amount()
     {
-        $this->add(new Money(50, Currency::gbp()))->getAmount()->shouldBe(150);
+        $this->beConstructedWith(-100, Currency::gbp());
+        $this->shouldThrow(new \InvalidArgumentException('Cannot create a negative amount of money'))
+            ->duringInstantiation();
     }
 
-    function it_subtracts()
+    public function it_adds()
     {
-        $this->subtract(new Money(50, Currency::gbp()))->getAmount()->shouldBe(50);
+        $this->add(new Money(45, Currency::gbp()))->__toString()->shouldBe('GBP 1.45');
     }
 
-    function it_is_not_more_than_when_given_a_greater_amount()
+    public function it_subtracts()
     {
-        $this->isMoreThan(new Money(500000, Currency::gbp()))->shouldBe(false);
+        $this->subtract(new Money(45, Currency::gbp()))->__toString()->shouldBe('GBP .55');
     }
 
-    function it_is_more_than_when_given_a_lesser_amount()
+    public function it_does_not_subtract_an_amount_that_would_make_it_negative()
     {
-        $this->isMoreThan(new Money(5, Currency::gbp()))->shouldBe(true);
+        $this->shouldThrow(
+            new \InvalidArgumentException('Cannot subtract an amount that would result in a negative amount of money')
+        )->during('subtract', [new Money(101, Currency::gbp())]);
     }
 
-    function it_is_not_less_than_when_given_a_lesser_amount()
+    public function it_is_more_than_when_compared_to_a_lesser_amount()
     {
-        $this->isLessThan(new Money(1, Currency::gbp()))->shouldBe(false);
+        $this->shouldBeMoreThan(new Money(50, Currency::gbp()));
     }
 
-    function it_is_less_than_when_given_a_greater_amount()
+    public function it_is_not_more_than_when_compared_to_a_greater_amount()
     {
-        $this->isLessThan(new Money(1000, Currency::gbp()))->shouldBe(true);
+        $this->shouldNotBeMoreThan(new Money(500, Currency::gbp()));
     }
 
-    function it_casts_to_a_string_in_the_correct_format()
+    public function it_is_less_than_when_compared_to_a_greater_amount()
     {
-        $this->__toString()->shouldBe('GBP 1.00');
+        $this->shouldBeLessThan(new Money(500, Currency::gbp()));
+    }
+
+    public function it_is_not_less_than_when_compared_to_a_lesser_amount()
+    {
+        $this->shouldNotBeLessThan(new Money(50, Currency::gbp()));
     }
 }

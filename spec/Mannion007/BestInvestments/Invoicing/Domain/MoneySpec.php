@@ -18,9 +18,9 @@ class MoneySpec extends ObjectBehavior
         $this->beConstructedWith(100, Currency::gbp());
     }
 
-    public function it_initializes()
+    function it_is_initializable()
     {
-        new Money(100, Currency::gbp());
+        $this->shouldHaveType(Money::class);
     }
 
     public function it_does_not_initialize_with_a_negative_amount()

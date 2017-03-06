@@ -9,6 +9,9 @@ class Money
 
     public function __construct(int $amount, Currency $currency)
     {
+        if ($amount < 0) {
+            throw new \InvalidArgumentException('Cannot create a negative amount of money');
+        }
         $this->amount = $amount;
         $this->currency = $currency;
     }
@@ -35,6 +38,11 @@ class Money
     {
         if ($other->getCurrency()->isNot($this->getCurrency())) {
             throw new \Exception('Cannot subtract because currencies do not match');
+        }
+        if ($this->amount - $other->getAmount() < 0) {
+            throw new \InvalidArgumentException(
+                'Cannot subtract an amount that would result in a negative amount of money'
+            );
         }
         return new static($this->amount - $other->getAmount(), $this->currency);
     }
