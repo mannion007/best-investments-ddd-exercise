@@ -28,14 +28,19 @@ class PackageReference
         return $this->startDate;
     }
 
-    public function getDuration(): string
+    public function getMonths(): PackageDuration
     {
         return $this->months;
     }
 
-    public function getMonths(): PackageDuration
+    public static function fromExisting(string $existing): PackageReference
     {
-        return $this->months;
+        $parts = explode('-', $existing);
+        return new self(
+            $parts[0],
+            new \DateTime(sprintf('%s-%s-01', $parts[1], $parts[2])),
+            PackageDuration::fromExisting($parts[3])
+        );
     }
 
     public function __toString()
