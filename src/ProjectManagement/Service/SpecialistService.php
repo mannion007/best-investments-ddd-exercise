@@ -2,7 +2,8 @@
 
 namespace Mannion007\BestInvestments\ProjectManagement\Service;
 
-use Mannion007\BestInvestments\ProjectManagement\Domain\Money;
+use Mannion007\ValueObjects\Currency;
+use Mannion007\BestInvestments\ProjectManagement\Domain\HourlyRate;
 use Mannion007\BestInvestments\ProjectManagement\Domain\PotentialSpecialist;
 use Mannion007\BestInvestments\ProjectManagement\Domain\SpecialistId;
 use Mannion007\BestInvestments\ProjectManagement\Domain\ProjectManagerId;
@@ -39,6 +40,6 @@ class SpecialistService
         if (!$potentialSpecialist) {
             throw new \Exception(sprintf('Potential Specialist with id %s not found', $specialistId));
         }
-        $this->specialistRepository->save($potentialSpecialist->register(new Money($hourlyRate)));
+        $this->specialistRepository->save($potentialSpecialist->register(new HourlyRate($hourlyRate, Currency::gbp())));
     }
 }

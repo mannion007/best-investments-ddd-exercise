@@ -8,7 +8,7 @@ class Specialist
     private $name;
     private $hourlyRate;
 
-    public function __construct(SpecialistId $specialistId, string $name, Money $hourlyRate)
+    public function __construct(SpecialistId $specialistId, string $name, HourlyRate $hourlyRate)
     {
         $this->specialistId = $specialistId;
         $this->name = $name;

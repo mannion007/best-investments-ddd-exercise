@@ -39,7 +39,7 @@ class PotentialSpecialist
         return new self($projectManagerId, $name, $notes);
     }
 
-    public function register(Money $hourlyRate): Specialist
+    public function register(HourlyRate $hourlyRate): Specialist
     {
         return new Specialist($this->specialistId, $this->name, $hourlyRate);
     }
