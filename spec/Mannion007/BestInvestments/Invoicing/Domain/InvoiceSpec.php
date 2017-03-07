@@ -8,6 +8,7 @@ use Mannion007\BestInvestments\Invoicing\Domain\ConsultationId;
 use Mannion007\BestInvestments\Invoicing\Domain\Consultation;
 use Mannion007\BestInvestments\Invoicing\Domain\InvoiceStatus;
 use Mannion007\BestInvestments\Invoicing\Domain\Money;
+use Mannion007\BestInvestments\Invoicing\Domain\PayAsYouGoRate;
 use Mannion007\BestInvestments\Invoicing\Domain\PaymentReference;
 use Mannion007\BestInvestments\Invoicing\Domain\TimeIncrement;
 use PhpSpec\ObjectBehavior;
@@ -21,7 +22,7 @@ class InvoiceSpec extends ObjectBehavior
 {
     function let(
         Consultation $consultation,
-        Money $payAsYouGoRate,
+        PayAsYouGoRate $payAsYouGoRate,
         ClientId $clientId,
         ConsultationId $consultationId,
         TimeIncrement $timeIncrement
@@ -35,7 +36,7 @@ class InvoiceSpec extends ObjectBehavior
 
     function it_does_not_initialise_with_a_consultation_that_is_not_billable(
         Consultation $consultation,
-        Money $payAsYouGoRate
+        PayAsYouGoRate $payAsYouGoRate
     ) {
         $consultation->isNotBillable()->willReturn(true);
         $this->beConstructedWith($consultation, $payAsYouGoRate);

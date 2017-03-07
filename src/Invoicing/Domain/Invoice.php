@@ -11,7 +11,7 @@ class Invoice
     private $paymentReference;
     private $status;
 
-    public function __construct(Consultation $consultation, Money $payAsYouGoRate)
+    public function __construct(Consultation $consultation, PayAsYouGoRate $payAsYouGoRate)
     {
         if ($consultation->isNotBillable()) {
             throw new \Exception('Consultation is not billable');
