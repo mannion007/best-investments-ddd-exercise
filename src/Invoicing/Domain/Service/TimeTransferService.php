@@ -17,7 +17,7 @@ class TimeTransferService
     {
         $fromPackage = $this->packageRepository->getByReference($fromReference);
         $toPackage = $this->packageRepository->getByReference($toReference);
-        $hours = $fromPackage->transferOutHours();
-        $toPackage->transferInHours($hours);
+        $hours = $fromPackage->transferOutRemainingHours();
+        $toPackage->transferInExtraHours($hours);
     }
 }

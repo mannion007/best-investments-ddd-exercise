@@ -5,39 +5,62 @@ namespace Mannion007\BestInvestments\Invoicing\Domain;
 class PackageStatus
 {
     const ACTIVE = 'active';
-    const INACTIVE = 'inactive';
+    const NOT_YET_STARTED = 'not yet started';
     const EXPIRED = 'expired';
 
+    /** @var string */
     private $status;
 
-    private function __construct(\DateTimeInterface $startDate, PackageDuration $duration)
+    private function __construct(string $status)
+    {
+        $this->status = $status;
+    }
+
+    public static function determineFrom(\DateTimeInterface $startDate, PackageLength $length): PackageStatus
     {
         $currentDate = new \DateTime();
-        $expiryDate = new \DateTime('@'.strtotime('+'.(string)$duration.' month', $startDate->getTimestamp()));
 
-        if ($currentDate < $startDate) {
-            $this->status = self::INACTIVE;
+        if ($startDate > $currentDate) {
+            return new self(self::NOT_YET_STARTED);
         }
-        if ($currentDate > $startDate) {
-            $this->status = self::ACTIVE;
+
+        $expiresAt = \DateTimeImmutable::createFromMutable($startDate)
+            ->add(new \DateInterval(sprintf('P%sM', (string)$length)));
+
+        if ($expiresAt < $currentDate) {
+            return new self(self::EXPIRED);
         }
-        if ($currentDate > $expiryDate) {
-            $this->status = self::EXPIRED;
-        }
+
+        return new self(self::ACTIVE);
     }
 
-    public static function determineFrom(\DateTimeInterface $startDate, PackageDuration $duration): PackageStatus
+    public static function active(): PackageStatus
     {
-        return new self($startDate, $duration);
+        return new self(self::ACTIVE);
     }
 
-    public function isNot(string $status): bool
+    public static function notYetStarted(): PackageStatus
     {
-        return !$this->is($status);
+        return new self(self::NOT_YET_STARTED);
     }
 
-    public function is(string $status): bool
+    public static function expired(): PackageStatus
     {
-        return $status === $this->status;
+        return new self(self::EXPIRED);
+    }
+
+    public function isNot(PackageStatus $other): bool
+    {
+        return !$this->is($other);
+    }
+
+    public function is(PackageStatus $other): bool
+    {
+        return (string)$this === (string)$other;
+    }
+
+    public function __toString()
+    {
+        return (string)$this->status;
     }
 }

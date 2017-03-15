@@ -4,80 +4,96 @@ namespace Mannion007\BestInvestments\Invoicing\Domain;
 
 class Package
 {
+    /** @var PackageReference */
     private $reference;
+
+    /** @var ClientId */
     private $clientId;
+
+    /** @var int */
     private $nominalHours;
-    private $attachedConsultations = [];
-    private $transferredInHours;
+
+    /** @var TimeIncrement */
+    private $availableHours;
+
+    /** @var TransferTime */
     private $transferredOutHours;
+
+    /** @var TimeIncrement[] */
+    private $attachedConsultations = [];
+
+    /** @var PackageStatus */
     private $status;
 
-    public function __construct(
-        PackageReference $reference,
-        ClientId $clientId,
-        TimeIncrement $nominalHours
-    ) {
+    public function __construct(PackageReference $reference, ClientId $clientId, int $nominalHours)
+    {
         $this->reference = $reference;
         $this->clientId = $clientId;
         $this->nominalHours = $nominalHours;
-        $this->transferredInHours = new TimeIncrement(0);
-        $this->transferredOutHours = new TransferTime($this->clientId, 0);
-        $this->status = PackageStatus::determineFrom($reference->getStartDate(), $reference->getMonths());
+        $this->availableHours = new TimeIncrement($nominalHours * 60);
+        $this->transferredOutHours = new TimeIncrement(0);
+        $this->status = PackageStatus::determineFrom(
+            $this->reference->getStartDate(),
+            $this->reference->getLength()
+        );
     }
 
-    public function attach(Consultation $consultation)
+    public function getReference(): PackageReference
     {
-        if ($this->status->isNot(PackageStatus::ACTIVE)) {
-            throw new \Exception('Cannot attach a consultation to a Package that is not Active');
+        return $this->reference;
+    }
+
+    public function attach(OutstandingConsultation $outstandingConsultation)
+    {
+        if ($this->status->isNot(PackageStatus::active())) {
+            throw new \InvalidArgumentException(
+                'Cannot attach a Consultation to a Package that is not active'
+            );
         }
-        if ($this->getUsedHours()->add($consultation->getDuration())->isMoreThan($this->getRemainingHours())) {
-            throw new \Exception('Package does not have enough hours remaining');
+        if ($outstandingConsultation->getClientId()->isNot($this->clientId)) {
+            throw new \InvalidArgumentException(
+                'Cannot attach a Consultation which belongs to a different Client'
+            );
         }
-        if ($this->clientId->isNot($consultation->getClientId())) {
-            throw new \Exception('Cannot attach a Consultation for another Client');
+        if ($outstandingConsultation->getDuration()->isMoreThan($this->getRemainingHours())) {
+            throw new \InvalidArgumentException(
+                'Cannot attach a Consultation with a duration which exceeds the available hours of a Package'
+            );
         }
-        $this->attachedConsultations[] = $consultation;
+        $this->attachedConsultations[(string)$outstandingConsultation->getConsultationId()]
+            = $outstandingConsultation->getDuration();
     }
 
     private function getRemainingHours(): TimeIncrement
     {
-        return $this->getAvailableHours()->minus($this->getUsedHours())->minus($this->transferredOutHours->getTime());
+        $usedHours = new TimeIncrement(0);
+        foreach ($this->attachedConsultations as $duration) {
+            $usedHours = $usedHours->add($duration);
+        }
+        return $this->availableHours->minus($usedHours)->minus($this->transferredOutHours);
     }
 
-    private function getAvailableHours(): TimeIncrement
+    public function transferOutRemainingHours(): TransferTime
     {
-        return $this->nominalHours->add($this->transferredInHours);
+        if ($this->status->isNot(PackageStatus::expired())) {
+            throw new \Exception('Cannot transfer out remaining hours from a Package that is not expired');
+        }
+        $this->transferredOutHours = new TimeIncrement($this->getRemainingHours()->inMinutes());
+        return new TransferTime($this->transferredOutHours->inMinutes(), $this->clientId);
     }
 
-    private function getUsedHours(): TimeIncrement
+    public function transferInExtraHours(TransferTime $extraHours): void
     {
-        $consultationHours = new TimeIncrement(0);
-        foreach ($this->attachedConsultations as $attachedConsultation) {
-            $consultationHours = $consultationHours->add($attachedConsultation->getDuration());
+        if ($this->status->isNot(PackageStatus::notYetStarted())) {
+            throw new \Exception(
+                'Cannot transfer extra hours into a package that has already started'
+            );
         }
-        return $consultationHours->minus($this->transferredOutHours->getTime());
-    }
-
-    public function transferInHours(TransferTime $timeToTransferIn): void
-    {
-        if ($this->status->is(PackageStatus::ACTIVE)) {
-            throw new \Exception('Cannot transfer hours into an Active Package');
+        if ($extraHours->doesNotBelongTo($this->clientId)) {
+            throw new \Exception(
+                'Cannot transfer extra hours in from a Package that belongs to a different Client'
+            );
         }
-        if ($this->status->is(PackageStatus::EXPIRED)) {
-            throw new \Exception('Cannot transfer hours into an Expired Package');
-        }
-        if ($timeToTransferIn->doesNotBelongTo($this->clientId)) {
-            throw new \Exception('Cannot transfer hours into an Package that belongs to a different client');
-        }
-        $this->transferredInHours = $this->transferredInHours->add($timeToTransferIn->getTime());
-    }
-
-    public function transferOutHours(): TransferTime
-    {
-        if ($this->status->isNot(PackageStatus::EXPIRED)) {
-            throw new \Exception('Cannot transfer hours out of a Package that has not yet Expired');
-        }
-        $this->transferredOutHours = new TransferTime($this->clientId, $this->getRemainingHours()->inMinutes());
-        return $this->transferredOutHours;
+        $this->availableHours = $this->availableHours->add($extraHours);
     }
 }

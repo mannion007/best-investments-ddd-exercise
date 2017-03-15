@@ -6,6 +6,7 @@ class TimeIncrement
 {
     const MINUTES_PER_INCREMENT = 15;
 
+    /** @var int  */
     private $increments = 0;
 
     public function __construct(int $minutes)
@@ -21,7 +22,7 @@ class TimeIncrement
         return new self($this->inMinutes() + $timeToAdd->inMinutes());
     }
 
-    public function minus(TimeIncrement $timeToMinus)
+    public function minus(TimeIncrement $timeToMinus): TimeIncrement
     {
         if ($timeToMinus->inMinutes() > $this->inMinutes()) {
             throw new \Exception('Cannot minus more time than the time increment has');
@@ -29,7 +30,7 @@ class TimeIncrement
         return new self($this->inMinutes() - $timeToMinus->inMinutes());
     }
 
-    public function isMoreThan(TimeIncrement $increment)
+    public function isMoreThan(TimeIncrement $increment): bool
     {
         return $this->inMinutes() > $increment->inMinutes();
     }

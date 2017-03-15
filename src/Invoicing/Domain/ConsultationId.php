@@ -6,14 +6,19 @@ class ConsultationId
 {
     private $consultationId;
 
-    private function __construct(int $consultationId)
+    public function __construct(string $consultationId)
     {
         $this->consultationId = $consultationId;
     }
 
-    public static function fromExisting(int $consultationId): ConsultationId
+    public static function fromExisting(string $existing): ConsultationId
     {
-        return new self($consultationId);
+        return new self($existing);
+    }
+
+    public function is(ConsultationId $other): bool
+    {
+        return (string)$other === (string)$this;
     }
 
     public function __toString()

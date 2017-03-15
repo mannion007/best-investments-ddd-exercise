@@ -4,23 +4,20 @@ namespace Mannion007\BestInvestments\Invoicing\Domain;
 
 class PackageReference
 {
-    const REFERENCE_FORMAT = '%s-%s-%s-%s';
+    /** @var string  */
+    private $name;
 
+    /** @var \DateTimeInterface */
     private $startDate;
-    private $months;
-    private $reference;
 
-    public function __construct(string $name, \DateTimeInterface $startDate, PackageDuration $months)
+    /** @var PackageLength */
+    private $length;
+
+    public function __construct(string $name, \DateTimeInterface $startDate, PackageLength $length)
     {
+        $this->name = $name;
         $this->startDate = $startDate;
-        $this->months = $months;
-        $this->reference = sprintf(
-            self::REFERENCE_FORMAT,
-            $name,
-            $startDate->format('Y'),
-            $startDate->format('m'),
-            (string)$months
-        );
+        $this->length = $length;
     }
 
     public function getStartDate(): \DateTimeInterface
@@ -28,23 +25,28 @@ class PackageReference
         return $this->startDate;
     }
 
-    public function getMonths(): PackageDuration
+    public function getLength(): PackageLength
     {
-        return $this->months;
+        return $this->length;
     }
 
     public static function fromExisting(string $existing): PackageReference
     {
         $parts = explode('-', $existing);
-        return new self(
-            $parts[0],
-            new \DateTime(sprintf('%s-%s-01', $parts[1], $parts[2])),
-            PackageDuration::fromExisting($parts[3])
-        );
+        $name = $parts[0];
+        $startDate = \DateTime::createFromFormat('Y-m-d', $parts[1] . '-' . $parts[2] . '-01');
+        $length = PackageLength::fromExisting($parts[3]);
+        return new self($name, $startDate, $length);
     }
 
     public function __toString()
     {
-        return (string)$this->reference;
+        return sprintf(
+            '%s-%s-%s-%s',
+            $this->name,
+            $this->startDate->format('Y'),
+            $this->startDate->format('m'),
+            (string)$this->length
+        );
     }
 }

@@ -27,3 +27,8 @@ default:
         - Mannion007\BestInvestmentsBehat\Prospecting\ApiContext
       filters:
         tags: '@api'
+    invoicing_domain_features:
+      paths:
+        - %paths.base%/features/invoicing
+      contexts:
+        - Mannion007\BestInvestmentsBehat\Invoicing\DomainContext
